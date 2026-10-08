@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar cliente | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+
+        <a href="clientes.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            ← Regresar
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-4xl px-6 py-10">
+
+    <div class="mb-7">
+        <p class="text-sm font-medium text-blue-600">Clientes</p>
+        <h2 class="text-3xl font-bold text-slate-900">Registrar cliente</h2>
+        <p class="mt-1 text-sm text-slate-500">
+            Registra la información del nuevo cliente.
+        </p>
+    </div>
+
+    <form class="rounded-2xl bg-white p-6 shadow-sm sm:p-8">
+
+        <div class="grid gap-5 sm:grid-cols-2">
+
+            <div>
+                <label class="mb-2 block text-sm font-medium">Nombre</label>
+                <input type="text"
+                       placeholder="Nombre"
+                       required
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+            </div>
+
+            <div>
+                <label class="mb-2 block text-sm font-medium">Apellidos</label>
+                <input type="text"
+                       placeholder="Apellidos"
+                       required
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+            </div>
+
+            <div>
+                <label class="mb-2 block text-sm font-medium">Teléfono</label>
+                <input type="tel"
+                       placeholder="415 000 0000"
+                       required
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+            </div>
+
+            <div>
+                <label class="mb-2 block text-sm font-medium">Correo electrónico</label>
+                <input type="email"
+                       placeholder="correo@ejemplo.com"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+            </div>
+
+            <div class="sm:col-span-2">
+                <label class="mb-2 block text-sm font-medium">Dirección</label>
+                <input type="text"
+                       placeholder="Dirección del cliente"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+            </div>
+
+        </div>
+
+        <div class="mt-8 flex justify-end gap-3 border-t pt-6">
+
+            <a href="clientes.html"
+               class="rounded-lg border border-slate-300 px-5 py-3 text-sm font-medium hover:bg-slate-50">
+                Cancelar
+            </a>
+
+            <button type="submit"
+                    class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+                Guardar cliente
+            </button>
+
+        </div>
+
+    </form>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+</body>
+</html>
