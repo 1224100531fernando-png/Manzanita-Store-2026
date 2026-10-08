@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del cliente | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+
+        <a href="clientes.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            ← Clientes
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-6xl px-6 py-8">
+
+    <div class="mb-6">
+        <p class="text-sm font-medium text-blue-600">Clientes</p>
+        <h2 class="text-3xl font-bold text-slate-900">Detalle del cliente</h2>
+    </div>
+
+    <section class="mb-6 rounded-2xl bg-white p-6 shadow-sm">
+
+        <div class="flex justify-between">
+            <div>
+                <h3 class="text-xl font-bold">Juan Pérez</h3>
+                <p class="text-sm text-slate-500">Cliente #001</p>
+            </div>
+
+            <span class="h-fit rounded-full bg-emerald-100 px-3 py-1 text-xs text-emerald-700">
+                Activo
+            </span>
+        </div>
+
+        <div class="mt-6 grid gap-5 sm:grid-cols-3">
+
+            <div>
+                <p class="text-xs uppercase text-slate-400">Teléfono</p>
+                <p class="mt-1 font-medium">415 123 4567</p>
+            </div>
+
+            <div>
+                <p class="text-xs uppercase text-slate-400">Correo</p>
+                <p class="mt-1 font-medium">juan@email.com</p>
+            </div>
+
+            <div>
+                <p class="text-xs uppercase text-slate-400">Dirección</p>
+                <p class="mt-1 font-medium">San Miguel de Allende, Gto.</p>
+            </div>
+
+        </div>
+
+        <a href="editar_cliente.html"
+           class="mt-6 inline-block rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
+            Editar información
+        </a>
+
+    </section>
+
+    <section class="overflow-hidden rounded-2xl bg-white shadow-sm">
+
+        <div class="border-b p-6">
+            <h3 class="text-lg font-bold">Historial</h3>
+            <p class="mt-1 text-sm text-slate-500">
+                Compras y servicios registrados.
+            </p>
+        </div>
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-left text-sm">
+
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                    <tr>
+                        <th class="px-6 py-4">Fecha</th>
+                        <th class="px-6 py-4">Tipo</th>
+                        <th class="px-6 py-4">Descripción</th>
+                        <th class="px-6 py-4">Estado</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+
+                    <tr>
+                        <td class="px-6 py-4">08/10/2026</td>
+                        <td class="px-6 py-4">Reparación</td>
+                        <td class="px-6 py-4">Cambio de pantalla</td>
+                        <td class="px-6 py-4 text-blue-600">En proceso</td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-6 py-4">01/10/2026</td>
+                        <td class="px-6 py-4">Compra</td>
+                        <td class="px-6 py-4">Teclado inalámbrico</td>
+                        <td class="px-6 py-4 text-emerald-600">Completado</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+</body>
+</html>
