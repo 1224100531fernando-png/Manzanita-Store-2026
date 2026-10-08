@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roles y permisos | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+
+        <a href="usuarios.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            ← Usuarios
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-6xl px-6 py-8">
+
+    <div class="mb-7">
+        <p class="text-sm font-medium text-blue-600">Seguridad</p>
+        <h2 class="text-3xl font-bold text-slate-900">Roles y permisos</h2>
+        <p class="mt-1 text-sm text-slate-500">
+            Define qué acciones puede realizar cada tipo de usuario.
+        </p>
+    </div>
+
+    <section class="overflow-hidden rounded-2xl bg-white shadow-sm">
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+
+                <thead class="bg-slate-950 text-xs uppercase text-white">
+                    <tr>
+                        <th class="px-5 py-4">Permiso</th>
+                        <th class="px-5 py-4 text-center">Administrador</th>
+                        <th class="px-5 py-4 text-center">Vendedor</th>
+                        <th class="px-5 py-4 text-center">Técnico</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+
+                    <tr>
+                        <td class="px-5 py-4 font-medium">Gestionar usuarios</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-slate-300">—</td>
+                        <td class="text-center text-slate-300">—</td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-5 py-4 font-medium">Gestionar clientes</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-5 py-4 font-medium">Gestionar reparaciones</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-slate-300">—</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-5 py-4 font-medium">Gestionar tickets</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-5 py-4 font-medium">Gestionar inventario</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-5 py-4 font-medium">Registrar ventas</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-slate-300">—</td>
+                    </tr>
+
+                    <tr>
+                        <td class="px-5 py-4 font-medium">Consultar reportes</td>
+                        <td class="text-center text-emerald-600">✓</td>
+                        <td class="text-center text-slate-300">—</td>
+                        <td class="text-center text-slate-300">—</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="flex justify-end border-t p-5">
+            <a href="usuarios.html"
+               class="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
+                Guardar configuración
+            </a>
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+</body>
+</html>
