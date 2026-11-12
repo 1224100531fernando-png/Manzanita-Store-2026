@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de reparación | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-5xl px-6 py-8">
+
+    <a href="reparaciones.html"
+       class="text-sm font-medium text-blue-600 hover:underline">
+        ← Volver a reparaciones
+    </a>
+
+    <div class="mb-7 mt-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <p class="text-sm font-medium text-blue-600">Servicio técnico</p>
+            <h2 class="text-3xl font-bold">Detalle de reparación</h2>
+            <p id="folio" class="mt-2 text-sm text-slate-500"></p>
+        </div>
+
+        <a id="editar" href="#"
+           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+            Editar reparación
+        </a>
+    </div>
+
+    <div id="contenido" class="space-y-6">
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <h3 class="text-lg font-semibold">Estado del servicio</h3>
+                <span id="estado" class="rounded-full px-4 py-2 text-sm font-semibold"></span>
+            </div>
+
+            <div class="mt-5 grid gap-5 sm:grid-cols-3">
+                <div>
+                    <p class="text-sm text-slate-500">Fecha de recepción</p>
+                    <p id="fecha" class="mt-1 font-semibold"></p>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Técnico responsable</p>
+                    <p id="tecnico" class="mt-1 font-semibold"></p>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Costo estimado</p>
+                    <p id="costo" class="mt-1 font-semibold"></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+                Información del cliente
+            </h3>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                    <p class="text-sm text-slate-500">Nombre completo</p>
+                    <p id="cliente" class="mt-1 font-medium"></p>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Teléfono</p>
+                    <p id="telefono" class="mt-1 font-medium"></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+                Información del dispositivo
+            </h3>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                    <p class="text-sm text-slate-500">Dispositivo</p>
+                    <p id="dispositivo" class="mt-1 font-medium"></p>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Número de serie</p>
+                    <p id="serie" class="mt-1 font-medium"></p>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <p class="text-sm text-slate-500">Falla reportada</p>
+                <p id="falla" class="mt-2 rounded-lg bg-slate-50 p-4 text-sm"></p>
+            </div>
+
+            <div class="mt-5">
+                <p class="text-sm text-slate-500">Diagnóstico técnico</p>
+                <p id="diagnostico" class="mt-2 rounded-lg bg-slate-50 p-4 text-sm"></p>
+            </div>
+        </section>
+
+        <div class="flex flex-wrap justify-end gap-3">
+            <a id="seguimiento" href="#"
+               class="rounded-lg border border-blue-600 px-5 py-3 text-sm font-semibold text-blue-600 hover:bg-blue-50">
+                Ver seguimiento
+            </a>
+            <a href="reparaciones.html"
+               class="rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+                Regresar
+            </a>
+        </div>
+    </div>
+
+    <div id="error" class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
+        <h3 class="text-xl font-bold">Reparación no encontrada</h3>
+        <p class="mt-2 text-slate-500">El folio solicitado no existe en los registros de prueba.</p>
+        <a href="reparaciones.html" class="mt-5 inline-block text-blue-600 hover:underline">
+            Volver a reparaciones
+        </a>
+    </div>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    // Datos de demostración. Posteriormente vendrán de MySQL.
+    const registros = [
+        {
+            folio: "REP-001",
+            cliente: "Juan Pérez",
+            telefono: "4151234567",
+            dispositivo: "iPhone 13",
+            serie: "SN-IP13-001",
+            falla: "El dispositivo no carga correctamente.",
+            diagnostico: "Revisión del puerto de carga pendiente.",
+            tecnico: "Técnico asignado",
+            fecha: "2026-11-10",
+            costo: 1200,
+            estado: "En proceso"
+        },
+        {
+            folio: "REP-002",
+            cliente: "María González",
+            telefono: "4159876543",
+            dispositivo: "MacBook Air",
+            serie: "SN-MBA-002",
+            falla: "La batería se descarga rápidamente.",
+            diagnostico: "Se realizó revisión y servicio de batería.",
+            tecnico: "Técnico asignado",
+            fecha: "2026-11-09",
+            costo: 1800,
+            estado: "Finalizada"
+        },
+        {
+            folio: "REP-003",
+            cliente: "Carlos López",
+            telefono: "4155551234",
+            dispositivo: "iPad Pro",
+            serie: "SN-IPAD-003",
+            falla: "La pantalla no responde correctamente.",
+            diagnostico: "Pendiente de revisión.",
+            tecnico: "Sin asignar",
+            fecha: "2026-11-12",
+            costo: 950,
+            estado: "Pendiente"
+        }
+    ];
+
+    const parametros = new URLSearchParams(window.location.search);
+    const folio = parametros.get("folio");
+    const reparacion = registros.find(r => r.folio === folio);
+
+    if (!reparacion) {
+        document.getElementById("contenido").classList.add("hidden");
+        document.getElementById("editar").classList.add("hidden");
+        document.getElementById("error").classList.remove("hidden");
+        document.getElementById("folio").textContent = folio || "Sin folio";
+    } else {
+        const campos = [
+            "folio", "cliente", "telefono", "dispositivo",
+            "serie", "falla", "diagnostico", "tecnico", "fecha"
+        ];
+
+        campos.forEach(campo => {
+            document.getElementById(campo).textContent = reparacion[campo];
+        });
+
+        document.getElementById("costo").textContent =
+            reparacion.costo.toLocaleString("es-MX", {
+                style: "currency",
+                currency: "MXN"
+            });
+
+        const estado = document.getElementById("estado");
+        estado.textContent = reparacion.estado;
+
+        const colores = {
+            "Pendiente": "bg-slate-100 text-slate-700",
+            "En proceso": "bg-amber-100 text-amber-700",
+            "Finalizada": "bg-emerald-100 text-emerald-700"
+        };
+
+        estado.className = "rounded-full px-4 py-2 text-sm font-semibold " +
+            (colores[reparacion.estado] || colores["Pendiente"]);
+
+        const codigo = encodeURIComponent(reparacion.folio);
+
+        document.getElementById("editar").href =
+            "editar_reparacion.html?folio=" + codigo;
+
+        document.getElementById("seguimiento").href =
+            "seguimiento_reparacion.html?folio=" + codigo;
+    }
+</script>
+
+</body>
+</html>

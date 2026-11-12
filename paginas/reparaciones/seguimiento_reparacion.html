@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-5xl px-6 py-8">
+
+    <a id="volver" href="reparaciones.html"
+       class="text-sm font-medium text-blue-600 hover:underline">
+        ← Volver al detalle
+    </a>
+
+    <div class="mb-7 mt-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <p class="text-sm font-medium text-blue-600">Servicio técnico</p>
+            <h2 class="text-3xl font-bold">Seguimiento de reparación</h2>
+            <p id="folio" class="mt-2 text-sm text-slate-500"></p>
+        </div>
+        <span id="estado"
+              class="rounded-full px-4 py-2 text-sm font-semibold"></span>
+    </div>
+
+    <div id="error" class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
+        <h3 class="text-xl font-bold">Reparación no encontrada</h3>
+        <p class="mt-2 text-slate-500">Verifica el folio seleccionado.</p>
+        <a href="reparaciones.html"
+           class="mt-4 inline-block text-blue-600 hover:underline">
+            Volver a reparaciones
+        </a>
+    </div>
+
+    <div id="contenido">
+
+        <section class="mb-6 grid gap-4 sm:grid-cols-3">
+            <div class="rounded-xl bg-white p-5 shadow-sm">
+                <p class="text-sm text-slate-500">Cliente</p>
+                <p id="cliente" class="mt-2 text-lg font-semibold"></p>
+            </div>
+
+            <div class="rounded-xl bg-white p-5 shadow-sm">
+                <p class="text-sm text-slate-500">Dispositivo</p>
+                <p id="dispositivo" class="mt-2 text-lg font-semibold"></p>
+            </div>
+
+            <div class="rounded-xl bg-white p-5 shadow-sm">
+                <p class="text-sm text-slate-500">Técnico responsable</p>
+                <p id="tecnico" class="mt-2 text-lg font-semibold"></p>
+            </div>
+        </section>
+
+        <section class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
+
+            <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+                <h3 class="text-xl font-bold">Progreso del servicio</h3>
+                <span id="porcentaje" class="font-bold text-blue-600"></span>
+            </div>
+
+            <div class="mb-8 h-3 overflow-hidden rounded-full bg-slate-200">
+                <div id="barra"
+                     class="h-full rounded-full bg-blue-600 transition-all">
+                </div>
+            </div>
+
+            <div id="etapas" class="space-y-6"></div>
+
+        </section>
+
+        <section class="mt-6 rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+                Información del seguimiento
+            </h3>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                    <p class="text-sm text-slate-500">Fecha de recepción</p>
+                    <p id="fecha" class="mt-1 font-semibold"></p>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-500">Costo estimado</p>
+                    <p id="costo" class="mt-1 font-semibold"></p>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <p class="text-sm text-slate-500">Observaciones técnicas</p>
+                <p id="observaciones"
+                   class="mt-2 rounded-lg bg-slate-50 p-4 text-sm"></p>
+            </div>
+
+            <p class="mt-5 text-xs text-slate-400">
+                Seguimiento demostrativo. Los avances se conectarán
+                con el historial real cuando se integre la base de datos.
+            </p>
+        </section>
+
+        <div class="mt-7 flex flex-wrap justify-end gap-3">
+            <a id="editar" href="#"
+               class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+                Actualizar reparación
+            </a>
+
+            <a href="reparaciones.html"
+               class="rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+                Regresar
+            </a>
+        </div>
+
+    </div>
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    // Registros de prueba. Se sustituirán por datos de MySQL.
+    const reparaciones = [
+        {
+            folio: "REP-001",
+            cliente: "Juan Pérez",
+            dispositivo: "iPhone 13",
+            tecnico: "Técnico asignado",
+            estado: "En proceso",
+            fecha: "2026-11-10",
+            costo: 1200,
+            observaciones: "Revisión del puerto de carga pendiente."
+        },
+        {
+            folio: "REP-002",
+            cliente: "María González",
+            dispositivo: "MacBook Air",
+            tecnico: "Técnico asignado",
+            estado: "Finalizada",
+            fecha: "2026-11-09",
+            costo: 1800,
+            observaciones: "Se realizó revisión y servicio de batería."
+        },
+        {
+            folio: "REP-003",
+            cliente: "Carlos López",
+            dispositivo: "iPad Pro",
+            tecnico: "Sin asignar",
+            estado: "Pendiente",
+            fecha: "2026-11-12",
+            costo: 950,
+            observaciones: "Pendiente de revisión técnica."
+        }
+    ];
+
+    const nombres = [
+        "Recepción del dispositivo",
+        "Diagnóstico técnico",
+        "Reparación del equipo",
+        "Servicio finalizado",
+        "Equipo entregado"
+    ];
+
+    const descripciones = [
+        "El dispositivo fue registrado para su atención.",
+        "Se revisa el equipo para identificar la falla.",
+        "El técnico realiza el servicio correspondiente.",
+        "La reparación fue concluida.",
+        "El dispositivo fue entregado al cliente."
+    ];
+
+    const avances = {
+        "Pendiente": 1,
+        "En proceso": 3,
+        "Finalizada": 4,
+        "Entregada": 5,
+        "Cancelada": 0
+    };
+
+    const folio = new URLSearchParams(location.search).get("folio");
+    const r = reparaciones.find(item => item.folio === folio);
+
+    if (!r) {
+        document.getElementById("contenido").classList.add("hidden");
+        document.getElementById("error").classList.remove("hidden");
+        document.getElementById("estado").classList.add("hidden");
+        document.getElementById("folio").textContent = folio || "Sin folio";
+    } else {
+        ["folio", "cliente", "dispositivo", "tecnico", "fecha"]
+            .forEach(id => {
+                document.getElementById(id).textContent = r[id];
+            });
+
+        document.getElementById("observaciones").textContent =
+            r.observaciones;
+
+        document.getElementById("costo").textContent =
+            r.costo.toLocaleString("es-MX", {
+                style: "currency",
+                currency: "MXN"
+            });
+
+        const estado = document.getElementById("estado");
+        estado.textContent = r.estado;
+
+        const colores = {
+            "Pendiente": "bg-slate-200 text-slate-700",
+            "En proceso": "bg-amber-100 text-amber-700",
+            "Finalizada": "bg-emerald-100 text-emerald-700",
+            "Entregada": "bg-blue-100 text-blue-700",
+            "Cancelada": "bg-red-100 text-red-700"
+        };
+
+        estado.className = "rounded-full px-4 py-2 text-sm font-semibold " +
+            colores[r.estado];
+
+        const completadas = avances[r.estado] ?? 0;
+        const porcentaje = completadas * 20;
+
+        document.getElementById("porcentaje").textContent =
+            porcentaje + "%";
+
+        document.getElementById("barra").style.width =
+            porcentaje + "%";
+
+        const contenedor = document.getElementById("etapas");
+
+        nombres.forEach((nombre, i) => {
+            const terminada = i < completadas;
+
+            const fila = document.createElement("div");
+            fila.className = "flex items-start gap-4";
+
+            const circulo = document.createElement("div");
+            circulo.className = terminada
+                ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white"
+                : "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-200 font-bold text-slate-500";
+            circulo.textContent = terminada ? "✓" : String(i + 1);
+
+            const texto = document.createElement("div");
+
+            const titulo = document.createElement("h4");
+            titulo.className = "font-semibold";
+            titulo.textContent = nombre;
+
+            const descripcion = document.createElement("p");
+            descripcion.className = "mt-1 text-sm text-slate-500";
+            descripcion.textContent = descripciones[i];
+
+            texto.append(titulo, descripcion);
+            fila.append(circulo, texto);
+            contenedor.appendChild(fila);
+        });
+
+        const codigo = encodeURIComponent(r.folio);
+
+        document.getElementById("editar").href =
+            "editar_reparacion.html?folio=" + codigo;
+
+        document.getElementById("volver").href =
+            "detalle_reparacion.html?folio=" + codigo;
+    }
+</script>
+
+</body>
+</html>

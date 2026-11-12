@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar reparación | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-4xl px-6 py-8">
+
+    <a id="volver" href="reparaciones.html"
+       class="text-sm font-medium text-blue-600 hover:underline">
+        ← Volver al detalle
+    </a>
+
+    <div class="mb-7 mt-5">
+        <p class="text-sm font-medium text-blue-600">Servicio técnico</p>
+        <h2 class="text-3xl font-bold">Editar reparación</h2>
+        <p id="subtitulo" class="mt-2 text-sm text-slate-500">
+            Actualiza la información del servicio.
+        </p>
+    </div>
+
+    <div id="error"
+         class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
+        <h3 class="text-xl font-bold">Reparación no encontrada</h3>
+        <p class="mt-2 text-slate-500">
+            No existe un registro de prueba con ese folio.
+        </p>
+        <a href="reparaciones.html"
+           class="mt-4 inline-block text-blue-600 hover:underline">
+            Volver a reparaciones
+        </a>
+    </div>
+
+    <form id="formulario"
+          class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
+
+        <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+            Datos del cliente
+        </h3>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+                <label for="cliente" class="mb-2 block text-sm font-medium">
+                    Nombre del cliente *
+                </label>
+                <input id="cliente" required maxlength="100"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+
+            <div>
+                <label for="telefono" class="mb-2 block text-sm font-medium">
+                    Teléfono *
+                </label>
+                <input id="telefono" type="tel" required
+                       pattern="[0-9]{10}" maxlength="10"
+                       title="Introduce 10 dígitos"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+        </div>
+
+        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
+            Información del dispositivo
+        </h3>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+                <label for="dispositivo" class="mb-2 block text-sm font-medium">
+                    Dispositivo *
+                </label>
+                <input id="dispositivo" required maxlength="100"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+
+            <div>
+                <label for="serie" class="mb-2 block text-sm font-medium">
+                    Número de serie
+                </label>
+                <input id="serie" maxlength="100"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+
+            <div class="sm:col-span-2">
+                <label for="falla" class="mb-2 block text-sm font-medium">
+                    Falla reportada *
+                </label>
+                <textarea id="falla" rows="3" required maxlength="1000"
+                          class="w-full rounded-lg border border-slate-300 px-4 py-3"></textarea>
+            </div>
+
+            <div class="sm:col-span-2">
+                <label for="diagnostico" class="mb-2 block text-sm font-medium">
+                    Diagnóstico técnico
+                </label>
+                <textarea id="diagnostico" rows="3" maxlength="1000"
+                          placeholder="Describe el diagnóstico del equipo..."
+                          class="w-full rounded-lg border border-slate-300 px-4 py-3"></textarea>
+            </div>
+        </div>
+
+        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
+            Información del servicio
+        </h3>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+
+            <div>
+                <label for="tecnico" class="mb-2 block text-sm font-medium">
+                    Técnico responsable *
+                </label>
+                <input id="tecnico" required maxlength="100"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+
+            <div>
+                <label for="costo" class="mb-2 block text-sm font-medium">
+                    Costo estimado (MXN) *
+                </label>
+                <input id="costo" type="number" min="0"
+                       step="0.01" required
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+
+            <div>
+                <label for="fecha" class="mb-2 block text-sm font-medium">
+                    Fecha de recepción *
+                </label>
+                <input id="fecha" type="date" required
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+
+            <div>
+                <label for="estado" class="mb-2 block text-sm font-medium">
+                    Estado de reparación *
+                </label>
+                <select id="estado" required
+                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="En proceso">En proceso</option>
+                    <option value="Finalizada">Finalizada</option>
+                    <option value="Entregada">Entregada</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div id="mensaje" role="status" aria-live="polite"
+             class="mt-6 hidden rounded-lg bg-blue-50 p-4 text-sm text-blue-700">
+        </div>
+
+        <div class="mt-8 flex flex-wrap justify-end gap-3 border-t pt-6">
+            <a id="cancelar" href="reparaciones.html"
+               class="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold hover:bg-slate-100">
+                Cancelar
+            </a>
+
+            <button type="submit"
+                    class="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+                Guardar cambios
+            </button>
+        </div>
+
+    </form>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    // Datos temporales para demostrar la edición.
+    const reparaciones = [
+        {
+            folio: "REP-001",
+            cliente: "Juan Pérez",
+            telefono: "4151234567",
+            dispositivo: "iPhone 13",
+            serie: "SN-IP13-001",
+            falla: "El dispositivo no carga correctamente.",
+            diagnostico: "Revisión del puerto de carga pendiente.",
+            tecnico: "Técnico asignado",
+            costo: 1200,
+            fecha: "2026-11-10",
+            estado: "En proceso"
+        },
+        {
+            folio: "REP-002",
+            cliente: "María González",
+            telefono: "4159876543",
+            dispositivo: "MacBook Air",
+            serie: "SN-MBA-002",
+            falla: "La batería se descarga rápidamente.",
+            diagnostico: "Se realizó revisión y servicio de batería.",
+            tecnico: "Técnico asignado",
+            costo: 1800,
+            fecha: "2026-11-09",
+            estado: "Finalizada"
+        },
+        {
+            folio: "REP-003",
+            cliente: "Carlos López",
+            telefono: "4155551234",
+            dispositivo: "iPad Pro",
+            serie: "SN-IPAD-003",
+            falla: "La pantalla no responde correctamente.",
+            diagnostico: "Pendiente de revisión.",
+            tecnico: "Sin asignar",
+            costo: 950,
+            fecha: "2026-11-12",
+            estado: "Pendiente"
+        }
+    ];
+
+    const parametros = new URLSearchParams(location.search);
+    const folio = parametros.get("folio");
+    const reparacion = reparaciones.find(r => r.folio === folio);
+    const formulario = document.getElementById("formulario");
+
+    if (!reparacion) {
+        formulario.classList.add("hidden");
+        document.getElementById("error").classList.remove("hidden");
+    } else {
+        document.getElementById("subtitulo").textContent =
+            "Modificando el servicio " + reparacion.folio;
+
+        const campos = [
+            "cliente", "telefono", "dispositivo", "serie",
+            "falla", "diagnostico", "tecnico", "costo",
+            "fecha", "estado"
+        ];
+
+        campos.forEach(campo => {
+            document.getElementById(campo).value =
+                reparacion[campo] ?? "";
+        });
+
+        const regreso = "detalle_reparacion.html?folio=" +
+            encodeURIComponent(folio);
+
+        document.getElementById("volver").href = regreso;
+        document.getElementById("cancelar").href = regreso;
+
+        formulario.addEventListener("submit", function(evento) {
+            evento.preventDefault();
+
+            if (!formulario.reportValidity()) return;
+
+            const mensaje = document.getElementById("mensaje");
+            mensaje.classList.remove("hidden");
+            mensaje.textContent =
+                "Cambios validados correctamente para " + folio +
+                ". Los datos aún no se guardan; falta conectar MySQL.";
+        });
+    }
+</script>
+
+</body>
+</html>

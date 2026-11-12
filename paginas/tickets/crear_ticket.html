@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear ticket | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-4xl px-6 py-8">
+
+    <a href="tickets.html"
+       class="text-sm font-medium text-blue-600 hover:underline">
+        ← Volver a tickets
+    </a>
+
+    <div class="mb-7 mt-5">
+        <p class="text-sm font-medium text-blue-600">Atención a clientes</p>
+        <h2 class="text-3xl font-bold">Crear ticket de soporte</h2>
+        <p class="mt-2 text-sm text-slate-500">
+            Registra una nueva solicitud, incidencia o queja de un cliente.
+        </p>
+    </div>
+
+    <form id="formulario"
+          class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
+
+        <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+            Información del cliente
+        </h3>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+
+            <div>
+                <label for="cliente" class="mb-2 block text-sm font-medium">
+                    Nombre del cliente *
+                </label>
+                <input id="cliente" name="cliente" type="text"
+                       required maxlength="100"
+                       placeholder="Ej. Juan Pérez"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500">
+            </div>
+
+            <div>
+                <label for="telefono" class="mb-2 block text-sm font-medium">
+                    Teléfono *
+                </label>
+                <input id="telefono" name="telefono" type="tel"
+                       required pattern="[0-9]{10}" maxlength="10"
+                       title="Introduce 10 dígitos"
+                       placeholder="Ej. 4151234567"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+
+            <div class="sm:col-span-2">
+                <label for="correo" class="mb-2 block text-sm font-medium">
+                    Correo electrónico
+                </label>
+                <input id="correo" name="correo" type="email"
+                       maxlength="150"
+                       placeholder="cliente@correo.com"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+
+        </div>
+
+        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
+            Información del ticket
+        </h3>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+
+            <div class="sm:col-span-2">
+                <label for="asunto" class="mb-2 block text-sm font-medium">
+                    Asunto del ticket *
+                </label>
+                <input id="asunto" name="asunto" type="text"
+                       required maxlength="150"
+                       placeholder="Ej. Problema con reparación de iPhone"
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+
+            <div>
+                <label for="categoria" class="mb-2 block text-sm font-medium">
+                    Categoría *
+                </label>
+                <select id="categoria" name="categoria" required
+                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
+                    <option value="">Selecciona una categoría</option>
+                    <option value="Reparación">Reparación</option>
+                    <option value="Garantía">Garantía</option>
+                    <option value="Venta">Venta</option>
+                    <option value="Producto">Producto</option>
+                    <option value="Queja">Queja</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="prioridad" class="mb-2 block text-sm font-medium">
+                    Prioridad *
+                </label>
+                <select id="prioridad" name="prioridad" required
+                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
+                    <option value="">Selecciona una prioridad</option>
+                    <option value="Baja">Baja</option>
+                    <option value="Media">Media</option>
+                    <option value="Alta">Alta</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="fecha" class="mb-2 block text-sm font-medium">
+                    Fecha de registro *
+                </label>
+                <input id="fecha" name="fecha" type="date" required
+                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            </div>
+
+            <div>
+                <label for="estado" class="mb-2 block text-sm font-medium">
+                    Estado inicial *
+                </label>
+                <select id="estado" name="estado" required
+                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
+                    <option value="Abierto">Abierto</option>
+                    <option value="En proceso">En proceso</option>
+                </select>
+            </div>
+
+            <div class="sm:col-span-2">
+                <label for="descripcion" class="mb-2 block text-sm font-medium">
+                    Descripción del problema *
+                </label>
+                <textarea id="descripcion" name="descripcion"
+                          rows="5" required maxlength="2000"
+                          placeholder="Describe detalladamente la solicitud o incidencia..."
+                          class="w-full rounded-lg border border-slate-300 px-4 py-3"></textarea>
+            </div>
+
+        </div>
+
+        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
+            Asignación del ticket
+        </h3>
+
+        <div>
+            <label for="responsable" class="mb-2 block text-sm font-medium">
+                Técnico o responsable asignado
+            </label>
+            <input id="responsable" name="responsable" type="text"
+                   maxlength="100"
+                   placeholder="Ej. Axel Gael"
+                   class="w-full rounded-lg border border-slate-300 px-4 py-3">
+        </div>
+
+        <div id="mensaje" role="status" aria-live="polite"
+             class="mt-6 hidden rounded-lg bg-blue-50 p-4 text-sm text-blue-800">
+        </div>
+
+        <div class="mt-8 flex flex-wrap justify-end gap-3 border-t pt-6">
+            <a href="tickets.html"
+               class="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold hover:bg-slate-100">
+                Cancelar
+            </a>
+
+            <button type="submit"
+                    class="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+                Guardar ticket
+            </button>
+        </div>
+
+    </form>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    const formulario = document.getElementById("formulario");
+    const mensaje = document.getElementById("mensaje");
+
+    // Fecha local del equipo.
+    const hoy = new Date();
+    const fechaLocal = new Date(
+        hoy.getTime() - hoy.getTimezoneOffset() * 60000
+    ).toISOString().slice(0, 10);
+
+    document.getElementById("fecha").value = fechaLocal;
+
+    formulario.addEventListener("submit", function(evento) {
+        evento.preventDefault();
+
+        if (!formulario.reportValidity()) return;
+
+        mensaje.classList.remove("hidden");
+        mensaje.textContent =
+            "Formulario validado correctamente. " +
+            "La conexión con MySQL se realizará al integrar el backend.";
+    });
+</script>
+
+</body>
+</html>
