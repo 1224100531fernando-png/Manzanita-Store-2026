@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de ticket | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-5xl px-6 py-8">
+
+    <a href="tickets.html"
+       class="text-sm font-medium text-blue-600 hover:underline">
+        ← Volver a tickets
+    </a>
+
+    <div class="mb-7 mt-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <p class="text-sm font-medium text-blue-600">
+                Atención a clientes
+            </p>
+            <h2 class="text-3xl font-bold">Detalle de ticket</h2>
+            <p id="folio" class="mt-2 text-sm text-slate-500"></p>
+        </div>
+
+        <a id="editar" href="#"
+           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+            Editar ticket
+        </a>
+    </div>
+
+    <div id="error"
+         class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
+        <h3 class="text-xl font-bold">Ticket no encontrado</h3>
+        <p class="mt-2 text-slate-500">
+            El folio solicitado no existe en los registros de prueba.
+        </p>
+        <a href="tickets.html"
+           class="mt-5 inline-block text-blue-600 hover:underline">
+            Volver a tickets
+        </a>
+    </div>
+
+    <div id="contenido" class="space-y-6">
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <h3 class="text-lg font-semibold">Estado del ticket</h3>
+
+                <div class="flex flex-wrap gap-3">
+                    <span id="prioridad"
+                          class="rounded-full px-4 py-2 text-sm font-semibold"></span>
+                    <span id="estado"
+                          class="rounded-full px-4 py-2 text-sm font-semibold"></span>
+                </div>
+            </div>
+
+            <div class="mt-6 grid gap-5 sm:grid-cols-3">
+                <div>
+                    <p class="text-sm text-slate-500">Fecha de registro</p>
+                    <p id="fecha" class="mt-1 font-semibold"></p>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-500">Categoría</p>
+                    <p id="categoria" class="mt-1 font-semibold"></p>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-500">Responsable</p>
+                    <p id="responsable" class="mt-1 font-semibold"></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+                Información del cliente
+            </h3>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                    <p class="text-sm text-slate-500">Nombre completo</p>
+                    <p id="cliente" class="mt-1 font-medium"></p>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-500">Teléfono</p>
+                    <p id="telefono" class="mt-1 font-medium"></p>
+                </div>
+
+                <div class="sm:col-span-2">
+                    <p class="text-sm text-slate-500">Correo electrónico</p>
+                    <p id="correo" class="mt-1 font-medium"></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+                Información de la solicitud
+            </h3>
+
+            <div>
+                <p class="text-sm text-slate-500">Asunto</p>
+                <p id="asunto" class="mt-1 text-lg font-semibold"></p>
+            </div>
+
+            <div class="mt-6">
+                <p class="text-sm text-slate-500">Descripción del problema</p>
+                <p id="descripcion"
+                   class="mt-2 whitespace-pre-wrap rounded-lg bg-slate-50 p-4 text-sm"></p>
+            </div>
+
+            <div class="mt-6">
+                <p class="text-sm text-slate-500">Respuesta o seguimiento</p>
+                <p id="respuesta"
+                   class="mt-2 whitespace-pre-wrap rounded-lg bg-slate-50 p-4 text-sm"></p>
+            </div>
+        </section>
+
+        <div class="flex justify-end">
+            <a href="tickets.html"
+               class="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+                Regresar a tickets
+            </a>
+        </div>
+
+    </div>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    // Información de prueba. Después vendrá de MySQL.
+    const tickets = [
+        {
+            folio: "TCK-001",
+            cliente: "Juan Pérez",
+            telefono: "4151234567",
+            correo: "juan@email.com",
+            asunto: "Problema con reparación",
+            categoria: "Reparación",
+            prioridad: "Alta",
+            estado: "Abierto",
+            fecha: "2026-11-10",
+            responsable: "Sin asignar",
+            descripcion: "El cliente solicita información sobre el avance de su reparación.",
+            respuesta: "Pendiente de atención."
+        },
+        {
+            folio: "TCK-002",
+            cliente: "María González",
+            telefono: "4159876543",
+            correo: "maria@email.com",
+            asunto: "Consulta sobre garantía",
+            categoria: "Garantía",
+            prioridad: "Media",
+            estado: "En proceso",
+            fecha: "2026-11-11",
+            responsable: "Técnico asignado",
+            descripcion: "La cliente solicita revisar la garantía de su dispositivo.",
+            respuesta: "Se está verificando la información de garantía."
+        },
+        {
+            folio: "TCK-003",
+            cliente: "Carlos López",
+            telefono: "4155551234",
+            correo: "carlos@email.com",
+            asunto: "Información de producto",
+            categoria: "Producto",
+            prioridad: "Baja",
+            estado: "Cerrado",
+            fecha: "2026-11-12",
+            responsable: "Atención a clientes",
+            descripcion: "El cliente solicita información sobre un producto disponible.",
+            respuesta: "Se proporcionó la información solicitada."
+        }
+    ];
+
+    const parametros = new URLSearchParams(location.search);
+    const folio = parametros.get("folio");
+    const ticket = tickets.find(t => t.folio === folio);
+
+    if (!ticket) {
+        document.getElementById("contenido").classList.add("hidden");
+        document.getElementById("editar").classList.add("hidden");
+        document.getElementById("error").classList.remove("hidden");
+        document.getElementById("folio").textContent = folio || "Sin folio";
+    } else {
+        const campos = [
+            "folio", "cliente", "telefono", "correo",
+            "asunto", "categoria", "fecha", "responsable",
+            "descripcion", "respuesta"
+        ];
+
+        campos.forEach(campo => {
+            document.getElementById(campo).textContent =
+                ticket[campo] || "No especificado";
+        });
+
+        const coloresPrioridad = {
+            "Alta": "bg-red-100 text-red-700",
+            "Media": "bg-amber-100 text-amber-700",
+            "Baja": "bg-emerald-100 text-emerald-700"
+        };
+
+        const coloresEstado = {
+            "Abierto": "bg-blue-100 text-blue-700",
+            "En proceso": "bg-amber-100 text-amber-700",
+            "Cerrado": "bg-emerald-100 text-emerald-700"
+        };
+
+        const prioridad = document.getElementById("prioridad");
+        prioridad.textContent = "Prioridad: " + ticket.prioridad;
+        prioridad.className =
+            "rounded-full px-4 py-2 text-sm font-semibold " +
+            coloresPrioridad[ticket.prioridad];
+
+        const estado = document.getElementById("estado");
+        estado.textContent = ticket.estado;
+        estado.className =
+            "rounded-full px-4 py-2 text-sm font-semibold " +
+            coloresEstado[ticket.estado];
+
+        document.getElementById("editar").href =
+            "editar_ticket.html?folio=" +
+            encodeURIComponent(ticket.folio);
+    }
+</script>
+
+</body>
+</html>

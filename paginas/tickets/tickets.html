@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tickets | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-7xl px-6 py-8">
+
+    <div class="mb-7 flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <p class="text-sm font-medium text-blue-600">Administración</p>
+            <h2 class="text-3xl font-bold">Tickets de soporte</h2>
+            <p class="mt-1 text-sm text-slate-500">
+                Administra las solicitudes e incidencias de los clientes.
+            </p>
+        </div>
+
+        <a href="crear_ticket.html"
+           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+            + Nuevo ticket
+        </a>
+    </div>
+
+    <section class="mb-6 grid gap-4 sm:grid-cols-3">
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Total de tickets</p>
+            <h3 id="total" class="mt-2 text-3xl font-bold">0</h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Tickets abiertos</p>
+            <h3 id="abiertos" class="mt-2 text-3xl font-bold text-amber-600">0</h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Tickets cerrados</p>
+            <h3 id="cerrados" class="mt-2 text-3xl font-bold text-emerald-600">0</h3>
+        </div>
+    </section>
+
+    <section class="overflow-hidden rounded-xl bg-white shadow-sm">
+
+        <div class="flex flex-col gap-3 border-b p-5 sm:flex-row">
+            <input id="buscar" type="search"
+                   placeholder="Buscar folio, cliente o asunto..."
+                   class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+
+            <select id="filtro"
+                    class="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm">
+                <option value="">Todos los estados</option>
+                <option>Abierto</option>
+                <option>En proceso</option>
+                <option>Cerrado</option>
+            </select>
+
+            <button onclick="filtrar()"
+                    class="rounded-lg bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800">
+                Buscar
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                    <tr>
+                        <th class="px-6 py-4">Folio</th>
+                        <th class="px-6 py-4">Cliente</th>
+                        <th class="px-6 py-4">Asunto</th>
+                        <th class="px-6 py-4">Prioridad</th>
+                        <th class="px-6 py-4">Estado</th>
+                        <th class="px-6 py-4 text-right">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabla" class="divide-y divide-slate-100"></tbody>
+            </table>
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    // Registros de demostración.
+    const tickets = [
+        {
+            folio: "TCK-001",
+            cliente: "Juan Pérez",
+            asunto: "Problema con reparación",
+            prioridad: "Alta",
+            estado: "Abierto"
+        },
+        {
+            folio: "TCK-002",
+            cliente: "María González",
+            asunto: "Consulta sobre garantía",
+            prioridad: "Media",
+            estado: "En proceso"
+        },
+        {
+            folio: "TCK-003",
+            cliente: "Carlos López",
+            asunto: "Información de producto",
+            prioridad: "Baja",
+            estado: "Cerrado"
+        }
+    ];
+
+    const coloresPrioridad = {
+        "Alta": "bg-red-100 text-red-700",
+        "Media": "bg-amber-100 text-amber-700",
+        "Baja": "bg-emerald-100 text-emerald-700"
+    };
+
+    const coloresEstado = {
+        "Abierto": "bg-blue-100 text-blue-700",
+        "En proceso": "bg-amber-100 text-amber-700",
+        "Cerrado": "bg-emerald-100 text-emerald-700"
+    };
+
+    function agregarCelda(fila, valor, clase = "") {
+        const celda = document.createElement("td");
+        celda.className = "px-6 py-4 " + clase;
+        celda.textContent = valor;
+        fila.appendChild(celda);
+        return celda;
+    }
+
+    function agregarEtiqueta(fila, valor, colores) {
+        const celda = agregarCelda(fila, "");
+        const etiqueta = document.createElement("span");
+        etiqueta.className =
+            "rounded-full px-3 py-1 text-xs font-medium " +
+            (colores[valor] || "bg-slate-100 text-slate-700");
+        etiqueta.textContent = valor;
+        celda.appendChild(etiqueta);
+    }
+
+    function mostrar(datos) {
+        const tabla = document.getElementById("tabla");
+        tabla.replaceChildren();
+
+        datos.forEach(ticket => {
+            const fila = document.createElement("tr");
+            fila.className = "hover:bg-slate-50";
+
+            agregarCelda(fila, ticket.folio, "font-semibold");
+            agregarCelda(fila, ticket.cliente);
+            agregarCelda(fila, ticket.asunto);
+            agregarEtiqueta(fila, ticket.prioridad, coloresPrioridad);
+            agregarEtiqueta(fila, ticket.estado, coloresEstado);
+
+            const acciones = agregarCelda(fila, "", "text-right");
+
+            const enlace = document.createElement("a");
+            enlace.href = "detalle_ticket.html?folio=" +
+                encodeURIComponent(ticket.folio);
+            enlace.className = "font-medium text-blue-600 hover:underline";
+            enlace.textContent = "Ver detalle";
+
+            acciones.appendChild(enlace);
+            tabla.appendChild(fila);
+        });
+
+        if (!datos.length) {
+            const fila = document.createElement("tr");
+            const celda = agregarCelda(
+                fila,
+                "No se encontraron tickets.",
+                "text-center text-slate-500"
+            );
+            celda.colSpan = 6;
+            tabla.appendChild(fila);
+        }
+    }
+
+    function filtrar() {
+        const texto = document.getElementById("buscar")
+            .value.toLowerCase().trim();
+
+        const estado = document.getElementById("filtro").value;
+
+        const resultado = tickets.filter(t =>
+            [t.folio, t.cliente, t.asunto].some(v =>
+                v.toLowerCase().includes(texto)
+            ) && (!estado || t.estado === estado)
+        );
+
+        mostrar(resultado);
+    }
+
+    document.getElementById("buscar")
+        .addEventListener("input", filtrar);
+
+    document.getElementById("filtro")
+        .addEventListener("change", filtrar);
+
+    document.getElementById("total").textContent = tickets.length;
+
+    document.getElementById("abiertos").textContent =
+        tickets.filter(t => t.estado !== "Cerrado").length;
+
+    document.getElementById("cerrados").textContent =
+        tickets.filter(t => t.estado === "Cerrado").length;
+
+    mostrar(tickets);
+</script>
+
+</body>
+</html>

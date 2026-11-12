@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reparaciones | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-7xl px-6 py-8">
+
+    <div class="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div>
+            <p class="text-sm font-medium text-blue-600">Administración</p>
+            <h2 class="text-3xl font-bold text-slate-900">Reparaciones</h2>
+            <p class="mt-1 text-sm text-slate-500">
+                Control y seguimiento de dispositivos en reparación.
+            </p>
+        </div>
+
+        <a href="registrar_reparacion.html"
+           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+            + Nueva reparación
+        </a>
+    </div>
+
+    <section class="mb-6 grid gap-4 sm:grid-cols-3">
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Total de reparaciones</p>
+            <h3 id="total" class="mt-2 text-3xl font-bold">0</h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">En proceso</p>
+            <h3 id="proceso" class="mt-2 text-3xl font-bold text-amber-600">0</h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Finalizadas</p>
+            <h3 id="finalizadas" class="mt-2 text-3xl font-bold text-emerald-600">0</h3>
+        </div>
+    </section>
+
+    <section class="overflow-hidden rounded-xl bg-white shadow-sm">
+
+        <div class="flex flex-col gap-3 border-b p-5 sm:flex-row">
+            <input id="buscar" type="search"
+                   placeholder="Buscar cliente, dispositivo o folio..."
+                   class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+
+            <button onclick="buscarReparacion()"
+                    class="rounded-lg bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800">
+                Buscar
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                    <tr>
+                        <th class="px-6 py-4">Folio</th>
+                        <th class="px-6 py-4">Cliente</th>
+                        <th class="px-6 py-4">Dispositivo</th>
+                        <th class="px-6 py-4">Estado</th>
+                        <th class="px-6 py-4 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla" class="divide-y divide-slate-100"></tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    // Registros de ejemplo para probar la pantalla.
+    const reparaciones = [
+        {folio:"REP-001", cliente:"Juan Pérez", equipo:"iPhone 13", estado:"En proceso"},
+        {folio:"REP-002", cliente:"María González", equipo:"MacBook Air", estado:"Finalizada"},
+        {folio:"REP-003", cliente:"Carlos López", equipo:"iPad Pro", estado:"Pendiente"}
+    ];
+
+    const tabla = document.getElementById("tabla");
+
+    function mostrar(datos) {
+        tabla.replaceChildren();
+
+        datos.forEach(r => {
+            const fila = document.createElement("tr");
+            fila.className = "hover:bg-slate-50";
+
+            [r.folio, r.cliente, r.equipo].forEach(valor => {
+                const celda = document.createElement("td");
+                celda.className = "px-6 py-4";
+                celda.textContent = valor;
+                fila.appendChild(celda);
+            });
+
+            const estado = document.createElement("td");
+            estado.className = "px-6 py-4";
+            estado.textContent = r.estado;
+            fila.appendChild(estado);
+
+            const acciones = document.createElement("td");
+            acciones.className = "px-6 py-4 text-right";
+
+            const ver = document.createElement("a");
+            ver.href = "detalle_reparacion.html?folio=" + encodeURIComponent(r.folio);
+            ver.className = "font-medium text-blue-600 hover:underline";
+            ver.textContent = "Ver detalle";
+
+            acciones.appendChild(ver);
+            fila.appendChild(acciones);
+            tabla.appendChild(fila);
+        });
+
+        if (!datos.length) {
+            const fila = document.createElement("tr");
+            const celda = document.createElement("td");
+            celda.colSpan = 5;
+            celda.className = "px-6 py-8 text-center text-slate-500";
+            celda.textContent = "No se encontraron reparaciones.";
+            fila.appendChild(celda);
+            tabla.appendChild(fila);
+        }
+    }
+
+    function buscarReparacion() {
+        const texto = document.getElementById("buscar").value.toLowerCase();
+
+        mostrar(reparaciones.filter(r =>
+            [r.folio, r.cliente, r.equipo].some(v =>
+                v.toLowerCase().includes(texto)
+            )
+        ));
+    }
+
+    document.getElementById("buscar").addEventListener("input", buscarReparacion);
+
+    document.getElementById("total").textContent = reparaciones.length;
+    document.getElementById("proceso").textContent =
+        reparaciones.filter(r => r.estado === "En proceso").length;
+    document.getElementById("finalizadas").textContent =
+        reparaciones.filter(r => r.estado === "Finalizada").length;
+
+    mostrar(reparaciones);
+</script>
+
+</body>
+</html>
