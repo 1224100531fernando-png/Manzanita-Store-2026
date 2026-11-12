@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-7xl px-6 py-8">
+
+    <div class="mb-7 flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <p class="text-sm font-medium text-blue-600">Administración</p>
+            <h2 class="text-3xl font-bold">Inventario</h2>
+            <p class="mt-1 text-sm text-slate-500">
+                Control de productos, precios y existencias.
+            </p>
+        </div>
+
+        <a href="registrar_producto.html"
+           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+            + Nuevo producto
+        </a>
+    </div>
+
+    <section class="mb-6 grid gap-4 sm:grid-cols-3">
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Productos registrados</p>
+            <h3 id="total" class="mt-2 text-3xl font-bold">0</h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Unidades disponibles</p>
+            <h3 id="unidades" class="mt-2 text-3xl font-bold text-blue-600">0</h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Productos con stock bajo</p>
+            <h3 id="bajos" class="mt-2 text-3xl font-bold text-red-600">0</h3>
+        </div>
+
+    </section>
+
+    <section class="overflow-hidden rounded-xl bg-white shadow-sm">
+
+        <div class="flex flex-col gap-3 border-b p-5 sm:flex-row">
+
+            <input id="buscar" type="search"
+                   placeholder="Buscar producto, código o categoría..."
+                   class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+
+            <select id="categoria"
+                    class="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm">
+                <option value="">Todas las categorías</option>
+                <option>iPhone</option>
+                <option>Mac</option>
+                <option>Accesorios</option>
+                <option>Refacciones</option>
+            </select>
+
+            <button onclick="filtrar()"
+                    class="rounded-lg bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800">
+                Buscar
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                    <tr>
+                        <th class="px-6 py-4">Código</th>
+                        <th class="px-6 py-4">Producto</th>
+                        <th class="px-6 py-4">Categoría</th>
+                        <th class="px-6 py-4">Precio</th>
+                        <th class="px-6 py-4">Existencias</th>
+                        <th class="px-6 py-4">Estado</th>
+                        <th class="px-6 py-4 text-right">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabla" class="divide-y divide-slate-100"></tbody>
+            </table>
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    // Productos de ejemplo. Después vendrán de MySQL.
+    const productos = [
+        {
+            codigo: "PROD-001",
+            nombre: "iPhone 13",
+            categoria: "iPhone",
+            precio: 9500,
+            stock: 8,
+            minimo: 3
+        },
+        {
+            codigo: "PROD-002",
+            nombre: "MacBook Air M2",
+            categoria: "Mac",
+            precio: 18500,
+            stock: 2,
+            minimo: 3
+        },
+        {
+            codigo: "PROD-003",
+            nombre: "Cargador USB-C",
+            categoria: "Accesorios",
+            precio: 450,
+            stock: 15,
+            minimo: 5
+        },
+        {
+            codigo: "PROD-004",
+            nombre: "Pantalla iPhone 11",
+            categoria: "Refacciones",
+            precio: 1200,
+            stock: 0,
+            minimo: 2
+        }
+    ];
+
+    function estadoProducto(p) {
+        if (p.stock === 0) return "Agotado";
+        if (p.stock <= p.minimo) return "Stock bajo";
+        return "Disponible";
+    }
+
+    function mostrar(datos) {
+        const tabla = document.getElementById("tabla");
+        tabla.replaceChildren();
+
+        datos.forEach(p => {
+            const fila = document.createElement("tr");
+            fila.className = "hover:bg-slate-50";
+
+            const valores = [
+                p.codigo,
+                p.nombre,
+                p.categoria,
+                p.precio.toLocaleString("es-MX", {
+                    style: "currency",
+                    currency: "MXN"
+                }),
+                String(p.stock)
+            ];
+
+            valores.forEach(valor => {
+                const celda = document.createElement("td");
+                celda.className = "px-6 py-4";
+                celda.textContent = valor;
+                fila.appendChild(celda);
+            });
+
+            const estado = estadoProducto(p);
+            const colores = {
+                "Disponible": "bg-emerald-100 text-emerald-700",
+                "Stock bajo": "bg-amber-100 text-amber-700",
+                "Agotado": "bg-red-100 text-red-700"
+            };
+
+            const celdaEstado = document.createElement("td");
+            celdaEstado.className = "px-6 py-4";
+
+            const etiqueta = document.createElement("span");
+            etiqueta.className = "rounded-full px-3 py-1 text-xs " + colores[estado];
+            etiqueta.textContent = estado;
+
+            celdaEstado.appendChild(etiqueta);
+            fila.appendChild(celdaEstado);
+
+            const acciones = document.createElement("td");
+            acciones.className = "px-6 py-4 text-right";
+
+            const editar = document.createElement("a");
+            editar.href = "editar_producto.html?codigo=" +
+                encodeURIComponent(p.codigo);
+            editar.className = "font-medium text-blue-600 hover:underline";
+            editar.textContent = "Editar";
+
+            acciones.appendChild(editar);
+            fila.appendChild(acciones);
+            tabla.appendChild(fila);
+        });
+
+        if (datos.length === 0) {
+            const fila = document.createElement("tr");
+            const celda = document.createElement("td");
+            celda.colSpan = 7;
+            celda.className = "px-6 py-8 text-center text-slate-500";
+            celda.textContent = "No se encontraron productos.";
+            fila.appendChild(celda);
+            tabla.appendChild(fila);
+        }
+    }
+
+    function filtrar() {
+        const texto = document.getElementById("buscar")
+            .value.toLowerCase().trim();
+        const categoria = document.getElementById("categoria").value;
+
+        mostrar(productos.filter(p =>
+            [p.codigo, p.nombre, p.categoria].some(v =>
+                v.toLowerCase().includes(texto)
+            ) && (!categoria || p.categoria === categoria)
+        ));
+    }
+
+    document.getElementById("buscar").addEventListener("input", filtrar);
+    document.getElementById("categoria").addEventListener("change", filtrar);
+
+    document.getElementById("total").textContent = productos.length;
+    document.getElementById("unidades").textContent =
+        productos.reduce((total, p) => total + p.stock, 0);
+    document.getElementById("bajos").textContent =
+        productos.filter(p => p.stock <= p.minimo).length;
+
+    mostrar(productos);
+</script>
+
+</body>
+</html>

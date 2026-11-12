@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte de inventario | Manzanita Store</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-7xl px-6 py-8">
+
+    <a href="reportes.html"
+       class="text-sm font-medium text-blue-600 hover:underline">
+        ← Volver a reportes
+    </a>
+
+    <div class="mb-7 mt-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <p class="text-sm font-medium text-blue-600">Administración</p>
+            <h2 class="text-3xl font-bold">Reporte de inventario</h2>
+            <p class="mt-2 text-sm text-slate-500">
+                Consulta existencias, valoración del inventario y productos con stock bajo.
+            </p>
+            <p class="mt-1 text-xs text-amber-700">
+                Datos de demostración, pendientes de conectar con MySQL.
+            </p>
+        </div>
+
+        <button onclick="window.print()"
+                class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+            Imprimir reporte
+        </button>
+    </div>
+
+    <section class="mb-6 rounded-xl bg-white p-5 shadow-sm">
+        <h3 class="mb-4 font-semibold">Filtrar inventario</h3>
+
+        <div class="grid gap-4 sm:grid-cols-3">
+            <div>
+                <label for="buscar" class="mb-2 block text-sm">
+                    Buscar producto
+                </label>
+                <input id="buscar" type="search"
+                       placeholder="Nombre o código..."
+                       class="w-full rounded-lg border border-slate-300 p-3">
+            </div>
+
+            <div>
+                <label for="categoria" class="mb-2 block text-sm">
+                    Categoría
+                </label>
+                <select id="categoria"
+                        class="w-full rounded-lg border border-slate-300 bg-white p-3">
+                    <option value="">Todas las categorías</option>
+                    <option>iPhone</option>
+                    <option>Mac</option>
+                    <option>Accesorios</option>
+                    <option>Refacciones</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="estadoFiltro" class="mb-2 block text-sm">
+                    Estado del inventario
+                </label>
+                <select id="estadoFiltro"
+                        class="w-full rounded-lg border border-slate-300 bg-white p-3">
+                    <option value="">Todos los estados</option>
+                    <option>Disponible</option>
+                    <option>Stock bajo</option>
+                    <option>Agotado</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Productos</p>
+            <h3 id="total" class="mt-2 text-3xl font-bold">0</h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Unidades disponibles</p>
+            <h3 id="unidades" class="mt-2 text-3xl font-bold text-blue-600">0</h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Stock bajo y agotado</p>
+            <h3 id="bajos" class="mt-2 text-3xl font-bold text-red-600">0</h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Valor estimado a costo</p>
+            <h3 id="valor" class="mt-2 text-2xl font-bold text-emerald-600">$0.00</h3>
+        </div>
+
+    </section>
+
+    <section class="mb-6 grid gap-6 lg:grid-cols-2">
+        <div class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-2 text-lg font-semibold">Existencias por producto</h3>
+            <p class="mb-5 text-sm text-slate-500">
+                Cantidad disponible de cada artículo filtrado.
+            </p>
+            <div class="h-80">
+                <canvas id="graficaExistencias"></canvas>
+            </div>
+        </div>
+
+        <div class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-2 text-lg font-semibold">Estado del inventario</h3>
+            <p class="mb-5 text-sm text-slate-500">
+                Distribución de productos según sus existencias.
+            </p>
+            <div class="mx-auto h-80 max-w-sm">
+                <canvas id="graficaEstados"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <section class="overflow-hidden rounded-xl bg-white shadow-sm">
+        <div class="border-b p-5">
+            <h3 class="text-lg font-semibold">Detalle del inventario</h3>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                    <tr>
+                        <th class="px-5 py-4">Código</th>
+                        <th class="px-5 py-4">Producto</th>
+                        <th class="px-5 py-4">Categoría</th>
+                        <th class="px-5 py-4">Stock</th>
+                        <th class="px-5 py-4">Mínimo</th>
+                        <th class="px-5 py-4">Estado</th>
+                        <th class="px-5 py-4 text-right">Valor a costo</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla" class="divide-y divide-slate-100"></tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<style>
+@media print {
+    header, footer, button, main > a {
+        display: none !important;
+    }
+    body { background: white !important; }
+    section { box-shadow: none !important; break-inside: avoid; }
+    input, select { border: none !important; }
+}
+</style>
+
+<script>
+    // Datos de ejemplo consistentes con el módulo de inventario.
+    const productos = [
+        {codigo:"PROD-001", nombre:"iPhone 13", categoria:"iPhone",
+         costo:7500, precio:9500, stock:8, minimo:3},
+
+        {codigo:"PROD-002", nombre:"MacBook Air M2", categoria:"Mac",
+         costo:15000, precio:18500, stock:2, minimo:3},
+
+        {codigo:"PROD-003", nombre:"Cargador USB-C", categoria:"Accesorios",
+         costo:300, precio:450, stock:15, minimo:5},
+
+        {codigo:"PROD-004", nombre:"Pantalla iPhone 11", categoria:"Refacciones",
+         costo:850, precio:1200, stock:0, minimo:2}
+    ];
+
+    const moneda = n => n.toLocaleString("es-MX", {
+        style:"currency", currency:"MXN"
+    });
+
+    function estado(p) {
+        if (p.stock === 0) return "Agotado";
+        if (p.stock <= p.minimo) return "Stock bajo";
+        return "Disponible";
+    }
+
+    const colores = {
+        "Disponible": "bg-emerald-100 text-emerald-700",
+        "Stock bajo": "bg-amber-100 text-amber-700",
+        "Agotado": "bg-red-100 text-red-700"
+    };
+
+    let graficaExistencias = null;
+    let graficaEstados = null;
+
+    function mostrar() {
+        const buscar = document.getElementById("buscar")
+            .value.toLowerCase().trim();
+        const categoria = document.getElementById("categoria").value;
+        const filtro = document.getElementById("estadoFiltro").value;
+
+        const datos = productos.filter(p =>
+            [p.nombre, p.codigo].some(v =>
+                v.toLowerCase().includes(buscar)
+            ) &&
+            (!categoria || p.categoria === categoria) &&
+            (!filtro || estado(p) === filtro)
+        );
+
+        document.getElementById("total").textContent = datos.length;
+        document.getElementById("unidades").textContent =
+            datos.reduce((s, p) => s + p.stock, 0);
+        document.getElementById("bajos").textContent =
+            datos.filter(p => p.stock <= p.minimo).length;
+        document.getElementById("valor").textContent =
+            moneda(datos.reduce((s, p) => s + p.stock * p.costo, 0));
+
+        const tabla = document.getElementById("tabla");
+        tabla.replaceChildren();
+
+        datos.forEach(p => {
+            const fila = document.createElement("tr");
+            fila.className = "hover:bg-slate-50";
+
+            [p.codigo, p.nombre, p.categoria,
+             String(p.stock), String(p.minimo)].forEach(valor => {
+                const td = document.createElement("td");
+                td.className = "px-5 py-4";
+                td.textContent = valor;
+                fila.appendChild(td);
+            });
+
+            const celdaEstado = document.createElement("td");
+            celdaEstado.className = "px-5 py-4";
+
+            const etiqueta = document.createElement("span");
+            etiqueta.className =
+                "rounded-full px-3 py-1 text-xs " + colores[estado(p)];
+            etiqueta.textContent = estado(p);
+            celdaEstado.appendChild(etiqueta);
+            fila.appendChild(celdaEstado);
+
+            const valor = document.createElement("td");
+            valor.className = "px-5 py-4 text-right font-semibold";
+            valor.textContent = moneda(p.stock * p.costo);
+            fila.appendChild(valor);
+
+            tabla.appendChild(fila);
+        });
+
+        if (!datos.length) {
+            const fila = document.createElement("tr");
+            const celda = document.createElement("td");
+            celda.colSpan = 7;
+            celda.className = "px-5 py-7 text-center text-slate-500";
+            celda.textContent = "No se encontraron productos.";
+            fila.appendChild(celda);
+            tabla.appendChild(fila);
+        }
+
+        if (typeof Chart === "undefined") return;
+
+        if (graficaExistencias) graficaExistencias.destroy();
+        if (graficaEstados) graficaEstados.destroy();
+
+        graficaExistencias = new Chart(
+            document.getElementById("graficaExistencias"), {
+                type:"bar",
+                data:{
+                    labels:datos.map(p => p.nombre),
+                    datasets:[{
+                        label:"Unidades",
+                        data:datos.map(p => p.stock),
+                        backgroundColor:"#2563eb",
+                        borderRadius:6
+                    }]
+                },
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    indexAxis:"y",
+                    scales:{x:{beginAtZero:true}}
+                }
+            }
+        );
+
+        const estados = ["Disponible", "Stock bajo", "Agotado"];
+
+        graficaEstados = new Chart(
+            document.getElementById("graficaEstados"), {
+                type:"doughnut",
+                data:{
+                    labels:estados,
+                    datasets:[{
+                        data:estados.map(e =>
+                            datos.filter(p => estado(p) === e).length
+                        ),
+                        backgroundColor:[
+                            "#10b981", "#f59e0b", "#ef4444"
+                        ]
+                    }]
+                },
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    plugins:{
+                        title:{
+                            display:datos.length === 0,
+                            text:"Sin productos para mostrar"
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+    ["buscar", "categoria", "estadoFiltro"].forEach(id => {
+        const elemento = document.getElementById(id);
+        elemento.addEventListener(
+            id === "buscar" ? "input" : "change", mostrar
+        );
+    });
+
+    mostrar();
+</script>
+
+</body>
+</html>

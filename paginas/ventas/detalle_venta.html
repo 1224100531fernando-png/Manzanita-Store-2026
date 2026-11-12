@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detalle de venta | Manzanita Store</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-5xl px-6 py-8">
+
+    <a href="ventas.html"
+       class="text-sm font-medium text-blue-600 hover:underline">
+        ← Volver a ventas
+    </a>
+
+    <div class="mb-7 mt-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <p class="text-sm font-medium text-blue-600">Administración</p>
+            <h2 class="text-3xl font-bold">Detalle de venta</h2>
+            <p id="folio" class="mt-2 text-sm text-slate-500"></p>
+        </div>
+
+        <button id="imprimir" type="button"
+                onclick="window.print()"
+                class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+            Imprimir detalle
+        </button>
+    </div>
+
+    <div id="error"
+         class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
+        <h3 class="text-xl font-bold">Venta no encontrada</h3>
+        <p class="mt-2 text-slate-500">
+            El folio solicitado no existe en los registros de prueba.
+        </p>
+        <a href="ventas.html"
+           class="mt-4 inline-block text-blue-600 hover:underline">
+            Regresar a ventas
+        </a>
+    </div>
+
+    <div id="contenido" class="space-y-6">
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+                Información de la operación
+            </h3>
+
+            <div class="grid gap-5 sm:grid-cols-3">
+                <div>
+                    <p class="text-sm text-slate-500">Fecha</p>
+                    <p id="fecha" class="mt-1 font-semibold"></p>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Método de pago</p>
+                    <p id="metodo" class="mt-1 font-semibold"></p>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Estado</p>
+                    <span class="mt-1 inline-block rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">
+                        Registrada (ejemplo)
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+                Datos del cliente y vendedor
+            </h3>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                    <p class="text-sm text-slate-500">Cliente</p>
+                    <p id="cliente" class="mt-1 font-semibold"></p>
+                </div>
+                <div>
+                    <p class="text-sm text-slate-500">Vendedor</p>
+                    <p id="vendedor" class="mt-1 font-semibold"></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="overflow-hidden rounded-xl bg-white shadow-sm">
+            <div class="border-b p-6">
+                <h3 class="text-lg font-semibold">Productos vendidos</h3>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                        <tr>
+                            <th class="px-6 py-4">Producto</th>
+                            <th class="px-6 py-4">Precio</th>
+                            <th class="px-6 py-4">Cantidad</th>
+                            <th class="px-6 py-4 text-right">Importe</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productos" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+
+            <div class="ml-auto max-w-sm space-y-3 p-6">
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-500">Subtotal</span>
+                    <span id="subtotal" class="font-semibold"></span>
+                </div>
+                <div class="flex justify-between border-t pt-4 text-xl">
+                    <strong>Total</strong>
+                    <strong id="total" class="text-blue-600"></strong>
+                </div>
+                <p class="text-xs text-slate-500">
+                    Importes de demostración. No constituyen un comprobante fiscal.
+                </p>
+            </div>
+        </section>
+
+        <div class="flex justify-end">
+            <a href="ventas.html"
+               class="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+                Regresar a ventas
+            </a>
+        </div>
+    </div>
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<style>
+@media print {
+    header, footer, a, #imprimir {
+        display: none !important;
+    }
+    body { background: white !important; }
+    main { padding: 0 !important; }
+    section { box-shadow: none !important; }
+}
+</style>
+
+<script>
+    // Datos de prueba, correspondientes al historial de ventas.
+    // Los precios se consideran totales de línea sin IVA adicional.
+    const ventas = [
+        {
+            folio: "VTA-001",
+            fecha: "2026-11-10",
+            cliente: "Juan Pérez",
+            vendedor: "Carlos Fernando",
+            metodo: "Tarjeta",
+            productos: [
+                {nombre:"iPhone 13", precio:9500, cantidad:1}
+            ]
+        },
+        {
+            folio: "VTA-002",
+            fecha: "2026-11-11",
+            cliente: "María González",
+            vendedor: "Axel Gael",
+            metodo: "Transferencia",
+            productos: [
+                {nombre:"MacBook Air M2", precio:18500, cantidad:1}
+            ]
+        },
+        {
+            folio: "VTA-003",
+            fecha: "2026-11-12",
+            cliente: "Carlos López",
+            vendedor: "Carlos Fernando",
+            metodo: "Efectivo",
+            productos: [
+                {nombre:"Cargador USB-C", precio:450, cantidad:1}
+            ]
+        },
+        {
+            folio: "VTA-004",
+            fecha: "2026-11-12",
+            cliente: "Ana Martínez",
+            vendedor: "Axel Gael",
+            metodo: "Tarjeta",
+            productos: [
+                {nombre:"Pantalla iPhone 11", precio:1200, cantidad:1}
+            ]
+        }
+    ];
+
+    const moneda = valor => valor.toLocaleString("es-MX", {
+        style: "currency",
+        currency: "MXN"
+    });
+
+    const folio = new URLSearchParams(location.search).get("folio");
+    const venta = ventas.find(v => v.folio === folio);
+
+    if (!venta) {
+        document.getElementById("contenido").classList.add("hidden");
+        document.getElementById("imprimir").classList.add("hidden");
+        document.getElementById("error").classList.remove("hidden");
+        document.getElementById("folio").textContent = folio || "Sin folio";
+    } else {
+        ["folio", "fecha", "metodo", "cliente", "vendedor"]
+            .forEach(campo => {
+                document.getElementById(campo).textContent = venta[campo];
+            });
+
+        const tabla = document.getElementById("productos");
+
+        venta.productos.forEach(p => {
+            const fila = document.createElement("tr");
+
+            [
+                p.nombre,
+                moneda(p.precio),
+                String(p.cantidad),
+                moneda(p.precio * p.cantidad)
+            ].forEach((valor, indice) => {
+                const celda = document.createElement("td");
+                celda.className = "px-6 py-4" +
+                    (indice === 3 ? " text-right" : "");
+                celda.textContent = valor;
+                fila.appendChild(celda);
+            });
+
+            tabla.appendChild(fila);
+        });
+
+        const total = venta.productos.reduce(
+            (suma, p) => suma + p.precio * p.cantidad, 0
+        );
+
+        document.getElementById("subtotal").textContent = moneda(total);
+        document.getElementById("total").textContent = moneda(total);
+    }
+</script>
+
+</body>
+</html>

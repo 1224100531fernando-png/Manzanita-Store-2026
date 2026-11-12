@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-7xl px-6 py-8">
+
+    <div class="mb-7 flex flex-wrap items-center justify-between gap-4">
+        <div>
+            <p class="text-sm font-medium text-blue-600">
+                Administración
+            </p>
+            <h2 class="text-3xl font-bold text-slate-900">
+                Gestión de ventas
+            </h2>
+            <p class="mt-1 text-sm text-slate-500">
+                Consulta las ventas y operaciones de Manzanita Store.
+            </p>
+        </div>
+
+        <a href="nueva_venta.html"
+           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+            + Nueva venta
+        </a>
+    </div>
+
+    <section class="mb-6 grid gap-4 sm:grid-cols-3">
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">
+                Total de ventas
+            </p>
+            <h3 id="totalVentas" class="mt-2 text-3xl font-bold">
+                0
+            </h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">
+                Ingresos registrados
+            </p>
+            <h3 id="ingresos"
+                class="mt-2 text-3xl font-bold text-emerald-600">
+                $0.00
+            </h3>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">
+                Ticket promedio
+            </p>
+            <h3 id="promedio"
+                class="mt-2 text-3xl font-bold text-blue-600">
+                $0.00
+            </h3>
+        </div>
+
+    </section>
+
+    <section class="overflow-hidden rounded-xl bg-white shadow-sm">
+
+        <div class="flex flex-col gap-3 border-b p-5 sm:flex-row">
+
+            <input id="buscar" type="search"
+                   placeholder="Buscar folio, cliente o vendedor..."
+                   class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+
+            <select id="metodo"
+                    class="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm">
+                <option value="">Todos los métodos</option>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta">Tarjeta</option>
+                <option value="Transferencia">Transferencia</option>
+            </select>
+
+            <button onclick="filtrar()"
+                    class="rounded-lg bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800">
+                Buscar
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-left text-sm">
+
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                    <tr>
+                        <th class="px-6 py-4">Folio</th>
+                        <th class="px-6 py-4">Fecha</th>
+                        <th class="px-6 py-4">Cliente</th>
+                        <th class="px-6 py-4">Vendedor</th>
+                        <th class="px-6 py-4">Método de pago</th>
+                        <th class="px-6 py-4">Total</th>
+                        <th class="px-6 py-4 text-right">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabla" class="divide-y divide-slate-100">
+                </tbody>
+
+            </table>
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    // Ventas de demostración.
+    // Más adelante se consultarán en MySQL.
+    const ventas = [
+        {
+            folio: "VTA-001",
+            fecha: "2026-11-10",
+            cliente: "Juan Pérez",
+            vendedor: "Carlos Fernando",
+            metodo: "Tarjeta",
+            total: 9500
+        },
+        {
+            folio: "VTA-002",
+            fecha: "2026-11-11",
+            cliente: "María González",
+            vendedor: "Axel Gael",
+            metodo: "Transferencia",
+            total: 18500
+        },
+        {
+            folio: "VTA-003",
+            fecha: "2026-11-12",
+            cliente: "Carlos López",
+            vendedor: "Carlos Fernando",
+            metodo: "Efectivo",
+            total: 450
+        },
+        {
+            folio: "VTA-004",
+            fecha: "2026-11-12",
+            cliente: "Ana Martínez",
+            vendedor: "Axel Gael",
+            metodo: "Tarjeta",
+            total: 1200
+        }
+    ];
+
+    function moneda(valor) {
+        return valor.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN"
+        });
+    }
+
+    function mostrar(datos) {
+        const tabla = document.getElementById("tabla");
+        tabla.replaceChildren();
+
+        datos.forEach(v => {
+            const fila = document.createElement("tr");
+            fila.className = "hover:bg-slate-50";
+
+            const valores = [
+                v.folio,
+                v.fecha,
+                v.cliente,
+                v.vendedor,
+                v.metodo,
+                moneda(v.total)
+            ];
+
+            valores.forEach(valor => {
+                const celda = document.createElement("td");
+                celda.className = "px-6 py-4";
+                celda.textContent = valor;
+                fila.appendChild(celda);
+            });
+
+            const acciones = document.createElement("td");
+            acciones.className = "px-6 py-4 text-right";
+
+            const enlace = document.createElement("a");
+            enlace.href = "detalle_venta.html?folio=" +
+                encodeURIComponent(v.folio);
+
+            enlace.className =
+                "font-medium text-blue-600 hover:underline";
+
+            enlace.textContent = "Ver detalle";
+
+            acciones.appendChild(enlace);
+            fila.appendChild(acciones);
+            tabla.appendChild(fila);
+        });
+
+        if (!datos.length) {
+            const fila = document.createElement("tr");
+            const celda = document.createElement("td");
+
+            celda.colSpan = 7;
+            celda.className =
+                "px-6 py-8 text-center text-slate-500";
+
+            celda.textContent = "No se encontraron ventas.";
+
+            fila.appendChild(celda);
+            tabla.appendChild(fila);
+        }
+    }
+
+    function filtrar() {
+        const texto = document.getElementById("buscar")
+            .value.toLowerCase().trim();
+
+        const metodo = document.getElementById("metodo").value;
+
+        const resultados = ventas.filter(v =>
+            [v.folio, v.cliente, v.vendedor].some(valor =>
+                valor.toLowerCase().includes(texto)
+            ) && (!metodo || v.metodo === metodo)
+        );
+
+        mostrar(resultados);
+    }
+
+    document.getElementById("buscar")
+        .addEventListener("input", filtrar);
+
+    document.getElementById("metodo")
+        .addEventListener("change", filtrar);
+
+    const total = ventas.reduce(
+        (suma, venta) => suma + venta.total, 0
+    );
+
+    document.getElementById("totalVentas").textContent =
+        ventas.length;
+
+    document.getElementById("ingresos").textContent =
+        moneda(total);
+
+    document.getElementById("promedio").textContent =
+        moneda(ventas.length ? total / ventas.length : 0);
+
+    mostrar(ventas);
+</script>
+
+</body>
+</html>
