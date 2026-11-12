@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nueva venta | Manzanita Store</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-5xl px-6 py-8">
+
+    <a href="ventas.html"
+       class="text-sm font-medium text-blue-600 hover:underline">
+        ← Volver a ventas
+    </a>
+
+    <div class="mb-7 mt-5">
+        <p class="text-sm font-medium text-blue-600">Administración</p>
+        <h2 class="text-3xl font-bold">Registrar nueva venta</h2>
+        <p class="mt-2 text-sm text-slate-500">
+            Selecciona los productos y calcula el total de la operación.
+        </p>
+    </div>
+
+    <form id="formulario" class="space-y-6">
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+                Información de la venta
+            </h3>
+
+            <div class="grid gap-5 sm:grid-cols-2">
+
+                <div>
+                    <label for="cliente" class="mb-2 block text-sm font-medium">
+                        Cliente *
+                    </label>
+                    <input id="cliente" required maxlength="100"
+                           placeholder="Nombre del cliente"
+                           class="w-full rounded-lg border border-slate-300 px-4 py-3">
+                </div>
+
+                <div>
+                    <label for="vendedor" class="mb-2 block text-sm font-medium">
+                        Vendedor *
+                    </label>
+                    <input id="vendedor" required maxlength="100"
+                           placeholder="Nombre del vendedor"
+                           class="w-full rounded-lg border border-slate-300 px-4 py-3">
+                </div>
+
+                <div>
+                    <label for="fecha" class="mb-2 block text-sm font-medium">
+                        Fecha *
+                    </label>
+                    <input id="fecha" type="date" required
+                           class="w-full rounded-lg border border-slate-300 px-4 py-3">
+                </div>
+
+                <div>
+                    <label for="metodo" class="mb-2 block text-sm font-medium">
+                        Método de pago *
+                    </label>
+                    <select id="metodo" required
+                            class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
+                        <option value="">Selecciona un método</option>
+                        <option>Efectivo</option>
+                        <option>Tarjeta</option>
+                        <option>Transferencia</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+
+            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+                Agregar productos
+            </h3>
+
+            <div class="grid gap-4 sm:grid-cols-4">
+
+                <div class="sm:col-span-3">
+                    <label for="producto" class="mb-2 block text-sm font-medium">
+                        Producto
+                    </label>
+                    <select id="producto"
+                            class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
+                        <option value="">Selecciona un producto</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="cantidad" class="mb-2 block text-sm font-medium">
+                        Cantidad
+                    </label>
+                    <input id="cantidad" type="number" min="1"
+                           step="1" value="1"
+                           class="w-full rounded-lg border border-slate-300 px-4 py-3">
+                </div>
+            </div>
+
+            <button id="agregar" type="button"
+                    class="mt-5 rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+                + Agregar producto
+            </button>
+
+            <p id="aviso" role="status" aria-live="polite"
+               class="mt-3 text-sm text-red-600"></p>
+
+            <div class="mt-6 overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+                        <tr>
+                            <th class="px-4 py-4">Producto</th>
+                            <th class="px-4 py-4">Precio</th>
+                            <th class="px-4 py-4">Cantidad</th>
+                            <th class="px-4 py-4">Importe</th>
+                            <th class="px-4 py-4">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="carrito" class="divide-y divide-slate-100">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
+                Resumen de la venta
+            </h3>
+
+            <div class="ml-auto max-w-sm space-y-4">
+
+                <div class="flex justify-between">
+                    <span>Subtotal</span>
+                    <strong id="subtotal">$0.00</strong>
+                </div>
+
+                <div class="flex items-center justify-between gap-4">
+                    <label for="iva">IVA de demostración</label>
+                    <select id="iva" class="rounded-lg border px-3 py-2">
+                        <option value="0">0%</option>
+                        <option value="0.16">16%</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-between">
+                    <span>IVA</span>
+                    <strong id="impuesto">$0.00</strong>
+                </div>
+
+                <div class="flex justify-between border-t pt-4 text-xl">
+                    <strong>Total</strong>
+                    <strong id="total" class="text-blue-600">$0.00</strong>
+                </div>
+            </div>
+
+            <p class="mt-5 text-xs text-slate-500">
+                Los precios son de ejemplo. La aplicación definitiva
+                deberá utilizar los precios y el tratamiento fiscal
+                configurados en el servidor.
+            </p>
+
+            <div id="mensaje" role="status" aria-live="polite"
+                 class="mt-6 hidden rounded-lg bg-blue-50 p-4 text-sm text-blue-800">
+            </div>
+
+            <div class="mt-7 flex flex-wrap justify-end gap-3 border-t pt-6">
+                <a href="ventas.html"
+                   class="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold">
+                    Cancelar
+                </a>
+
+                <button type="submit"
+                        class="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+                    Registrar venta
+                </button>
+            </div>
+        </section>
+
+    </form>
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    // Datos de prueba, iguales a los del inventario.
+    const productos = [
+        {codigo:"PROD-001", nombre:"iPhone 13", precio:9500, stock:8},
+        {codigo:"PROD-002", nombre:"MacBook Air M2", precio:18500, stock:2},
+        {codigo:"PROD-003", nombre:"Cargador USB-C", precio:450, stock:15},
+        {codigo:"PROD-004", nombre:"Pantalla iPhone 11", precio:1200, stock:0}
+    ];
+
+    const carrito = [];
+    const selector = document.getElementById("producto");
+    const tbody = document.getElementById("carrito");
+    const aviso = document.getElementById("aviso");
+    const mensaje = document.getElementById("mensaje");
+
+    const hoy = new Date();
+    document.getElementById("fecha").value =
+        new Date(hoy.getTime() - hoy.getTimezoneOffset() * 60000)
+        .toISOString().slice(0, 10);
+
+    const moneda = valor => valor.toLocaleString("es-MX", {
+        style:"currency", currency:"MXN"
+    });
+
+    productos.forEach(p => {
+        const opcion = document.createElement("option");
+        opcion.value = p.codigo;
+        opcion.textContent =
+            `${p.nombre} - ${moneda(p.precio)} (${p.stock} disponibles)`;
+        opcion.disabled = p.stock === 0;
+        selector.appendChild(opcion);
+    });
+
+    function calcular() {
+        const subtotal = carrito.reduce(
+            (s, p) => s + p.precio * p.cantidad, 0
+        );
+        const impuesto = subtotal *
+            Number(document.getElementById("iva").value);
+
+        document.getElementById("subtotal").textContent = moneda(subtotal);
+        document.getElementById("impuesto").textContent = moneda(impuesto);
+        document.getElementById("total").textContent =
+            moneda(subtotal + impuesto);
+    }
+
+    function mostrarCarrito() {
+        tbody.replaceChildren();
+
+        if (!carrito.length) {
+            const fila = document.createElement("tr");
+            const celda = document.createElement("td");
+            celda.colSpan = 5;
+            celda.className = "px-4 py-5 text-center text-slate-500";
+            celda.textContent = "Todavía no hay productos agregados.";
+            fila.appendChild(celda);
+            tbody.appendChild(fila);
+        }
+
+        carrito.forEach((p, indice) => {
+            const fila = document.createElement("tr");
+
+            [
+                p.nombre, moneda(p.precio),
+                String(p.cantidad), moneda(p.precio * p.cantidad)
+            ].forEach(valor => {
+                const td = document.createElement("td");
+                td.className = "px-4 py-4";
+                td.textContent = valor;
+                fila.appendChild(td);
+            });
+
+            const td = document.createElement("td");
+            td.className = "px-4 py-4";
+
+            const boton = document.createElement("button");
+            boton.type = "button";
+            boton.textContent = "Quitar";
+            boton.className = "font-medium text-red-600 hover:underline";
+
+            boton.addEventListener("click", () => {
+                carrito.splice(indice, 1);
+                mostrarCarrito();
+            });
+
+            td.appendChild(boton);
+            fila.appendChild(td);
+            tbody.appendChild(fila);
+        });
+
+        calcular();
+    }
+
+    document.getElementById("agregar").addEventListener("click", () => {
+        aviso.textContent = "";
+
+        const p = productos.find(x => x.codigo === selector.value);
+        const cantidadInput = document.getElementById("cantidad");
+
+        if (!p) {
+            aviso.textContent = "Selecciona un producto.";
+            return;
+        }
+
+        if (!cantidadInput.reportValidity()) return;
+
+        const cantidad = Number(cantidadInput.value);
+        const existente = carrito.find(x => x.codigo === p.codigo);
+        const acumulado = cantidad + (existente?.cantidad || 0);
+
+        if (!Number.isSafeInteger(cantidad) || cantidad < 1 ||
+            acumulado > p.stock) {
+            aviso.textContent =
+                "Cantidad inválida o superior a las existencias disponibles.";
+            return;
+        }
+
+        if (existente) {
+            existente.cantidad = acumulado;
+        } else {
+            carrito.push({...p, cantidad});
+        }
+
+        mostrarCarrito();
+    });
+
+    document.getElementById("iva")
+        .addEventListener("change", calcular);
+
+    document.getElementById("formulario")
+        .addEventListener("submit", evento => {
+            evento.preventDefault();
+
+            if (!evento.target.reportValidity()) return;
+
+            if (!carrito.length) {
+                aviso.textContent = "Agrega al menos un producto.";
+                return;
+            }
+
+            mensaje.classList.remove("hidden");
+            mensaje.textContent =
+                "Venta validada correctamente. " +
+                "Aún no se registra ni descuenta existencias; " +
+                "falta conectar el backend y MySQL.";
+        });
+
+    mostrarCarrito();
+</script>
+
+</body>
+</html>

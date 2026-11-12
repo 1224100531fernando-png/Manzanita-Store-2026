@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reportes | Manzanita Store</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+<header class="bg-slate-950 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div>
+            <h1 class="text-xl font-bold">
+                Manzanita <span class="text-blue-400">Store</span>
+            </h1>
+            <p class="text-xs text-slate-400">Sistema de gestión</p>
+        </div>
+        <a href="../autenticacion/login.html"
+           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+            Salir
+        </a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-7xl px-6 py-8">
+
+    <div class="mb-7">
+        <p class="text-sm font-medium text-blue-600">Administración</p>
+        <h2 class="text-3xl font-bold">Panel de reportes</h2>
+        <p class="mt-2 text-sm text-slate-500">
+            Resumen general de las operaciones de Manzanita Store.
+        </p>
+        <p class="mt-1 text-xs text-amber-700">
+            Datos de demostración, pendientes de conectar con MySQL.
+        </p>
+    </div>
+
+    <section class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Ingresos por ventas</p>
+            <h3 class="mt-2 text-2xl font-bold text-emerald-600">
+                $29,650.00
+            </h3>
+            <p class="mt-2 text-xs text-slate-400">4 ventas de ejemplo</p>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Reparaciones</p>
+            <h3 class="mt-2 text-3xl font-bold text-blue-600">3</h3>
+            <p class="mt-2 text-xs text-slate-400">1 finalizada</p>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Tickets de soporte</p>
+            <h3 class="mt-2 text-3xl font-bold text-amber-600">3</h3>
+            <p class="mt-2 text-xs text-slate-400">2 sin cerrar</p>
+        </div>
+
+        <div class="rounded-xl bg-white p-5 shadow-sm">
+            <p class="text-sm text-slate-500">Productos con stock bajo</p>
+            <h3 class="mt-2 text-3xl font-bold text-red-600">2</h3>
+            <p class="mt-2 text-xs text-slate-400">
+                Incluye productos agotados
+            </p>
+        </div>
+    </section>
+
+    <section class="grid gap-6 lg:grid-cols-2">
+
+        <div class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-1 text-lg font-semibold">Ingresos por día</h3>
+            <p class="mb-5 text-sm text-slate-500">
+                Ventas de demostración de noviembre de 2026.
+            </p>
+            <div class="h-72">
+                <canvas id="graficaVentas"></canvas>
+            </div>
+        </div>
+
+        <div class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-1 text-lg font-semibold">
+                Estado de reparaciones
+            </h3>
+            <p class="mb-5 text-sm text-slate-500">
+                Distribución de las órdenes de servicio.
+            </p>
+            <div class="mx-auto h-72 max-w-sm">
+                <canvas id="graficaReparaciones"></canvas>
+            </div>
+        </div>
+
+        <div class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-1 text-lg font-semibold">Tickets de soporte</h3>
+            <p class="mb-5 text-sm text-slate-500">
+                Solicitudes agrupadas por estado.
+            </p>
+            <div class="h-72">
+                <canvas id="graficaTickets"></canvas>
+            </div>
+        </div>
+
+        <div class="rounded-xl bg-white p-6 shadow-sm">
+            <h3 class="mb-1 text-lg font-semibold">
+                Existencias del inventario
+            </h3>
+            <p class="mb-5 text-sm text-slate-500">
+                Unidades disponibles por producto.
+            </p>
+            <div class="h-72">
+                <canvas id="graficaInventario"></canvas>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="mt-6 rounded-xl bg-white p-6 shadow-sm">
+        <h3 class="mb-5 text-lg font-semibold">Reportes detallados</h3>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+
+            <a href="reporte_ventas.html"
+               class="rounded-lg border border-slate-200 p-5 hover:border-blue-500 hover:bg-blue-50">
+                <h4 class="font-semibold text-blue-600">
+                    Reporte de ventas →
+                </h4>
+                <p class="mt-2 text-sm text-slate-500">
+                    Consulta ingresos, operaciones y productos vendidos.
+                </p>
+            </a>
+
+            <a href="reporte_inventario.html"
+               class="rounded-lg border border-slate-200 p-5 hover:border-blue-500 hover:bg-blue-50">
+                <h4 class="font-semibold text-blue-600">
+                    Reporte de inventario →
+                </h4>
+                <p class="mt-2 text-sm text-slate-500">
+                    Consulta existencias y alertas de stock.
+                </p>
+            </a>
+
+        </div>
+    </section>
+
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+    Manzanita Store · 2026
+</footer>
+
+<script>
+    if (typeof Chart === "undefined") {
+        alert("No se pudo cargar Chart.js. Revisa tu conexión a internet.");
+    } else {
+        const opciones = {
+            responsive: true,
+            maintainAspectRatio: false
+        };
+
+        new Chart(document.getElementById("graficaVentas"), {
+            type: "bar",
+            data: {
+                labels: ["10 nov", "11 nov", "12 nov"],
+                datasets: [{
+                    label: "Ingresos (MXN)",
+                    data: [9500, 18500, 1650],
+                    backgroundColor: "#2563eb",
+                    borderRadius: 6
+                }]
+            },
+            options: opciones
+        });
+
+        new Chart(document.getElementById("graficaReparaciones"), {
+            type: "doughnut",
+            data: {
+                labels: ["Pendiente", "En proceso", "Finalizada"],
+                datasets: [{
+                    data: [1, 1, 1],
+                    backgroundColor: [
+                        "#94a3b8", "#f59e0b", "#10b981"
+                    ]
+                }]
+            },
+            options: opciones
+        });
+
+        new Chart(document.getElementById("graficaTickets"), {
+            type: "bar",
+            data: {
+                labels: ["Abierto", "En proceso", "Cerrado"],
+                datasets: [{
+                    label: "Tickets",
+                    data: [1, 1, 1],
+                    backgroundColor: [
+                        "#3b82f6", "#f59e0b", "#10b981"
+                    ],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                ...opciones,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+
+        new Chart(document.getElementById("graficaInventario"), {
+            type: "bar",
+            data: {
+                labels: [
+                    "iPhone 13",
+                    "MacBook Air",
+                    "Cargador USB-C",
+                    "Pantalla iPhone 11"
+                ],
+                datasets: [{
+                    label: "Existencias",
+                    data: [8, 2, 15, 0],
+                    backgroundColor: "#2563eb",
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                ...opciones,
+                indexAxis: "y",
+                scales: {
+                    x: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
