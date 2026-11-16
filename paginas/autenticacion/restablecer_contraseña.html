@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer contraseña | Manzanita Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 flex items-center justify-center p-5">
+
+    <main class="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+
+        <div class="text-center mb-7">
+            <h1 class="text-3xl font-bold text-slate-900">
+                <span class="text-blue-600">Manzanita</span> Store
+            </h1>
+            <p class="text-sm text-slate-500 mt-2">Seguridad de cuenta</p>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-800">
+            Nueva contraseña
+        </h2>
+
+        <p class="text-sm text-slate-500 mt-2 mb-6">
+            Introduce el código de recuperación y establece tu nueva contraseña.
+        </p>
+
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% for categoria, mensaje in mensajes %}
+                <div class="mb-4 rounded-lg p-3 text-sm
+                    {% if categoria == 'error' %}
+                        bg-red-100 text-red-700
+                    {% else %}
+                        bg-green-100 text-green-700
+                    {% endif %}">
+                    {{ mensaje }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('restablecer_contrasena') }}">
+
+            <label class="block text-sm font-semibold mb-2">
+                Código de recuperación
+            </label>
+
+            <input
+                type="text"
+                name="codigo"
+                required
+                maxlength="6"
+                pattern="[0-9]{6}"
+                inputmode="numeric"
+                placeholder="000000"
+                class="w-full border border-slate-300 rounded-lg px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-blue-500"
+            >
+
+            <label class="block text-sm font-semibold mb-2">
+                Nueva contraseña
+            </label>
+
+            <input
+                type="password"
+                name="contrasena"
+                required
+                minlength="8"
+                autocomplete="new-password"
+                placeholder="Mínimo 8 caracteres"
+                class="w-full border border-slate-300 rounded-lg px-4 py-3 mb-4 outline-none focus:ring-2 focus:ring-blue-500"
+            >
+
+            <label class="block text-sm font-semibold mb-2">
+                Confirmar contraseña
+            </label>
+
+            <input
+                type="password"
+                name="confirmar_contrasena"
+                required
+                minlength="8"
+                autocomplete="new-password"
+                placeholder="Repite la contraseña"
+                class="w-full border border-slate-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+            >
+
+            <button
+                type="submit"
+                class="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg py-3">
+                Cambiar contraseña
+            </button>
+
+        </form>
+
+        <div class="text-center mt-6">
+            <a href="{{ url_for('login') }}"
+            class="text-blue-600 hover:underline text-sm font-semibold">
+                ← Regresar al inicio de sesión
+            </a>
+        </div>
+
+    </main>
+
+</body>
+</html>

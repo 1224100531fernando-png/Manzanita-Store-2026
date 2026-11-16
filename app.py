@@ -1,6 +1,8 @@
 
 import json
 import os
+import secrets
+import time
 
 from functools import wraps
 
@@ -38,6 +40,9 @@ ROLES_VALIDOS = [
     "Vendedor",
     "Técnico"
 ]
+
+TIEMPO_CODIGO = 600  # 10 minutos
+MAX_INTENTOS = 5
 
 
 # ==========================================================
@@ -85,12 +90,10 @@ def guardar_usuarios(usuarios):
 # ==========================================================
 
 def obtener_rol():
-
     return session.get("rol", "")
 
 
 def tiene_rol(*roles):
-
     return obtener_rol() in roles
 
 
@@ -169,7 +172,19 @@ def requiere_rol(*roles):
 
 
 # ==========================================================
-# 4. PÁGINA PRINCIPAL
+# 4. LIMPIAR DATOS DE RECUPERACIÓN
+# ==========================================================
+
+def limpiar_recuperacion():
+
+    session.pop("recuperacion_usuario", None)
+    session.pop("recuperacion_codigo_hash", None)
+    session.pop("recuperacion_expira", None)
+    session.pop("recuperacion_intentos", None)
+
+
+# ==========================================================
+# 5. PÁGINA PRINCIPAL
 # ==========================================================
 
 @app.route("/")
@@ -179,7 +194,7 @@ def inicio():
 
 
 # ==========================================================
-# 5. DASHBOARD DEL ADMINISTRADOR
+# 6. DASHBOARD DEL ADMINISTRADOR
 # ==========================================================
 
 @app.route("/dashboard")
@@ -197,7 +212,7 @@ def dashboard():
 
 
 # ==========================================================
-# 6. INICIAR SESIÓN
+# 7. INICIAR SESIÓN
 # ==========================================================
 
 @app.route("/login", methods=["GET", "POST"])
@@ -245,12 +260,7 @@ def login():
             session.clear()
 
             session["usuario"] = cuenta["usuario"]
-
-            session["nombre"] = cuenta.get(
-                "nombre",
-                "Usuario"
-            )
-
+            session["nombre"] = cuenta.get("nombre", "Usuario")
             session["rol"] = rol
 
             flash(
@@ -271,7 +281,7 @@ def login():
 
 
 # ==========================================================
-# 7. REGISTRO DE CUENTAS
+# 8. REGISTRO DE CUENTAS
 # ==========================================================
 
 @app.route("/registro", methods=["GET", "POST"])
@@ -279,31 +289,12 @@ def registro():
 
     if request.method == "POST":
 
-        nombre = request.form.get(
-            "nombre",
-            ""
-        ).strip()
+        nombre = request.form.get("nombre", "").strip()
+        apellidos = request.form.get("apellidos", "").strip()
+        usuario = request.form.get("usuario", "").strip()
+        correo = request.form.get("correo", "").strip().lower()
 
-        apellidos = request.form.get(
-            "apellidos",
-            ""
-        ).strip()
-
-        usuario = request.form.get(
-            "usuario",
-            ""
-        ).strip()
-
-        correo = request.form.get(
-            "correo",
-            ""
-        ).strip().lower()
-
-        password = request.form.get(
-            "password",
-            ""
-        )
-
+        password = request.form.get("password", "")
         confirmar_password = request.form.get(
             "confirmar_password",
             ""
@@ -353,10 +344,7 @@ def registro():
 
         for cuenta in usuarios_registrados:
 
-            if cuenta.get(
-                "usuario",
-                ""
-            ).casefold() == usuario.casefold():
+            if cuenta.get("usuario", "").casefold() == usuario.casefold():
 
                 flash(
                     "Ese nombre de usuario ya está registrado.",
@@ -367,10 +355,7 @@ def registro():
                     "autenticacion/registro.html"
                 )
 
-            if cuenta.get(
-                "correo",
-                ""
-            ).casefold() == correo.casefold():
+            if cuenta.get("correo", "").casefold() == correo.casefold():
 
                 flash(
                     "Ese correo electrónico ya está registrado.",
@@ -381,9 +366,6 @@ def registro():
                     "autenticacion/registro.html"
                 )
 
-        # La primera cuenta será Administrador.
-        # Las demás necesitarán asignación de rol.
-
         rol = (
             "Administrador"
             if len(usuarios_registrados) == 0
@@ -391,19 +373,12 @@ def registro():
         )
 
         nueva_cuenta = {
-
             "nombre": nombre,
-
             "apellidos": apellidos,
-
             "usuario": usuario,
-
             "correo": correo,
-
             "password": generate_password_hash(password),
-
             "rol": rol
-
         }
 
         usuarios_registrados.append(nueva_cuenta)
@@ -434,7 +409,259 @@ def registro():
 
 
 # ==========================================================
-# 8. FUNCIÓN PARA REGISTRAR PÁGINAS
+# 9. RECUPERAR CONTRASEÑA - GENERAR CÓDIGO
+# ==========================================================
+
+@app.route(
+    "/recuperar-contrasena",
+    methods=["GET", "POST"]
+)
+def recuperar_contrasena():
+
+    if request.method == "POST":
+
+        usuario = request.form.get(
+            "usuario",
+            ""
+        ).strip()
+
+        if not usuario:
+
+            flash(
+                "Escribe tu nombre de usuario.",
+                "error"
+            )
+
+            return redirect(url_for("recuperar_contrasena"))
+
+        usuarios_registrados = cargar_usuarios()
+
+        cuenta = next(
+            (
+                u for u in usuarios_registrados
+                if u.get("usuario", "").casefold()
+                == usuario.casefold()
+            ),
+            None
+        )
+
+        if not cuenta:
+
+            flash(
+                "No se encontró una cuenta con ese nombre de usuario.",
+                "error"
+            )
+
+            return redirect(url_for("recuperar_contrasena"))
+
+        # Generar código aleatorio de seis dígitos.
+
+        codigo = f"{secrets.randbelow(1000000):06d}"
+
+        # Guardar el hash del código en la sesión.
+
+        limpiar_recuperacion()
+
+        session["recuperacion_usuario"] = cuenta["usuario"]
+
+        session["recuperacion_codigo_hash"] = generate_password_hash(
+            codigo
+        )
+
+        session["recuperacion_expira"] = time.time() + TIEMPO_CODIGO
+
+        session["recuperacion_intentos"] = 0
+
+        # Mostrar el código solamente para pruebas locales.
+
+        flash(
+            f"Tu código de recuperación es: {codigo}. "
+            "Tiene una vigencia de 10 minutos. "
+            "No compartas este código.",
+            "success"
+        )
+
+        return redirect(url_for("restablecer_contrasena"))
+
+    return render_template(
+        "autenticacion/recuperar_contraseña.html"
+    )
+
+
+# ==========================================================
+# 10. RESTABLECER CONTRASEÑA
+# ==========================================================
+
+@app.route(
+    "/restablecer-contrasena",
+    methods=["GET", "POST"]
+)
+def restablecer_contrasena():
+
+    usuario = session.get("recuperacion_usuario")
+    codigo_hash = session.get("recuperacion_codigo_hash")
+    expira = session.get("recuperacion_expira")
+
+    # Verificar que exista una recuperación activa.
+
+    if not usuario or not codigo_hash or not expira:
+
+        limpiar_recuperacion()
+
+        flash(
+            "Primero debes solicitar un código de recuperación.",
+            "error"
+        )
+
+        return redirect(url_for("recuperar_contrasena"))
+
+    # Verificar vencimiento.
+
+    if time.time() > expira:
+
+        limpiar_recuperacion()
+
+        flash(
+            "El código ha caducado. Solicita uno nuevo.",
+            "error"
+        )
+
+        return redirect(url_for("recuperar_contrasena"))
+
+    if request.method == "POST":
+
+        codigo = request.form.get(
+            "codigo",
+            ""
+        ).strip()
+
+        nueva_password = request.form.get(
+            "contrasena",
+            ""
+        )
+
+        confirmar_password = request.form.get(
+            "confirmar_contrasena",
+            ""
+        )
+
+        # Control de intentos.
+
+        intentos = session.get(
+            "recuperacion_intentos",
+            0
+        )
+
+        if intentos >= MAX_INTENTOS:
+
+            limpiar_recuperacion()
+
+            flash(
+                "Superaste el límite de intentos. Solicita un nuevo código.",
+                "error"
+            )
+
+            return redirect(url_for("recuperar_contrasena"))
+
+        # Validar código.
+
+        if not codigo or not check_password_hash(
+            codigo_hash,
+            codigo
+        ):
+
+            session["recuperacion_intentos"] = intentos + 1
+
+            restantes = MAX_INTENTOS - (intentos + 1)
+
+            if restantes <= 0:
+
+                limpiar_recuperacion()
+
+                flash(
+                    "Superaste el límite de intentos. Solicita un nuevo código.",
+                    "error"
+                )
+
+                return redirect(url_for("recuperar_contrasena"))
+
+            flash(
+                f"Código incorrecto. Te quedan {restantes} intentos.",
+                "error"
+            )
+
+            return redirect(url_for("restablecer_contrasena"))
+
+        # Validar nueva contraseña.
+
+        if len(nueva_password) < 8:
+
+            flash(
+                "La contraseña debe tener al menos 8 caracteres.",
+                "error"
+            )
+
+            return redirect(url_for("restablecer_contrasena"))
+
+        if nueva_password != confirmar_password:
+
+            flash(
+                "Las contraseñas no coinciden.",
+                "error"
+            )
+
+            return redirect(url_for("restablecer_contrasena"))
+
+        # Buscar nuevamente al usuario.
+
+        usuarios_registrados = cargar_usuarios()
+
+        cuenta = next(
+            (
+                u for u in usuarios_registrados
+                if u.get("usuario", "").casefold()
+                == usuario.casefold()
+            ),
+            None
+        )
+
+        if not cuenta:
+
+            limpiar_recuperacion()
+
+            flash(
+                "No se pudo localizar la cuenta.",
+                "error"
+            )
+
+            return redirect(url_for("login"))
+
+        # Actualizar contraseña con hash.
+
+        cuenta["password"] = generate_password_hash(
+            nueva_password
+        )
+
+        guardar_usuarios(usuarios_registrados)
+
+        # Eliminar código para impedir reutilización.
+
+        limpiar_recuperacion()
+
+        flash(
+            "Tu contraseña se actualizó correctamente. Ya puedes iniciar sesión.",
+            "success"
+        )
+
+        return redirect(url_for("login"))
+
+    return render_template(
+        "autenticacion/restablecer_contraseña.html"
+    )
+
+
+# ==========================================================
+# 11. FUNCIÓN PARA REGISTRAR PÁGINAS
 # ==========================================================
 
 def registrar_pagina(
@@ -490,7 +717,7 @@ def registrar_pagina(
 
 
 # ==========================================================
-# 9. MÓDULO DE USUARIOS
+# 12. MÓDULO DE USUARIOS
 # ==========================================================
 
 @app.route("/usuarios")
@@ -510,30 +737,15 @@ def usuarios():
 
             "id": indice,
 
-            "nombre": usuario.get(
-                "nombre",
-                ""
-            ),
+            "nombre": usuario.get("nombre", ""),
 
-            "apellidos": usuario.get(
-                "apellidos",
-                ""
-            ),
+            "apellidos": usuario.get("apellidos", ""),
 
-            "usuario": usuario.get(
-                "usuario",
-                ""
-            ),
+            "usuario": usuario.get("usuario", ""),
 
-            "correo": usuario.get(
-                "correo",
-                ""
-            ),
+            "correo": usuario.get("correo", ""),
 
-            "rol": usuario.get(
-                "rol",
-                "Sin asignar"
-            )
+            "rol": usuario.get("rol", "Sin asignar")
 
         })
 
@@ -543,8 +755,6 @@ def usuarios():
         usuario_actual=session.get("usuario")
     )
 
-
-# Asignar o cambiar el rol de un usuario.
 
 @app.route(
     "/usuarios/rol/<int:id>",
@@ -575,10 +785,7 @@ def actualizar_rol_usuario(id):
 
         return redirect(url_for("usuarios"))
 
-    nuevo_rol = request.form.get(
-        "rol",
-        ""
-    )
+    nuevo_rol = request.form.get("rol", "")
 
     if nuevo_rol not in ROLES_VALIDOS:
 
@@ -631,7 +838,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 10. MÓDULO DE CLIENTES
+# 13. MÓDULO DE CLIENTES
 # ==========================================================
 
 registrar_pagina(
@@ -664,7 +871,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 11. MÓDULO DE REPARACIONES
+# 14. MÓDULO DE REPARACIONES
 # ==========================================================
 
 registrar_pagina(
@@ -704,7 +911,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 12. MÓDULO DE TICKETS
+# 15. MÓDULO DE TICKETS
 # ==========================================================
 
 registrar_pagina(
@@ -737,7 +944,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 13. MÓDULO DE INVENTARIO
+# 16. MÓDULO DE INVENTARIO
 # ==========================================================
 
 registrar_pagina(
@@ -763,7 +970,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 14. MÓDULO DE VENTAS
+# 17. MÓDULO DE VENTAS
 # ==========================================================
 
 registrar_pagina(
@@ -789,7 +996,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 15. MÓDULO DE REPORTES
+# 18. MÓDULO DE REPORTES
 # ==========================================================
 
 registrar_pagina(
@@ -815,7 +1022,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 16. CERRAR SESIÓN
+# 19. CERRAR SESIÓN
 # ==========================================================
 
 @app.route("/logout")
@@ -832,7 +1039,7 @@ def logout():
 
 
 # ==========================================================
-# 17. EJECUTAR APLICACIÓN
+# 20. EJECUTAR APLICACIÓN
 # ==========================================================
 
 if __name__ == "__main__":
