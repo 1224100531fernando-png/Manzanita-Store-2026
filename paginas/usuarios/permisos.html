@@ -1,125 +1,305 @@
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Roles y permisos | Manzanita Store</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="min-h-screen bg-slate-100 text-slate-800">
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
-        </div>
+    <!-- ENCABEZADO -->
+    <header class="bg-slate-950 text-white shadow-lg">
+        <div class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 sm:flex-row sm:items-center sm:justify-between">
 
-        <a href="usuarios.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
-            ← Usuarios
-        </a>
-    </div>
-</header>
+            <div>
+                <h1 class="text-2xl font-bold">
+                    <span class="text-blue-400">Manzanita</span> Store
+                </h1>
 
-<main class="mx-auto max-w-6xl px-6 py-8">
+                <p class="mt-1 text-sm text-slate-300">
+                    Administración del sistema
+                </p>
+            </div>
 
-    <div class="mb-7">
-        <p class="text-sm font-medium text-blue-600">Seguridad</p>
-        <h2 class="text-3xl font-bold text-slate-900">Roles y permisos</h2>
-        <p class="mt-1 text-sm text-slate-500">
-            Define qué acciones puede realizar cada tipo de usuario.
-        </p>
-    </div>
-
-    <section class="overflow-hidden rounded-2xl bg-white shadow-sm">
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-
-                <thead class="bg-slate-950 text-xs uppercase text-white">
-                    <tr>
-                        <th class="px-5 py-4">Permiso</th>
-                        <th class="px-5 py-4 text-center">Administrador</th>
-                        <th class="px-5 py-4 text-center">Vendedor</th>
-                        <th class="px-5 py-4 text-center">Técnico</th>
-                    </tr>
-                </thead>
-
-                <tbody class="divide-y divide-slate-100">
-
-                    <tr>
-                        <td class="px-5 py-4 font-medium">Gestionar usuarios</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-slate-300">—</td>
-                        <td class="text-center text-slate-300">—</td>
-                    </tr>
-
-                    <tr>
-                        <td class="px-5 py-4 font-medium">Gestionar clientes</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                    </tr>
-
-                    <tr>
-                        <td class="px-5 py-4 font-medium">Gestionar reparaciones</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-slate-300">—</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                    </tr>
-
-                    <tr>
-                        <td class="px-5 py-4 font-medium">Gestionar tickets</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                    </tr>
-
-                    <tr>
-                        <td class="px-5 py-4 font-medium">Gestionar inventario</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                    </tr>
-
-                    <tr>
-                        <td class="px-5 py-4 font-medium">Registrar ventas</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-slate-300">—</td>
-                    </tr>
-
-                    <tr>
-                        <td class="px-5 py-4 font-medium">Consultar reportes</td>
-                        <td class="text-center text-emerald-600">✓</td>
-                        <td class="text-center text-slate-300">—</td>
-                        <td class="text-center text-slate-300">—</td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-        </div>
-
-        <div class="flex justify-end border-t p-5">
-            <a href="usuarios.html"
-               class="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
-                Guardar configuración
+            <a href="{{ url_for('usuarios') }}"
+               class="inline-flex items-center justify-center rounded-lg bg-slate-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-600">
+                ← Regresar a usuarios
             </a>
+
+        </div>
+    </header>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="mx-auto max-w-7xl px-6 py-10">
+
+        <!-- TITULO -->
+        <section class="mb-8">
+
+            <p class="text-sm font-semibold uppercase tracking-wider text-blue-600">
+                Seguridad
+            </p>
+
+            <h2 class="mt-2 text-3xl font-bold text-slate-900">
+                Roles y permisos
+            </h2>
+
+            <p class="mt-2 max-w-3xl text-slate-600">
+                Consulta los permisos asignados a cada tipo de usuario
+                dentro del sistema Manzanita Store.
+            </p>
+
+        </section>
+
+
+        <!-- TARJETAS DE ROLES -->
+        <section class="mb-8 grid gap-5 md:grid-cols-3">
+
+            <!-- ADMINISTRADOR -->
+            <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+
+                <h3 class="mb-3 font-bold text-slate-900">
+                    Administrador
+                </h3>
+
+                <p class="text-sm leading-6 text-slate-600">
+                    Tiene acceso a todos los módulos y puede administrar
+                    usuarios, permisos y operaciones del sistema.
+                </p>
+
+            </div>
+
+
+            <!-- VENDEDOR -->
+            <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+
+                <h3 class="mb-3 font-bold text-slate-900">
+                    Vendedor
+                </h3>
+
+                <p class="text-sm leading-6 text-slate-600">
+                    Puede consultar y gestionar clientes, consultar inventario
+                    y registrar ventas.
+                </p>
+
+            </div>
+
+
+            <!-- TECNICO -->
+            <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+
+                <h3 class="mb-3 font-bold text-slate-900">
+                    Técnico
+                </h3>
+
+                <p class="text-sm leading-6 text-slate-600">
+                    Puede consultar clientes y gestionar reparaciones
+                    y tickets de soporte.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- TABLA DE PERMISOS -->
+        <section class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+
+            <div class="border-b border-slate-200 px-6 py-5">
+
+                <h3 class="text-lg font-bold text-slate-900">
+                    Matriz de permisos
+                </h3>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    Acceso permitido a los módulos según el rol del usuario.
+                </p>
+
+            </div>
+
+
+            <div class="overflow-x-auto">
+
+                <table class="w-full min-w-[650px] text-left text-sm">
+
+                    <thead class="bg-slate-100 text-slate-700">
+
+                        <tr>
+                            <th class="px-6 py-4 font-bold">
+                                Permiso o módulo
+                            </th>
+
+                            <th class="px-6 py-4 text-center font-bold">
+                                Administrador
+                            </th>
+
+                            <th class="px-6 py-4 text-center font-bold">
+                                Vendedor
+                            </th>
+
+                            <th class="px-6 py-4 text-center font-bold">
+                                Técnico
+                            </th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody class="divide-y divide-slate-200">
+
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium">
+                                Gestionar usuarios
+                            </td>
+
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center text-slate-400">—</td>
+                            <td class="px-6 py-4 text-center text-slate-400">—</td>
+                        </tr>
+
+
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium">
+                                Consultar clientes
+                            </td>
+
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                        </tr>
+
+
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium">
+                                Registrar y editar clientes
+                            </td>
+
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center text-slate-400">—</td>
+                        </tr>
+
+
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium">
+                                Gestionar reparaciones
+                            </td>
+
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center text-slate-400">—</td>
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                        </tr>
+
+
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium">
+                                Gestionar tickets
+                            </td>
+
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center text-slate-400">—</td>
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                        </tr>
+
+
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium">
+                                Consultar y gestionar inventario
+                            </td>
+
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center text-slate-400">—</td>
+                        </tr>
+
+
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium">
+                                Registrar ventas
+                            </td>
+
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center text-slate-400">—</td>
+                        </tr>
+
+
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-medium">
+                                Consultar reportes
+                            </td>
+
+                            <td class="px-6 py-4 text-center font-bold text-green-600">✓</td>
+                            <td class="px-6 py-4 text-center text-slate-400">—</td>
+                            <td class="px-6 py-4 text-center text-slate-400">—</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- LEYENDA -->
+            <div class="border-t border-slate-200 bg-slate-50 px-6 py-4">
+
+                <div class="flex flex-wrap items-center gap-6 text-sm">
+
+                    <span class="flex items-center gap-2">
+                        <span class="font-bold text-green-600">✓</span>
+                        Acceso permitido
+                    </span>
+
+                    <span class="flex items-center gap-2">
+                        <span class="font-bold text-slate-400">—</span>
+                        Sin acceso
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- NOTA INFORMATIVA -->
+        <section class="mt-6 rounded-xl border border-blue-200 bg-blue-50 p-5">
+
+            <h3 class="font-bold text-blue-900">
+                Información sobre los permisos
+            </h3>
+
+            <p class="mt-2 text-sm leading-6 text-blue-800">
+                Esta matriz muestra la distribución prevista de accesos
+                para cada rol. Los permisos efectivos dependen de las
+                restricciones configuradas en el servidor mediante Flask.
+                Esta página es informativa y no modifica automáticamente
+                los permisos del sistema.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- PIE DE PAGINA -->
+    <footer class="mt-10 border-t border-slate-200 bg-white">
+
+        <div class="mx-auto max-w-7xl px-6 py-5 text-center text-sm text-slate-500">
+
+            Manzanita Store © 2026 |
+            Sistema Web de Gestión
+
         </div>
 
-    </section>
-
-</main>
-
-<footer class="py-6 text-center text-xs text-slate-400">
-    Manzanita Store · 2026
-</footer>
+    </footer>
 
 </body>
 </html>

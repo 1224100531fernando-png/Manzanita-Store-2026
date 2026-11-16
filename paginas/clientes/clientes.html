@@ -19,8 +19,8 @@
             <p class="text-xs text-slate-400">Sistema de gestión</p>
         </div>
 
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+        <a href="{{ url_for('logout') }}"
+        class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
             Salir
         </a>
     </div>
@@ -38,7 +38,7 @@
         </div>
 
         <a href="registrar_cliente.html"
-           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+        class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
             + Nuevo cliente
         </a>
     </div>
@@ -47,8 +47,8 @@
 
         <div class="flex flex-col gap-3 border-b p-5 sm:flex-row">
             <input type="search"
-                   placeholder="Buscar por nombre, teléfono o correo..."
-                   class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                placeholder="Buscar por nombre, teléfono o correo..."
+                class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
 
             <button class="rounded-lg bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800">
                 Buscar
@@ -91,12 +91,12 @@
 
                         <td class="px-6 py-4 text-right">
                             <a href="editar_cliente.html"
-                               class="mr-3 font-medium text-blue-600 hover:underline">
+                            class="mr-3 font-medium text-blue-600 hover:underline">
                                 Editar
                             </a>
 
                             <a href="detalle_cliente.html"
-                               class="font-medium text-slate-600 hover:underline">
+                            class="font-medium text-slate-600 hover:underline">
                                 Ver
                             </a>
                         </td>
@@ -123,12 +123,12 @@
 
                         <td class="px-6 py-4 text-right">
                             <a href="editar_cliente.html"
-                               class="mr-3 font-medium text-blue-600 hover:underline">
+                            class="mr-3 font-medium text-blue-600 hover:underline">
                                 Editar
                             </a>
 
                             <a href="detalle_cliente.html"
-                               class="font-medium text-slate-600 hover:underline">
+                            class="font-medium text-slate-600 hover:underline">
                                 Ver
                             </a>
                         </td>
