@@ -1,31 +1,21 @@
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Manzanita Store | Iniciar sesión</title>
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
-
 
 <body class="min-h-screen bg-gray-100">
 
     <!-- Encabezado -->
-
     <header class="bg-gray-900 text-white">
-
         <div class="mx-auto max-w-6xl px-6 py-5">
-
             <h1 class="text-2xl font-bold">
                 Manzanita Store
             </h1>
@@ -33,18 +23,15 @@
             <p class="text-sm text-gray-300">
                 Sistema de gestión
             </p>
-
         </div>
-
     </header>
 
-
     <!-- Contenido principal -->
-
-    <main class="flex min-h-[calc(100vh-140px)] items-center justify-center px-6">
+    <main class="flex min-h-[calc(100vh-140px)] items-center justify-center px-6 py-10">
 
         <section class="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
 
+            <!-- Título -->
             <div class="mb-6 text-center">
 
                 <h2 class="text-2xl font-bold text-gray-900">
@@ -57,17 +44,28 @@
 
             </div>
 
+            <!-- Mensajes -->
+            {% with mensajes = get_flashed_messages(with_categories=true) %}
+                {% for categoria, mensaje in mensajes %}
+                    <div class="mb-4 rounded-lg p-3 text-sm
+                        {% if categoria == 'success' %}
+                            bg-green-100 text-green-700
+                        {% else %}
+                            bg-red-100 text-red-700
+                        {% endif %}">
+                        {{ mensaje }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
 
-            <form action="#" method="post" class="space-y-5">
+            <!-- Formulario -->
+            <form action="{{ url_for('auth.login') }}" method="POST" class="space-y-5">
 
                 <!-- Usuario -->
-
                 <div>
 
-                    <label
-                        for="usuario"
-                        class="mb-2 block text-sm font-medium text-gray-700"
-                    >
+                    <label for="usuario"
+                        class="mb-2 block text-sm font-medium text-gray-700">
                         Usuario
                     </label>
 
@@ -78,20 +76,15 @@
                         placeholder="Ingresa tu usuario"
                         autocomplete="username"
                         required
-                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                    >
+                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
 
                 </div>
 
-
                 <!-- Contraseña -->
-
                 <div>
 
-                    <label
-                        for="password"
-                        class="mb-2 block text-sm font-medium text-gray-700"
-                    >
+                    <label for="password"
+                        class="mb-2 block text-sm font-medium text-gray-700">
                         Contraseña
                     </label>
 
@@ -102,33 +95,60 @@
                         placeholder="Ingresa tu contraseña"
                         autocomplete="current-password"
                         required
-                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                    >
+                        class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
 
                 </div>
 
-
-                <!-- Botón -->
-
+                <!-- Botón iniciar sesión -->
                 <button
                     type="submit"
-                    class="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                >
+                    class="w-full rounded-lg bg-blue-600 px-4 py-3 font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+
                     Iniciar sesión
+
                 </button>
 
             </form>
 
-
-            <!-- Recuperación -->
-
-            <div class="mt-6 text-center">
+            <!-- Recuperar contraseña -->
+            <div class="mt-5 text-center">
 
                 <a
                     href="#"
-                    class="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline"
-                >
+                    class="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+
                     ¿Olvidaste tu contraseña?
+
+                </a>
+
+            </div>
+
+            <!-- Separador -->
+            <div class="my-6 flex items-center">
+
+                <div class="flex-grow border-t border-gray-200"></div>
+
+                <span class="px-3 text-xs text-gray-400">
+                    O
+                </span>
+
+                <div class="flex-grow border-t border-gray-200"></div>
+
+            </div>
+
+            <!-- Opción de registro -->
+            <div class="text-center">
+
+                <p class="mb-3 text-sm text-gray-600">
+                    ¿No tienes una cuenta?
+                </p>
+
+                <a
+                    href="{{ url_for('auth.registro') }}"
+                    class="block w-full rounded-lg border-2 border-green-600 px-4 py-3 font-semibold text-green-700 transition hover:bg-green-600 hover:text-white">
+
+                    Crear una cuenta
+
                 </a>
 
             </div>
@@ -137,9 +157,7 @@
 
     </main>
 
-
     <!-- Pie de página -->
-
     <footer class="border-t border-gray-200 bg-white">
 
         <div class="mx-auto max-w-6xl px-6 py-4 text-center">
@@ -153,5 +171,4 @@
     </footer>
 
 </body>
-
 </html>
