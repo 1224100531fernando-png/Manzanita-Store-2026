@@ -3,6 +3,7 @@ import json
 import os
 import secrets
 import time
+import uuid
 
 from functools import wraps
 
@@ -21,6 +22,8 @@ from werkzeug.security import (
     check_password_hash
 )
 
+from werkzeug.utils import secure_filename
+
 
 # ==========================================================
 # 1. CONFIGURACIÓN GENERAL
@@ -35,18 +38,29 @@ ARCHIVO_USUARIOS = os.path.join(
     "usuarios.json"
 )
 
+CARPETA_FOTOS = os.path.join(
+    app.root_path,
+    "static",
+    "img",
+    "perfiles"
+)
+
+os.makedirs(CARPETA_FOTOS, exist_ok=True)
+
+EXTENSIONES_PERMITIDAS = {"png", "jpg", "jpeg", "webp"}
+
 ROLES_VALIDOS = [
     "Administrador",
     "Vendedor",
     "Técnico"
 ]
 
-TIEMPO_CODIGO = 600  # 10 minutos
+TIEMPO_CODIGO = 600
 MAX_INTENTOS = 5
 
 
 # ==========================================================
-# 2. ADMINISTRACIÓN DE USUARIOS
+# 2. FUNCIONES DE USUARIOS
 # ==========================================================
 
 def cargar_usuarios():
@@ -83,6 +97,49 @@ def guardar_usuarios(usuarios):
             ensure_ascii=False,
             indent=4
         )
+
+
+def obtener_cuenta_actual():
+
+    usuario_actual = session.get("usuario")
+
+    if not usuario_actual:
+        return None
+
+    usuarios = cargar_usuarios()
+
+    return next(
+        (
+            cuenta for cuenta in usuarios
+            if cuenta.get("usuario", "").casefold()
+            == usuario_actual.casefold()
+        ),
+        None
+    )
+
+
+def extension_permitida(nombre):
+
+    return (
+        "." in nombre
+        and nombre.rsplit(".", 1)[1].lower()
+        in EXTENSIONES_PERMITIDAS
+    )
+
+
+def obtener_foto(cuenta):
+
+    foto = cuenta.get("foto_perfil", "")
+
+    if not foto:
+        return None
+
+    ruta = os.path.join(CARPETA_FOTOS, foto)
+
+    if os.path.isfile(ruta):
+        return foto
+
+    return None
 
 
 # ==========================================================
@@ -202,17 +259,264 @@ def inicio():
 def dashboard():
 
     usuarios_registrados = cargar_usuarios()
+    cuenta = obtener_cuenta_actual()
 
     return render_template(
         "dashboard/dashboard.html",
         total_usuarios=len(usuarios_registrados),
         nombre=session.get("nombre"),
+        rol=obtener_rol(),
+        usuario_actual=cuenta,
+        foto_perfil=obtener_foto(cuenta) if cuenta else None
+    )
+
+
+# ==========================================================
+# 7. MI PERFIL
+# ==========================================================
+
+@app.route(
+    "/perfil",
+    methods=["GET", "POST"]
+)
+@requiere_sesion
+def perfil():
+
+    usuarios_registrados = cargar_usuarios()
+
+    usuario_actual = session.get("usuario")
+
+    cuenta = next(
+        (
+            u for u in usuarios_registrados
+            if u.get("usuario", "").casefold()
+            == usuario_actual.casefold()
+        ),
+        None
+    )
+
+    if not cuenta:
+
+        session.clear()
+
+        flash(
+            "No se encontró tu cuenta.",
+            "error"
+        )
+
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+
+        accion = request.form.get("accion", "actualizar")
+
+        # ----------------------------------------------
+        # ACTUALIZAR INFORMACIÓN PERSONAL
+        # ----------------------------------------------
+
+        if accion == "actualizar":
+
+            nombre = request.form.get(
+                "nombre",
+                ""
+            ).strip()
+
+            apellidos = request.form.get(
+                "apellidos",
+                ""
+            ).strip()
+
+            correo = request.form.get(
+                "correo",
+                ""
+            ).strip().lower()
+
+            if not nombre or not apellidos or not correo:
+
+                flash(
+                    "Completa todos los campos.",
+                    "error"
+                )
+
+                return redirect(url_for("perfil"))
+
+            for otro_usuario in usuarios_registrados:
+
+                if otro_usuario is cuenta:
+                    continue
+
+                if otro_usuario.get("correo", "").casefold() == correo.casefold():
+
+                    flash(
+                        "Ese correo ya está registrado por otro usuario.",
+                        "error"
+                    )
+
+                    return redirect(url_for("perfil"))
+
+            cuenta["nombre"] = nombre
+            cuenta["apellidos"] = apellidos
+            cuenta["correo"] = correo
+
+            guardar_usuarios(usuarios_registrados)
+
+            session["nombre"] = nombre
+
+            flash(
+                "Tu información se actualizó correctamente.",
+                "success"
+            )
+
+            return redirect(url_for("perfil"))
+
+        # ----------------------------------------------
+        # CAMBIAR CONTRASEÑA
+        # ----------------------------------------------
+
+        elif accion == "contrasena":
+
+            actual = request.form.get(
+                "contrasena_actual",
+                ""
+            )
+
+            nueva = request.form.get(
+                "nueva_contrasena",
+                ""
+            )
+
+            confirmar = request.form.get(
+                "confirmar_contrasena",
+                ""
+            )
+
+            if not check_password_hash(
+                cuenta.get("password", ""),
+                actual
+            ):
+
+                flash(
+                    "La contraseña actual es incorrecta.",
+                    "error"
+                )
+
+                return redirect(url_for("perfil"))
+
+            if len(nueva) < 8:
+
+                flash(
+                    "La nueva contraseña debe tener al menos 8 caracteres.",
+                    "error"
+                )
+
+                return redirect(url_for("perfil"))
+
+            if nueva != confirmar:
+
+                flash(
+                    "Las nuevas contraseñas no coinciden.",
+                    "error"
+                )
+
+                return redirect(url_for("perfil"))
+
+            cuenta["password"] = generate_password_hash(nueva)
+
+            guardar_usuarios(usuarios_registrados)
+
+            flash(
+                "Tu contraseña se cambió correctamente.",
+                "success"
+            )
+
+            return redirect(url_for("perfil"))
+
+        # ----------------------------------------------
+        # ACTUALIZAR FOTOGRAFÍA
+        # ----------------------------------------------
+
+        elif accion == "foto":
+
+            archivo = request.files.get("foto")
+
+            if not archivo or not archivo.filename:
+
+                flash(
+                    "Selecciona una fotografía.",
+                    "error"
+                )
+
+                return redirect(url_for("perfil"))
+
+            if not extension_permitida(archivo.filename):
+
+                flash(
+                    "Formato no permitido. Usa JPG, JPEG, PNG o WEBP.",
+                    "error"
+                )
+
+                return redirect(url_for("perfil"))
+
+            extension = archivo.filename.rsplit(".", 1)[1].lower()
+
+            nombre_archivo = (
+                secrets.token_hex(16)
+                + "."
+                + extension
+            )
+
+            ruta_destino = os.path.join(
+                CARPETA_FOTOS,
+                nombre_archivo
+            )
+
+            try:
+
+                archivo.save(ruta_destino)
+
+                foto_anterior = cuenta.get("foto_perfil")
+
+                cuenta["foto_perfil"] = nombre_archivo
+
+                guardar_usuarios(usuarios_registrados)
+
+                if foto_anterior:
+
+                    ruta_anterior = os.path.join(
+                        CARPETA_FOTOS,
+                        foto_anterior
+                    )
+
+                    if os.path.isfile(ruta_anterior):
+                        os.remove(ruta_anterior)
+
+                flash(
+                    "Tu fotografía de perfil se actualizó correctamente.",
+                    "success"
+                )
+
+            except OSError:
+
+                if os.path.isfile(ruta_destino):
+                    os.remove(ruta_destino)
+
+                flash(
+                    "No se pudo guardar la fotografía.",
+                    "error"
+                )
+
+            return redirect(url_for("perfil"))
+
+    return render_template(
+        "perfil/perfil.html",
+        usuario=cuenta,
+        foto_perfil=obtener_foto(cuenta),
         rol=obtener_rol()
     )
 
 
 # ==========================================================
-# 7. INICIAR SESIÓN
+# 8. INICIAR SESIÓN
 # ==========================================================
 
 @app.route("/login", methods=["GET", "POST"])
@@ -240,6 +544,20 @@ def login():
             ),
             None
         )
+
+        if cuenta and check_password_hash(
+            cuenta.get("password", ""),
+            password
+        ):
+
+            if cuenta.get("activo", True) is False:
+
+                flash(
+                    "Tu cuenta está desactivada. Contacta al administrador.",
+                    "error"
+                )
+
+                return redirect(url_for("login"))
 
         if cuenta and check_password_hash(
             cuenta.get("password", ""),
@@ -281,7 +599,7 @@ def login():
 
 
 # ==========================================================
-# 8. REGISTRO DE CUENTAS
+# 9. REGISTRO DE CUENTAS
 # ==========================================================
 
 @app.route("/registro", methods=["GET", "POST"])
@@ -378,7 +696,8 @@ def registro():
             "usuario": usuario,
             "correo": correo,
             "password": generate_password_hash(password),
-            "rol": rol
+            "rol": rol,
+            "foto_perfil": ""
         }
 
         usuarios_registrados.append(nueva_cuenta)
@@ -409,7 +728,7 @@ def registro():
 
 
 # ==========================================================
-# 9. RECUPERAR CONTRASEÑA - GENERAR CÓDIGO
+# 10. RECUPERAR CONTRASEÑA - GENERAR CÓDIGO
 # ==========================================================
 
 @app.route(
@@ -454,11 +773,7 @@ def recuperar_contrasena():
 
             return redirect(url_for("recuperar_contrasena"))
 
-        # Generar código aleatorio de seis dígitos.
-
         codigo = f"{secrets.randbelow(1000000):06d}"
-
-        # Guardar el hash del código en la sesión.
 
         limpiar_recuperacion()
 
@@ -471,8 +786,6 @@ def recuperar_contrasena():
         session["recuperacion_expira"] = time.time() + TIEMPO_CODIGO
 
         session["recuperacion_intentos"] = 0
-
-        # Mostrar el código solamente para pruebas locales.
 
         flash(
             f"Tu código de recuperación es: {codigo}. "
@@ -489,7 +802,7 @@ def recuperar_contrasena():
 
 
 # ==========================================================
-# 10. RESTABLECER CONTRASEÑA
+# 11. RESTABLECER CONTRASEÑA
 # ==========================================================
 
 @app.route(
@@ -502,8 +815,6 @@ def restablecer_contrasena():
     codigo_hash = session.get("recuperacion_codigo_hash")
     expira = session.get("recuperacion_expira")
 
-    # Verificar que exista una recuperación activa.
-
     if not usuario or not codigo_hash or not expira:
 
         limpiar_recuperacion()
@@ -514,8 +825,6 @@ def restablecer_contrasena():
         )
 
         return redirect(url_for("recuperar_contrasena"))
-
-    # Verificar vencimiento.
 
     if time.time() > expira:
 
@@ -545,8 +854,6 @@ def restablecer_contrasena():
             ""
         )
 
-        # Control de intentos.
-
         intentos = session.get(
             "recuperacion_intentos",
             0
@@ -562,8 +869,6 @@ def restablecer_contrasena():
             )
 
             return redirect(url_for("recuperar_contrasena"))
-
-        # Validar código.
 
         if not codigo or not check_password_hash(
             codigo_hash,
@@ -592,8 +897,6 @@ def restablecer_contrasena():
 
             return redirect(url_for("restablecer_contrasena"))
 
-        # Validar nueva contraseña.
-
         if len(nueva_password) < 8:
 
             flash(
@@ -611,8 +914,6 @@ def restablecer_contrasena():
             )
 
             return redirect(url_for("restablecer_contrasena"))
-
-        # Buscar nuevamente al usuario.
 
         usuarios_registrados = cargar_usuarios()
 
@@ -636,15 +937,11 @@ def restablecer_contrasena():
 
             return redirect(url_for("login"))
 
-        # Actualizar contraseña con hash.
-
         cuenta["password"] = generate_password_hash(
             nueva_password
         )
 
         guardar_usuarios(usuarios_registrados)
-
-        # Eliminar código para impedir reutilización.
 
         limpiar_recuperacion()
 
@@ -661,7 +958,7 @@ def restablecer_contrasena():
 
 
 # ==========================================================
-# 11. FUNCIÓN PARA REGISTRAR PÁGINAS
+# 12. FUNCIÓN PARA REGISTRAR PÁGINAS
 # ==========================================================
 
 def registrar_pagina(
@@ -717,7 +1014,7 @@ def registrar_pagina(
 
 
 # ==========================================================
-# 12. MÓDULO DE USUARIOS
+# 13. MÓDULO DE USUARIOS
 # ==========================================================
 
 @app.route("/usuarios")
@@ -808,26 +1105,329 @@ def actualizar_rol_usuario(id):
     return redirect(url_for("usuarios"))
 
 
-registrar_pagina(
-    "nuevo_usuario",
-    "/usuarios/registrar",
-    "usuarios/registrar_usuario.html",
-    ("Administrador",)
-)
+# ==========================================================
+# 14. REGISTRAR USUARIOS DESDE EL PANEL ADMINISTRADOR
+# ==========================================================
 
-registrar_pagina(
-    "registrar_usuario",
-    "/usuarios/registrar",
-    "usuarios/registrar_usuario.html",
-    ("Administrador",)
-)
+@app.route("/usuarios/registrar", methods=["GET", "POST"])
+@requiere_rol("Administrador")
+def nuevo_usuario():
 
-registrar_pagina(
-    "editar_usuario",
-    "/usuarios/editar/<int:id>",
-    "usuarios/editar_usuario.html",
-    ("Administrador",)
-)
+    if request.method == "POST":
+
+        nombre = request.form.get("nombre", "").strip()
+        apellidos = request.form.get("apellidos", "").strip()
+        usuario = request.form.get("usuario", "").strip()
+        correo = request.form.get("correo", "").strip().lower()
+        password = request.form.get("password", "")
+        confirmar_password = request.form.get("confirmar_password", "")
+        rol = request.form.get("rol", "")
+
+        if not all([
+            nombre, apellidos, usuario, correo,
+            password, confirmar_password, rol
+        ]):
+            flash("Todos los campos son obligatorios.", "error")
+            return render_template(
+                "usuarios/registrar_usuario.html",
+                rol=obtener_rol(),
+                nombre=session.get("nombre")
+            )
+
+        if len(password) < 8:
+            flash("La contraseña debe tener al menos 8 caracteres.", "error")
+            return render_template(
+                "usuarios/registrar_usuario.html",
+                rol=obtener_rol(),
+                nombre=session.get("nombre")
+            )
+
+        if password != confirmar_password:
+            flash("Las contraseñas no coinciden.", "error")
+            return render_template(
+                "usuarios/registrar_usuario.html",
+                rol=obtener_rol(),
+                nombre=session.get("nombre")
+            )
+
+        if rol not in ROLES_VALIDOS:
+            flash("El rol seleccionado no es válido.", "error")
+            return render_template(
+                "usuarios/registrar_usuario.html",
+                rol=obtener_rol(),
+                nombre=session.get("nombre")
+            )
+
+        usuarios_registrados = cargar_usuarios()
+
+        for cuenta in usuarios_registrados:
+
+            if cuenta.get("usuario", "").casefold() == usuario.casefold():
+                flash("Ese nombre de usuario ya está registrado.", "error")
+                return render_template(
+                    "usuarios/registrar_usuario.html",
+                    rol=obtener_rol(),
+                    nombre=session.get("nombre")
+                )
+
+            if cuenta.get("correo", "").casefold() == correo.casefold():
+                flash("Ese correo electrónico ya está registrado.", "error")
+                return render_template(
+                    "usuarios/registrar_usuario.html",
+                    rol=obtener_rol(),
+                    nombre=session.get("nombre")
+                )
+
+        nueva_cuenta = {
+            "nombre": nombre,
+            "apellidos": apellidos,
+            "usuario": usuario,
+            "correo": correo,
+            "password": generate_password_hash(password),
+            "rol": rol,
+            "foto_perfil": "",
+            "activo": True
+        }
+
+        usuarios_registrados.append(nueva_cuenta)
+        guardar_usuarios(usuarios_registrados)
+
+        flash("Usuario registrado correctamente.", "success")
+        return redirect(url_for("usuarios"))
+
+    return render_template(
+        "usuarios/registrar_usuario.html",
+        rol=obtener_rol(),
+        nombre=session.get("nombre")
+    )
+
+
+# ==========================================================
+# 15. EDITAR USUARIOS
+# ==========================================================
+
+@app.route("/usuarios/editar/<int:id>", methods=["GET", "POST"])
+@requiere_rol("Administrador")
+def editar_usuario(id):
+
+    usuarios_registrados = cargar_usuarios()
+
+    if id < 1 or id > len(usuarios_registrados):
+        flash("El usuario seleccionado no existe.", "error")
+        return redirect(url_for("usuarios"))
+
+    cuenta = usuarios_registrados[id - 1]
+
+    if request.method == "POST":
+
+        nombre = request.form.get("nombre", "").strip()
+        apellidos = request.form.get("apellidos", "").strip()
+        usuario = request.form.get("usuario", "").strip()
+        correo = request.form.get("correo", "").strip().lower()
+        nuevo_password = request.form.get("password", "")
+        nuevo_rol = request.form.get("rol", "")
+
+        if not all([nombre, apellidos, usuario, correo]):
+            flash("Completa todos los campos obligatorios.", "error")
+            return render_template(
+                "usuarios/editar_usuario.html",
+                usuario=cuenta,
+                id=id,
+                rol=obtener_rol(),
+                nombre=session.get("nombre")
+            )
+
+        for indice, otra_cuenta in enumerate(usuarios_registrados):
+
+            if indice == id - 1:
+                continue
+
+            if otra_cuenta.get("usuario", "").casefold() == usuario.casefold():
+                flash("Ese nombre de usuario ya está registrado.", "error")
+                return render_template(
+                    "usuarios/editar_usuario.html",
+                    usuario=cuenta,
+                    id=id,
+                    rol=obtener_rol(),
+                    nombre=session.get("nombre")
+                )
+
+            if otra_cuenta.get("correo", "").casefold() == correo.casefold():
+                flash("Ese correo electrónico ya está registrado.", "error")
+                return render_template(
+                    "usuarios/editar_usuario.html",
+                    usuario=cuenta,
+                    id=id,
+                    rol=obtener_rol(),
+                    nombre=session.get("nombre")
+                )
+
+        es_cuenta_actual = (
+            cuenta.get("usuario", "").casefold()
+            == session.get("usuario", "").casefold()
+        )
+
+        if es_cuenta_actual:
+            nuevo_rol = cuenta.get("rol", "Administrador")
+
+        elif nuevo_rol not in ROLES_VALIDOS:
+            flash("El rol seleccionado no es válido.", "error")
+            return render_template(
+                "usuarios/editar_usuario.html",
+                usuario=cuenta,
+                id=id,
+                rol=obtener_rol(),
+                nombre=session.get("nombre")
+            )
+
+        if (
+            cuenta.get("rol") == "Administrador"
+            and nuevo_rol != "Administrador"
+            and cuenta.get("activo", True)
+        ):
+
+            administradores_activos = sum(
+                1 for u in usuarios_registrados
+                if u.get("rol") == "Administrador"
+                and u.get("activo", True)
+            )
+
+            if administradores_activos <= 1:
+                flash(
+                    "No puedes quitar el rol al último administrador activo.",
+                    "error"
+                )
+                return redirect(url_for("usuarios"))
+
+        if nuevo_password and len(nuevo_password) < 8:
+            flash("La nueva contraseña debe tener al menos 8 caracteres.", "error")
+            return render_template(
+                "usuarios/editar_usuario.html",
+                usuario=cuenta,
+                id=id,
+                rol=obtener_rol(),
+                nombre=session.get("nombre")
+            )
+
+        cuenta["nombre"] = nombre
+        cuenta["apellidos"] = apellidos
+        cuenta["usuario"] = usuario
+        cuenta["correo"] = correo
+        cuenta["rol"] = nuevo_rol
+
+        if nuevo_password:
+            cuenta["password"] = generate_password_hash(nuevo_password)
+
+        guardar_usuarios(usuarios_registrados)
+
+        if es_cuenta_actual:
+            session["usuario"] = usuario
+            session["nombre"] = nombre
+            session["rol"] = nuevo_rol
+
+        flash("Los datos del usuario se actualizaron correctamente.", "success")
+        return redirect(url_for("usuarios"))
+
+    return render_template(
+        "usuarios/editar_usuario.html",
+        usuario=cuenta,
+        id=id,
+        rol=obtener_rol(),
+        nombre=session.get("nombre")
+    )
+
+
+# ==========================================================
+# 16. ACTIVAR Y DESACTIVAR CUENTAS
+# ==========================================================
+
+@app.route("/usuarios/estado/<int:id>", methods=["POST"])
+@requiere_rol("Administrador")
+def cambiar_estado_usuario(id):
+
+    usuarios_registrados = cargar_usuarios()
+
+    if id < 1 or id > len(usuarios_registrados):
+        flash("El usuario seleccionado no existe.", "error")
+        return redirect(url_for("usuarios"))
+
+    cuenta = usuarios_registrados[id - 1]
+
+    if cuenta.get("usuario", "").casefold() == session.get("usuario", "").casefold():
+        flash("No puedes desactivar o modificar el estado de tu propia cuenta.", "error")
+        return redirect(url_for("editar_usuario", id=id))
+
+    nuevo_estado = request.form.get("activo", "")
+
+    if nuevo_estado not in ("true", "false"):
+        flash("La solicitud de estado no es válida.", "error")
+        return redirect(url_for("editar_usuario", id=id))
+
+    activar = nuevo_estado == "true"
+
+    if not activar and cuenta.get("rol") == "Administrador":
+        administradores_activos = sum(
+            1 for u in usuarios_registrados
+            if u.get("rol") == "Administrador"
+            and u.get("activo", True)
+        )
+
+        if administradores_activos <= 1:
+            flash("No puedes desactivar al último administrador activo.", "error")
+            return redirect(url_for("editar_usuario", id=id))
+
+    cuenta["activo"] = activar
+    guardar_usuarios(usuarios_registrados)
+
+    if activar:
+        flash("La cuenta se reactivó correctamente.", "success")
+    else:
+        flash("La cuenta se puso en pausa correctamente.", "success")
+
+    return redirect(url_for("editar_usuario", id=id))
+
+
+# ==========================================================
+# 17. ELIMINAR CUENTAS PERMANENTEMENTE
+# ==========================================================
+
+@app.route("/usuarios/eliminar/<int:id>", methods=["POST"])
+@requiere_rol("Administrador")
+def eliminar_usuario(id):
+
+    usuarios_registrados = cargar_usuarios()
+
+    if id < 1 or id > len(usuarios_registrados):
+        flash("El usuario seleccionado no existe.", "error")
+        return redirect(url_for("usuarios"))
+
+    cuenta = usuarios_registrados[id - 1]
+
+    if cuenta.get("usuario", "").casefold() == session.get("usuario", "").casefold():
+        flash("No puedes eliminar tu propia cuenta.", "error")
+        return redirect(url_for("usuarios"))
+
+    if (
+        cuenta.get("rol") == "Administrador"
+        and cuenta.get("activo", True)
+    ):
+
+        administradores_activos = sum(
+            1 for u in usuarios_registrados
+            if u.get("rol") == "Administrador"
+            and u.get("activo", True)
+        )
+
+        if administradores_activos <= 1:
+            flash("No puedes eliminar al último administrador activo.", "error")
+            return redirect(url_for("usuarios"))
+
+    usuarios_registrados.pop(id - 1)
+    guardar_usuarios(usuarios_registrados)
+
+    flash("La cuenta se eliminó permanentemente.", "success")
+    return redirect(url_for("usuarios"))
+
 
 registrar_pagina(
     "permisos",
@@ -838,7 +1438,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 13. MÓDULO DE CLIENTES
+# 14. MÓDULO DE CLIENTES
 # ==========================================================
 
 registrar_pagina(
@@ -871,7 +1471,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 14. MÓDULO DE REPARACIONES
+# 15. MÓDULO DE REPARACIONES
 # ==========================================================
 
 registrar_pagina(
@@ -911,7 +1511,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 15. MÓDULO DE TICKETS
+# 16. MÓDULO DE TICKETS
 # ==========================================================
 
 registrar_pagina(
@@ -944,7 +1544,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 16. MÓDULO DE INVENTARIO
+# 17. MÓDULO DE INVENTARIO
 # ==========================================================
 
 registrar_pagina(
@@ -970,7 +1570,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 17. MÓDULO DE VENTAS
+# 18. MÓDULO DE VENTAS
 # ==========================================================
 
 registrar_pagina(
@@ -996,7 +1596,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 18. MÓDULO DE REPORTES
+# 19. MÓDULO DE REPORTES
 # ==========================================================
 
 registrar_pagina(
@@ -1022,7 +1622,7 @@ registrar_pagina(
 
 
 # ==========================================================
-# 19. CERRAR SESIÓN
+# 20. CERRAR SESIÓN
 # ==========================================================
 
 @app.route("/logout")
@@ -1039,9 +1639,13 @@ def logout():
 
 
 # ==========================================================
-# 20. EJECUTAR APLICACIÓN
+# 21. EJECUTAR APLICACIÓN
 # ==========================================================
 
 if __name__ == "__main__":
 
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=False
+    )

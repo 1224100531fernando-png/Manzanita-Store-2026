@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Registrar usuario | Manzanita Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+    <!-- ENCABEZADO -->
+
+    <header class="bg-slate-950 text-white">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+
+            <div>
+                <h1 class="text-xl font-bold">
+                    Manzanita <span class="text-blue-400">Store</span>
+                </h1>
+
+                <p class="text-xs text-slate-400">
+                    Sistema de gestión
+                </p>
+            </div>
+
+            <a href="{{ url_for('usuarios') }}"
+            class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition">
+                ← Regresar
+            </a>
+
+        </div>
+    </header>
+
+
+    <!-- CONTENIDO -->
+
+    <main class="mx-auto max-w-3xl px-6 py-8">
+
+        <div class="mb-7">
+
+            <p class="text-sm font-medium text-blue-600">
+                Administración
+            </p>
+
+            <h2 class="text-3xl font-bold text-slate-900">
+                Registrar usuario
+            </h2>
+
+            <p class="mt-2 text-sm text-slate-500">
+                Registra una nueva cuenta para el personal de Manzanita Store.
+            </p>
+
+        </div>
+
+
+        <!-- MENSAJES -->
+
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+
+            {% if mensajes %}
+
+                <div class="mb-6 space-y-3">
+
+                    {% for categoria, mensaje in mensajes %}
+
+                        <div class="rounded-lg border px-4 py-3 text-sm
+                            {% if categoria == 'success' %}
+                                border-emerald-200 bg-emerald-50 text-emerald-700
+                            {% else %}
+                                border-red-200 bg-red-50 text-red-700
+                            {% endif %}">
+
+                            {{ mensaje }}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- FORMULARIO -->
+
+        <section class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
+
+            <div class="mb-6 border-b border-slate-200 pb-5">
+
+                <h3 class="text-lg font-semibold text-slate-900">
+                    Información de la cuenta
+                </h3>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    Completa los datos solicitados para crear el usuario.
+                </p>
+
+            </div>
+
+
+            <form action="{{ url_for('nuevo_usuario') }}"
+                method="POST"
+                class="space-y-5">
+
+
+                <!-- NOMBRE Y APELLIDOS -->
+
+                <div class="grid gap-5 sm:grid-cols-2">
+
+                    <div>
+
+                        <label for="nombre"
+                            class="mb-2 block text-sm font-semibold text-slate-700">
+                            Nombre(s)
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nombre"
+                            name="nombre"
+                            required
+                            maxlength="80"
+                            placeholder="Nombre del usuario"
+                            class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="apellidos"
+                            class="mb-2 block text-sm font-semibold text-slate-700">
+                            Apellidos
+                        </label>
+
+                        <input
+                            type="text"
+                            id="apellidos"
+                            name="apellidos"
+                            required
+                            maxlength="100"
+                            placeholder="Apellidos del usuario"
+                            class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- NOMBRE DE USUARIO -->
+
+                <div>
+
+                    <label for="usuario"
+                        class="mb-2 block text-sm font-semibold text-slate-700">
+                        Nombre de usuario
+                    </label>
+
+                    <input
+                        type="text"
+                        id="usuario"
+                        name="usuario"
+                        required
+                        maxlength="40"
+                        autocomplete="username"
+                        placeholder="Ej. juan123"
+                        class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    >
+
+                    <p class="mt-1 text-xs text-slate-400">
+                        Este nombre se utilizará para iniciar sesión.
+                    </p>
+
+                </div>
+
+
+                <!-- CORREO -->
+
+                <div>
+
+                    <label for="correo"
+                        class="mb-2 block text-sm font-semibold text-slate-700">
+                        Correo electrónico
+                    </label>
+
+                    <input
+                        type="email"
+                        id="correo"
+                        name="correo"
+                        required
+                        maxlength="120"
+                        autocomplete="email"
+                        placeholder="usuario@ejemplo.com"
+                        class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    >
+
+                </div>
+
+
+                <!-- CONTRASEÑAS -->
+
+                <div class="grid gap-5 sm:grid-cols-2">
+
+                    <div>
+
+                        <label for="password"
+                            class="mb-2 block text-sm font-semibold text-slate-700">
+                            Contraseña
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            minlength="8"
+                            autocomplete="new-password"
+                            placeholder="Mínimo 8 caracteres"
+                            class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="confirmar_password"
+                            class="mb-2 block text-sm font-semibold text-slate-700">
+                            Confirmar contraseña
+                        </label>
+
+                        <input
+                            type="password"
+                            id="confirmar_password"
+                            name="confirmar_password"
+                            required
+                            minlength="8"
+                            autocomplete="new-password"
+                            placeholder="Repite la contraseña"
+                            class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- ROL -->
+
+                <div>
+
+                    <label for="rol"
+                        class="mb-2 block text-sm font-semibold text-slate-700">
+                        Rol del usuario
+                    </label>
+
+                    <select
+                        id="rol"
+                        name="rol"
+                        required
+                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    >
+
+                        <option value="" selected disabled>
+                            Selecciona un rol
+                        </option>
+
+                        <option value="Administrador">
+                            Administrador
+                        </option>
+
+                        <option value="Vendedor">
+                            Vendedor
+                        </option>
+
+                        <option value="Técnico">
+                            Técnico
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- INFORMACIÓN -->
+
+                <div class="rounded-lg border border-blue-100 bg-blue-50 p-4">
+
+                    <p class="text-sm font-semibold text-blue-800">
+                        Información importante
+                    </p>
+
+                    <p class="mt-1 text-sm leading-6 text-blue-700">
+                        El rol asignado determinará las funciones y permisos
+                        disponibles para esta cuenta dentro del sistema.
+                    </p>
+
+                </div>
+
+
+                <!-- BOTONES -->
+
+                <div class="flex flex-col-reverse gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:justify-end">
+
+                    <a href="{{ url_for('usuarios') }}"
+                    class="rounded-lg border border-slate-300 bg-white px-6 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                        Cancelar
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition"
+                    >
+                        Registrar usuario
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer class="py-6 text-center text-xs text-slate-400">
+        Manzanita Store · 2026
+    </footer>
+
+</body>
+</html>

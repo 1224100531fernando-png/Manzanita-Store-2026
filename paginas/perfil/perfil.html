@@ -1,0 +1,506 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mi perfil | Manzanita Store</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f6fa;
+            font-family: Arial, sans-serif;
+            color: #263247;
+        }
+
+        .perfil-container {
+            max-width: 1050px;
+            margin: 35px auto;
+            padding: 25px;
+        }
+
+        .perfil-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .perfil-header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .perfil-header p {
+            color: #718096;
+            margin-top: 8px;
+        }
+
+        .btn-regresar {
+            background: #263b64;
+            color: white;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .perfil-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .foto-seccion {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .foto-perfil {
+            width: 125px;
+            height: 125px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #e5eaf3;
+            background: #edf1f7;
+        }
+
+        .foto-vacia {
+            width: 125px;
+            height: 125px;
+            border-radius: 50%;
+            background: #263b64;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 42px;
+            font-weight: bold;
+        }
+
+        .foto-info h2 {
+            margin: 0 0 8px;
+        }
+
+        .foto-info p {
+            color: #718096;
+            margin-bottom: 15px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .campo label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .campo input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d8deea;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .campo input:focus {
+            border-color: #345b9b;
+        }
+
+        .campo input[readonly] {
+            background: #f0f2f6;
+            color: #718096;
+        }
+
+        .btn-guardar {
+            background: #263b64;
+            color: white;
+            border: none;
+            padding: 13px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 22px;
+        }
+
+        .btn-guardar:hover {
+            background: #345b9b;
+        }
+
+        .btn-foto {
+            background: #263b64;
+            color: white;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .separador {
+            border: none;
+            border-top: 1px solid #e8edf4;
+            margin: 25px 0;
+        }
+
+        .flash {
+            padding: 13px 16px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .flash.success {
+            background: #e6f7ed;
+            color: #176b39;
+        }
+
+        .flash.error {
+            background: #fdeaea;
+            color: #a52b2b;
+        }
+
+        .ayuda {
+            color: #718096;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        /* SEGURIDAD Y CERRAR SESIÓN */
+
+        .seguridad-card {
+            border: 1px solid #f0dede;
+        }
+
+        .seguridad-card h2 {
+            color: #263247;
+            margin-bottom: 10px;
+        }
+
+        .seguridad-contenido {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .seguridad-contenido p {
+            color: #718096;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .btn-cerrar-sesion {
+            display: inline-block;
+            background: #c0392b;
+            color: white;
+            text-decoration: none;
+            padding: 13px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: .2s;
+            white-space: nowrap;
+        }
+
+        .btn-cerrar-sesion:hover {
+            background: #962d22;
+        }
+
+        @media (max-width: 650px) {
+            .perfil-container {
+                padding: 15px;
+                margin: 15px auto;
+            }
+
+            .perfil-card {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .perfil-header h1 {
+                font-size: 23px;
+            }
+
+            .seguridad-contenido {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="perfil-container">
+
+        <header class="perfil-header">
+            <div>
+                <h1>Mi perfil</h1>
+                <p>Administra tu información personal y fotografía.</p>
+            </div>
+
+            <a href="{% if rol == 'Administrador' %}{{ url_for('dashboard') }}{% elif rol == 'Vendedor' %}{{ url_for('ventas') }}{% else %}{{ url_for('reparaciones') }}{% endif %}"
+            class="btn-regresar">
+                Regresar
+            </a>
+        </header>
+
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                {% for categoria, mensaje in mensajes %}
+                    <div class="flash {{ categoria }}">
+                        {{ mensaje }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- FOTOGRAFÍA DE PERFIL -->
+
+        <section class="perfil-card">
+
+            <h2>Fotografía de perfil</h2>
+
+            <div class="foto-seccion">
+
+                {% if foto_perfil %}
+
+                    <img
+                        src="{{ url_for('static', filename='img/perfiles/' + foto_perfil) }}"
+                        alt="Fotografía de perfil"
+                        class="foto-perfil"
+                    >
+
+                {% else %}
+
+                    <div class="foto-vacia">
+                        {{ usuario.nombre[:1]|upper }}
+                    </div>
+
+                {% endif %}
+
+                <div class="foto-info">
+
+                    <h2>{{ usuario.nombre }} {{ usuario.apellidos }}</h2>
+
+                    <p>Esta fotografía aparecerá en tu panel principal.</p>
+
+                    <form
+                        action="{{ url_for('perfil') }}"
+                        method="POST"
+                        enctype="multipart/form-data"
+                    >
+
+                        <input type="hidden" name="accion" value="foto">
+
+                        <input
+                            type="file"
+                            name="foto"
+                            accept=".jpg,.jpeg,.png,.webp"
+                            required
+                        >
+
+                        <p class="ayuda">
+                            Formatos permitidos: JPG, JPEG, PNG y WEBP.
+                        </p>
+
+                        <button type="submit" class="btn-foto">
+                            Actualizar fotografía
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- INFORMACIÓN PERSONAL -->
+
+        <section class="perfil-card">
+
+            <h2>Información personal</h2>
+
+            <p class="ayuda">
+                Puedes modificar tu nombre, apellidos y correo electrónico.
+            </p>
+
+            <form action="{{ url_for('perfil') }}" method="POST">
+
+                <input type="hidden" name="accion" value="actualizar">
+
+                <div class="form-grid">
+
+                    <div class="campo">
+                        <label for="nombre">Nombre</label>
+                        <input
+                            type="text"
+                            id="nombre"
+                            name="nombre"
+                            value="{{ usuario.nombre }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="apellidos">Apellidos</label>
+                        <input
+                            type="text"
+                            id="apellidos"
+                            name="apellidos"
+                            value="{{ usuario.apellidos }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="usuario">Nombre de usuario</label>
+                        <input
+                            type="text"
+                            id="usuario"
+                            value="{{ usuario.usuario }}"
+                            readonly
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="correo">Correo electrónico</label>
+                        <input
+                            type="email"
+                            id="correo"
+                            name="correo"
+                            value="{{ usuario.correo }}"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn-guardar">
+                    Guardar información
+                </button>
+
+            </form>
+
+        </section>
+
+        <!-- CAMBIAR CONTRASEÑA -->
+
+        <section class="perfil-card">
+
+            <h2>Cambiar contraseña</h2>
+
+            <p class="ayuda">
+                Si deseas cambiar tu contraseña, completa los siguientes campos.
+            </p>
+
+            <form action="{{ url_for('perfil') }}" method="POST">
+
+                <input type="hidden" name="accion" value="contrasena">
+
+                <div class="form-grid">
+
+                    <div class="campo">
+                        <label for="contrasena_actual">Contraseña actual</label>
+                        <input
+                            type="password"
+                            id="contrasena_actual"
+                            name="contrasena_actual"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="nueva_contrasena">Nueva contraseña</label>
+                        <input
+                            type="password"
+                            id="nueva_contrasena"
+                            name="nueva_contrasena"
+                            minlength="8"
+                            autocomplete="new-password"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo">
+                        <label for="confirmar_contrasena">
+                            Confirmar nueva contraseña
+                        </label>
+                        <input
+                            type="password"
+                            id="confirmar_contrasena"
+                            name="confirmar_contrasena"
+                            minlength="8"
+                            autocomplete="new-password"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn-guardar">
+                    Cambiar contraseña
+                </button>
+
+            </form>
+
+        </section>
+
+        <!-- SEGURIDAD DE LA CUENTA -->
+
+        <section class="perfil-card seguridad-card">
+
+            <h2>Seguridad de la cuenta</h2>
+
+            <div class="seguridad-contenido">
+
+                <p>
+                    Cuando termines de utilizar Manzanita Store,
+                    puedes cerrar tu sesión de forma segura.
+                </p>
+
+                <a href="{{ url_for('logout') }}"
+                class="btn-cerrar-sesion">
+                    Cerrar sesión
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

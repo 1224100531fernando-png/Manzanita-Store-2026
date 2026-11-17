@@ -8,7 +8,7 @@
     <title>Dashboard | Manzanita Store</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+        href="{{ url_for('static', filename='css/style.css') }}">
 
     <style>
         * {
@@ -151,12 +151,13 @@
         }
 
         .topbar {
-            height: 75px;
+            min-height: 75px;
             background: white;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 40px;
+            gap: 20px;
+            padding: 12px 40px;
             border-bottom: 1px solid #e8eee7;
         }
 
@@ -169,6 +170,65 @@
         .topbar-label {
             color: var(--gris);
             font-size: 13px;
+        }
+
+        /* PERFIL EN BARRA SUPERIOR */
+
+        .topbar-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--texto);
+            padding: 6px 10px;
+            border-radius: 12px;
+            transition: .2s;
+            flex-shrink: 0;
+        }
+
+        .topbar-profile:hover {
+            background: #f1f7e9;
+        }
+
+        .topbar-avatar {
+            width: 43px;
+            height: 43px;
+            min-width: 43px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--verde-principal);
+            background: #eff8dc;
+        }
+
+        .topbar-avatar-fallback {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--verde-oscuro);
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .topbar-user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .topbar-user-info strong {
+            color: var(--verde-oscuro);
+            font-size: 13px;
+        }
+
+        .topbar-user-info span {
+            color: var(--gris);
+            font-size: 11px;
+        }
+
+        .profile-arrow {
+            color: var(--verde-principal);
+            font-size: 17px;
+            margin-left: 4px;
         }
 
         .page-content {
@@ -426,6 +486,10 @@
             .page-content {
                 padding: 30px 25px;
             }
+
+            .topbar {
+                padding: 12px 25px;
+            }
         }
 
         @media(max-width: 750px) {
@@ -464,7 +528,35 @@
             }
 
             .topbar {
-                padding: 0 18px;
+                padding: 12px 15px;
+                gap: 8px;
+            }
+
+            .topbar-title {
+                font-size: 12px;
+            }
+
+            .topbar-profile {
+                gap: 7px;
+                padding: 5px;
+            }
+
+            .topbar-avatar {
+                width: 37px;
+                height: 37px;
+                min-width: 37px;
+            }
+
+            .topbar-user-info strong {
+                font-size: 11px;
+            }
+
+            .topbar-user-info span {
+                font-size: 10px;
+            }
+
+            .profile-arrow {
+                display: none;
             }
 
             .page-content {
@@ -501,6 +593,20 @@
 
             .topbar-label {
                 display: none;
+            }
+
+            .topbar {
+                flex-wrap: wrap;
+            }
+
+            .topbar-user-info {
+                max-width: 105px;
+            }
+
+            .topbar-user-info strong {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
         }
     </style>
@@ -567,13 +673,6 @@
 
         </nav>
 
-        <div class="sidebar-bottom">
-            <a href="{{ url_for('logout') }}">
-                <span class="menu-icon">🚪</span>
-                <span>Cerrar sesión</span>
-            </a>
-        </div>
-
     </aside>
 
     <!-- CONTENIDO PRINCIPAL -->
@@ -581,6 +680,7 @@
 
         <!-- BARRA SUPERIOR -->
         <header class="topbar">
+
             <div class="topbar-title">
                 MANZANITA STORE
             </div>
@@ -588,6 +688,38 @@
             <div class="topbar-label">
                 Sistema de gestión empresarial
             </div>
+
+            <!-- ACCESO AL PERFIL -->
+            <a href="{{ url_for('perfil') }}" class="topbar-profile"
+            title="Ver y editar mi perfil">
+
+                {% if foto_perfil %}
+
+                    <img
+                        src="{{ url_for('static', filename='img/perfiles/' + foto_perfil) }}"
+                        alt="Fotografía de perfil"
+                        class="topbar-avatar">
+
+                {% else %}
+
+                    <div class="topbar-avatar topbar-avatar-fallback">
+                        {{ (nombre or 'U')[0]|upper }}
+                    </div>
+
+                {% endif %}
+
+                <div class="topbar-user-info">
+
+                    <strong>{{ nombre or 'Usuario' }}</strong>
+
+                    <span>{{ rol or 'Usuario' }} · Mi perfil</span>
+
+                </div>
+
+                <span class="profile-arrow">›</span>
+
+            </a>
+
         </header>
 
         <div class="page-content">
