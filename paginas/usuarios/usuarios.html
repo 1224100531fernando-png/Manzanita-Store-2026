@@ -4,424 +4,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Usuarios | Manzanita Store</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/clientes/clientes.css">
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body data-pagina="usuarios">
 
-<!-- ENCABEZADO -->
+    <!-- ENCABEZADO -->
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-
-            <p class="text-xs text-slate-400">
-                Sistema de gestión
-            </p>
-        </div>
-
-        <!-- BOTÓN REGRESAR AL MENÚ -->
-
-        <a href="{{ url_for('dashboard') }}"
-        class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition">
-            ← Regresar al menú
-        </a>
-
-    </div>
-</header>
-
-
-<!-- CONTENIDO PRINCIPAL -->
-
-<main class="mx-auto max-w-7xl px-6 py-8">
-
-    <!-- TÍTULO Y BOTONES -->
-
-    <div class="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-
-        <div>
-            <p class="text-sm font-medium text-blue-600">
-                Administración
-            </p>
-
-            <h2 class="text-3xl font-bold text-slate-900">
-                Usuarios
-            </h2>
-
-            <p class="mt-1 text-sm text-slate-500">
-                Administración de cuentas, personal y roles del sistema.
-            </p>
-        </div>
-
-        <div class="flex flex-wrap gap-3">
-
-            <a href="{{ url_for('permisos') }}"
-            class="rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">
-                Roles y permisos
-            </a>
-
-            <a href="{{ url_for('nuevo_usuario') }}"
-            class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
-                + Nuevo usuario
-            </a>
-
-        </div>
-
-    </div>
-
-
-    <!-- MENSAJES -->
-
-    {% with mensajes = get_flashed_messages(with_categories=true) %}
-
-        {% if mensajes %}
-
-            <div class="mb-6 space-y-3">
-
-                {% for categoria, mensaje in mensajes %}
-
-                    <div class="rounded-lg border px-4 py-3 text-sm
-                        {% if categoria == 'success' %}
-                            border-emerald-200 bg-emerald-50 text-emerald-700
-                        {% else %}
-                            border-red-200 bg-red-50 text-red-700
-                        {% endif %}">
-
-                        {{ mensaje }}
-
-                    </div>
-
-                {% endfor %}
-
+    <header class="topbar">
+        <div class="topinner">
+            <div class="brand">
+                🍏 Manzanita Store
+                <small>Gestión de usuarios</small>
             </div>
 
-        {% endif %}
-
-    {% endwith %}
-
-
-    <!-- TARJETAS INFORMATIVAS -->
-
-    <section class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">
-                Total de usuarios
-            </p>
-
-            <h3 class="mt-2 text-3xl font-bold text-slate-900">
-                {{ usuarios|length }}
-            </h3>
+            <a href="{{ url_for('dashboard') }}" class="btn">
+                ← Regresar al menú
+            </a>
         </div>
+    </header>
 
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">
-                Administradores
-            </p>
+    <!-- CONTENIDO PRINCIPAL -->
 
-            <h3 class="mt-2 text-3xl font-bold text-emerald-600">
-                {{ usuarios|selectattr('rol', 'equalto', 'Administrador')|list|length }}
-            </h3>
-        </div>
+    <main class="container">
 
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">
-                Vendedores
-            </p>
-
-            <h3 class="mt-2 text-3xl font-bold text-blue-600">
-                {{ usuarios|selectattr('rol', 'equalto', 'Vendedor')|list|length }}
-            </h3>
-        </div>
-
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">
-                Técnicos
-            </p>
-
-            <h3 class="mt-2 text-3xl font-bold text-violet-600">
-                {{ usuarios|selectattr('rol', 'equalto', 'Técnico')|list|length }}
-            </h3>
-        </div>
-
-    </section>
-
-
-    <!-- TABLA DE USUARIOS -->
-
-    <section class="overflow-hidden rounded-xl bg-white shadow-sm">
-
-        <div class="border-b border-slate-200 p-5">
-
-            <h3 class="text-lg font-semibold text-slate-900">
-                Personal registrado
-            </h3>
-
-            <p class="mt-1 text-sm text-slate-500">
-                Consulta las cuentas y administra los permisos de acceso.
-            </p>
-
-        </div>
-
-
-        {% if usuarios %}
-
-        <div class="overflow-x-auto">
-
-            <table class="w-full text-left text-sm">
-
-                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
-
-                    <tr>
-                        <th class="px-6 py-4">ID</th>
-                        <th class="px-6 py-4">Nombre</th>
-                        <th class="px-6 py-4">Usuario</th>
-                        <th class="px-6 py-4">Rol actual</th>
-                        <th class="px-6 py-4">Asignar rol</th>
-                        <th class="px-6 py-4 text-right">Acciones</th>
-                    </tr>
-
-                </thead>
-
-                <tbody class="divide-y divide-slate-100">
-
-                {% for usuario in usuarios %}
-
-                    <tr class="hover:bg-slate-50">
-
-                        <!-- ID -->
-
-                        <td class="px-6 py-4 font-semibold text-slate-700">
-                            #{{ usuario.id }}
-                        </td>
-
-
-                        <!-- NOMBRE -->
-
-                        <td class="px-6 py-4">
-
-                            <span class="font-semibold text-slate-900">
-                                {{ usuario.nombre }} {{ usuario.apellidos }}
-                            </span>
-
-                        </td>
-
-
-                        <!-- USUARIO -->
-
-                        <td class="px-6 py-4 text-slate-600">
-                            {{ usuario.usuario }}
-                        </td>
-
-
-                        <!-- ROL ACTUAL -->
-
-                        <td class="px-6 py-4">
-
-                            {% if usuario.rol == "Administrador" %}
-
-                                <span class="rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-semibold text-emerald-700">
-                                    Administrador
-                                </span>
-
-                            {% elif usuario.rol == "Vendedor" %}
-
-                                <span class="rounded-full bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700">
-                                    Vendedor
-                                </span>
-
-                            {% elif usuario.rol == "Técnico" %}
-
-                                <span class="rounded-full bg-violet-100 px-3 py-1.5 text-xs font-semibold text-violet-700">
-                                    Técnico
-                                </span>
-
-                            {% else %}
-
-                                <span class="rounded-full bg-amber-100 px-3 py-1.5 text-xs font-semibold text-amber-700">
-                                    Sin asignar
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <!-- ASIGNAR ROL -->
-
-                        <td class="px-6 py-4">
-
-                            {% if usuario.usuario != usuario_actual %}
-
-                                <form
-                                    action="{{ url_for('actualizar_rol_usuario', id=usuario.id) }}"
-                                    method="POST"
-                                    class="flex min-w-64 items-center gap-2"
-                                >
-
-                                    <select
-                                        name="rol"
-                                        required
-                                        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                                    >
-
-                                        <option value="" disabled
-                                            {% if usuario.rol not in ["Administrador", "Vendedor", "Técnico"] %}
-                                                selected
-                                            {% endif %}>
-                                            Seleccionar rol
-                                        </option>
-
-                                        <option value="Administrador"
-                                            {% if usuario.rol == "Administrador" %}selected{% endif %}>
-                                            Administrador
-                                        </option>
-
-                                        <option value="Vendedor"
-                                            {% if usuario.rol == "Vendedor" %}selected{% endif %}>
-                                            Vendedor
-                                        </option>
-
-                                        <option value="Técnico"
-                                            {% if usuario.rol == "Técnico" %}selected{% endif %}>
-                                            Técnico
-                                        </option>
-
-                                    </select>
-
-                                    <button
-                                        type="submit"
-                                        class="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
-                                    >
-                                        Guardar
-                                    </button>
-
-                                </form>
-
-                            {% else %}
-
-                                <span class="text-xs font-medium text-slate-400">
-                                    Cuenta actual
-                                </span>
-
-                            {% endif %}
-
-                        </td>
-
-
-                        <!-- ACCIONES -->
-
-                        <td class="px-6 py-4 text-right">
-
-                            <a
-                                href="{{ url_for('editar_usuario', id=usuario.id) }}"
-                                class="font-medium text-blue-600 hover:text-blue-800 hover:underline"
-                            >
-                                Editar
-                            </a>
-
-                        </td>
-
-                    </tr>
-
-                {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-        {% else %}
-
-            <div class="px-6 py-12 text-center">
-
-                <div class="mb-3 text-5xl">
-                    👤
-                </div>
-
-                <h3 class="text-lg font-semibold text-slate-800">
-                    No hay usuarios registrados
-                </h3>
-
-                <p class="mt-1 text-sm text-slate-500">
-                    Comienza registrando al personal del sistema.
+        <div class="heading">
+            <div>
+                <div class="eyebrow">ADMINISTRACIÓN / USUARIOS</div>
+                <h1>Gestión de Usuarios</h1>
+                <p class="muted">
+                    Administración de cuentas, personal y roles del sistema.
                 </p>
+            </div>
 
-                <a href="{{ url_for('nuevo_usuario') }}"
-                class="mt-5 inline-block rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
-                    + Registrar usuario
+            <div class="actions">
+                <a href="{{ url_for('permisos') }}" class="btn">
+                    Roles y permisos
                 </a>
 
+                <a href="{{ url_for('nuevo_usuario') }}" class="btn primary">
+                    + Nuevo usuario
+                </a>
             </div>
-
-        {% endif %}
-
-    </section>
-
-
-    <!-- INFORMACIÓN DE ROLES -->
-
-    <section class="mt-6 rounded-xl bg-white p-5 shadow-sm">
-
-        <h3 class="mb-4 text-lg font-semibold text-slate-900">
-            Roles del sistema
-        </h3>
-
-        <div class="grid gap-5 md:grid-cols-3">
-
-            <div>
-                <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                    Administrador
-                </span>
-
-                <p class="mt-3 text-sm leading-6 text-slate-500">
-                    Administra las cuentas, asigna permisos y supervisa
-                    el funcionamiento general del sistema.
-                </p>
-            </div>
-
-            <div>
-                <span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
-                    Vendedor
-                </span>
-
-                <p class="mt-3 text-sm leading-6 text-slate-500">
-                    Registra ventas y consulta información de clientes
-                    e inventario.
-                </p>
-            </div>
-
-            <div>
-                <span class="rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
-                    Técnico
-                </span>
-
-                <p class="mt-3 text-sm leading-6 text-slate-500">
-                    Gestiona las reparaciones y atiende los tickets
-                    de soporte.
-                </p>
-            </div>
-
         </div>
 
-    </section>
+        <!-- MENSAJES -->
 
-</main>
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                <section class="card" style="margin-bottom:20px;">
+                    {% for categoria, mensaje in mensajes %}
+                        <div class="pill {% if categoria != 'success' %}off{% endif %}"
+                             style="display:block; margin-bottom:8px;">
+                            {{ mensaje }}
+                        </div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
 
+        <!-- ESTADÍSTICAS -->
 
-<!-- PIE DE PÁGINA -->
+        <section class="stats">
 
-<footer class="py-6 text-center text-xs text-slate-400">
-    Manzanita Store · 2026
-</footer>
+            <div class="card stat">
+                <div class="muted">Total de usuarios</div>
+                <div class="value">
+                    {{ usuarios|length }}
+                </div>
+            </div>
+
+            <div class="card stat">
+                <div class="muted">Administradores</div>
+                <div class="value green">
+                    {{ usuarios|selectattr('rol', 'equalto', 'Administrador')|list|length }}
+                </div>
+            </div>
+
+            <div class="card stat">
+                <div class="muted">Vendedores</div>
+                <div class="value">
+                    {{ usuarios|selectattr('rol', 'equalto', 'Vendedor')|list|length }}
+                </div>
+            </div>
+
+            <div class="card stat">
+                <div class="muted">Técnicos</div>
+                <div class="value">
+                    {{ usuarios|selectattr('rol', 'equalto', 'Técnico')|list|length }}
+                </div>
+            </div>
+
+        </section>
+
+        <!-- TABLA DE USUARIOS -->
+
+        <section class="card">
+
+            <div class="heading">
+                <div>
+                    <h2>Personal registrado</h2>
+                    <p class="muted">
+                        Consulta las cuentas y administra los permisos de acceso.
+                    </p>
+                </div>
+            </div>
+
+            {% if usuarios %}
+
+                <div class="table-wrap">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Usuario</th>
+                                <th>Rol actual</th>
+                                <th>Asignar rol</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for usuario in usuarios %}
+
+                                <tr>
+
+                                    <!-- ID -->
+
+                                    <td>
+                                        #{{ usuario.id }}
+                                    </td>
+
+                                    <!-- NOMBRE -->
+
+                                    <td>
+                                        <strong>
+                                            {{ usuario.nombre }} {{ usuario.apellidos }}
+                                        </strong>
+                                    </td>
+
+                                    <!-- USUARIO -->
+
+                                    <td>
+                                        {{ usuario.usuario }}
+                                    </td>
+
+                                    <!-- ROL ACTUAL -->
+
+                                    <td>
+
+                                        {% if usuario.rol == "Administrador" %}
+
+                                            <span class="pill">
+                                                Administrador
+                                            </span>
+
+                                        {% elif usuario.rol == "Vendedor" %}
+
+                                            <span class="pill">
+                                                Vendedor
+                                            </span>
+
+                                        {% elif usuario.rol == "Técnico" %}
+
+                                            <span class="pill">
+                                                Técnico
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="pill off">
+                                                Sin asignar
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    <!-- ASIGNAR ROL -->
+
+                                    <td>
+
+                                        {% if usuario.usuario != usuario_actual %}
+
+                                            <form
+                                                action="{{ url_for('actualizar_rol_usuario', id=usuario.id) }}"
+                                                method="POST"
+                                                class="actions"
+                                            >
+
+                                                <select
+                                                    name="rol"
+                                                    required
+                                                    class="field"
+                                                >
+
+                                                    <option
+                                                        value=""
+                                                        disabled
+                                                        {% if usuario.rol not in ["Administrador", "Vendedor", "Técnico"] %}
+                                                            selected
+                                                        {% endif %}
+                                                    >
+                                                        Seleccionar rol
+                                                    </option>
+
+                                                    <option
+                                                        value="Administrador"
+                                                        {% if usuario.rol == "Administrador" %}selected{% endif %}
+                                                    >
+                                                        Administrador
+                                                    </option>
+
+                                                    <option
+                                                        value="Vendedor"
+                                                        {% if usuario.rol == "Vendedor" %}selected{% endif %}
+                                                    >
+                                                        Vendedor
+                                                    </option>
+
+                                                    <option
+                                                        value="Técnico"
+                                                        {% if usuario.rol == "Técnico" %}selected{% endif %}
+                                                    >
+                                                        Técnico
+                                                    </option>
+
+                                                </select>
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn primary"
+                                                >
+                                                    Guardar
+                                                </button>
+
+                                            </form>
+
+                                        {% else %}
+
+                                            <span class="muted">
+                                                Cuenta actual
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    <!-- ACCIONES -->
+
+                                    <td>
+
+                                        <a
+                                            href="{{ url_for('editar_usuario', id=usuario.id) }}"
+                                            class="btn small"
+                                        >
+                                            Editar
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty">
+
+                    <div class="emoji">👤</div>
+
+                    <h2>No hay usuarios registrados</h2>
+
+                    <p class="muted">
+                        Comienza registrando al personal del sistema.
+                    </p>
+
+                    <a
+                        href="{{ url_for('nuevo_usuario') }}"
+                        class="btn primary"
+                    >
+                        + Registrar usuario
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+            <div class="foot">
+                Total de usuarios:
+                <strong>{{ usuarios|length }}</strong>
+            </div>
+
+        </section>
+
+        <!-- INFORMACIÓN DE ROLES -->
+
+        <section class="card" style="margin-top:20px;">
+
+            <h2>Roles del sistema</h2>
+
+            <div class="stats" style="margin-top:15px;">
+
+                <div>
+                    <span class="pill">Administrador</span>
+
+                    <p class="muted">
+                        Administra las cuentas, asigna permisos y supervisa
+                        el funcionamiento general del sistema.
+                    </p>
+                </div>
+
+                <div>
+                    <span class="pill">Vendedor</span>
+
+                    <p class="muted">
+                        Registra ventas y consulta información de clientes
+                        e inventario.
+                    </p>
+                </div>
+
+                <div>
+                    <span class="pill">Técnico</span>
+
+                    <p class="muted">
+                        Gestiona las reparaciones y atiende los tickets
+                        de soporte.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer class="foot" style="text-align:center; padding:25px;">
+        Manzanita Store · 2026
+    </footer>
 
 </body>
 </html>
