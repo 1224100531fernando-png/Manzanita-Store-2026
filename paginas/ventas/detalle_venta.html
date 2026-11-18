@@ -5,251 +5,1059 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Detalle de venta | Manzanita Store</title>
-<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ENCABEZADO */
+
+.header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--limon);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+
+.brand h1 {
+    font-size: 21px;
+    font-weight: 750;
+    margin: 0;
+}
+
+.brand h1 span {
+    color: var(--limon);
+}
+
+.brand p {
+    color: #b6cfbe;
+    font-size: 12px;
+    margin: 4px 0 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-inicio,
+.salir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.25);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.btn-inicio {
+    background: var(--medio);
+}
+
+.btn-inicio:hover {
+    background: var(--boton);
+}
+
+.salir:hover {
+    background: var(--medio);
+}
+
+/* CONTENIDO */
+
+.contenido {
+    max-width: 1100px;
+    margin: auto;
+    padding: 38px 25px;
+}
+
+.volver {
+    display: inline-block;
+    color: #548b1a;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.volver:hover {
+    text-decoration: underline;
+}
+
+.page-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 22px 0 28px;
+}
+
+.page-title small {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+
+.page-title h2 {
+    color: var(--verde);
+    font-size: 34px;
+    font-weight: 800;
+    margin: 9px 0;
+}
+
+.page-title p {
+    color: var(--gris);
+    font-size: 14px;
+}
+
+.btn-imprimir {
+    padding: 14px 23px;
+    border: none;
+    border-radius: 11px;
+    background: var(--boton);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn-imprimir:hover {
+    background: #608f12;
+    transform: translateY(-2px);
+}
+
+/* BIENVENIDA */
+
+.welcome {
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    border-radius: 19px;
+    padding: 30px 35px;
+    margin-bottom: 27px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome::after {
+    content: "🛍️";
+    position: absolute;
+    right: 42px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 85px;
+    opacity: .15;
+    pointer-events: none;
+}
+
+.welcome small {
+    color: var(--limon);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 3px;
+}
+
+.welcome h3 {
+    position: relative;
+    z-index: 1;
+    margin: 10px 0;
+    font-size: 23px;
+    font-weight: 750;
+}
+
+.welcome p {
+    position: relative;
+    z-index: 1;
+    color: #d8e7dc;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* TARJETAS */
+
+.card {
+    margin-bottom: 24px;
+    padding: 30px;
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.card-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding-bottom: 19px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e8eee7;
+}
+
+.card-icon {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    border-radius: 13px;
+    background: #eff8dc;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+}
+
+.card-heading h3 {
+    margin: 0;
+    color: var(--verde);
+    font-size: 19px;
+    font-weight: 750;
+}
+
+.card-heading p {
+    margin: 5px 0 0;
+    color: var(--gris);
+    font-size: 12px;
+}
+
+/* INFORMACIÓN */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+}
+
+.info-grid.tres {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.info-label {
+    margin-bottom: 9px;
+    color: var(--gris);
+    font-size: 13px;
+}
+
+.info-value {
+    color: var(--verde);
+    font-size: 15px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.estado {
+    display: inline-block;
+    padding: 9px 14px;
+    border-radius: 30px;
+    background: #e4f7e7;
+    color: #16813a;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+/* TABLA DE PRODUCTOS */
+
+.card-tabla {
+    padding: 0;
+    overflow: hidden;
+}
+
+.card-tabla .card-heading {
+    margin: 0;
+    padding: 25px 30px;
+}
+
+.tabla-scroll {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead {
+    background: #f5f8f3;
+}
+
+th {
+    padding: 18px 22px;
+    color: #718177;
+    font-size: 11px;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+td {
+    padding: 20px 22px;
+    border-top: 1px solid #eef2ed;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+tbody tr:hover {
+    background: #f7faf4;
+}
+
+.producto-nombre {
+    color: var(--verde);
+    font-weight: 700;
+}
+
+.importe {
+    color: #16813a;
+    font-weight: 750;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* RESUMEN */
+
+.resumen-contenedor {
+    padding: 26px 30px;
+    border-top: 1px solid #edf1eb;
+}
+
+.resumen {
+    max-width: 420px;
+    margin-left: auto;
+}
+
+.resumen-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 19px;
+    font-size: 14px;
+}
+
+.resumen-fila strong {
+    color: var(--verde);
+}
+
+.total-fila {
+    padding-top: 20px;
+    border-top: 1px solid #e8eee7;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+#total {
+    color: #16813a;
+    font-size: 26px;
+}
+
+.nota {
+    margin-top: 20px;
+    color: var(--gris);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* BOTÓN REGRESAR */
+
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 27px;
+}
+
+.btn-regresar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+    background: var(--verde);
+    border-radius: 11px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.btn-regresar:hover {
+    background: var(--medio);
+}
+
+/* ERROR */
+
+.error-card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    padding: 45px 25px;
+    text-align: center;
+}
+
+.error-card h3 {
+    color: var(--verde);
+    font-size: 22px;
+    font-weight: 750;
+}
+
+.error-card p {
+    color: var(--gris);
+    font-size: 14px;
+    margin: 12px 0 25px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #929b93;
+    font-size: 12px;
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 700px) {
+    .contenido {
+        padding: 25px 15px;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+
+    .card {
+        padding: 23px 19px;
+    }
+
+    .card-tabla {
+        padding: 0;
+    }
+
+    .card-tabla .card-heading,
+    .resumen-contenedor {
+        padding: 23px 19px;
+    }
+
+    .info-grid,
+    .info-grid.tres {
+        grid-template-columns: 1fr;
+        gap: 21px;
+    }
+
+    .resumen {
+        max-width: 100%;
+    }
+}
+
+@media(max-width: 480px) {
+    .header-content {
+        padding: 0 12px;
+    }
+
+    .header-actions {
+        gap: 7px;
+    }
+
+    .btn-inicio,
+    .salir {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+}
+
+/* IMPRESIÓN */
+
+@media print {
+    @page {
+        size: auto;
+        margin: 15mm;
+    }
+
+    body {
+        background: white !important;
+        color: #222 !important;
+    }
+
+    .header,
+    .volver,
+    .btn-imprimir,
+    .acciones,
+    footer,
+    #error {
+        display: none !important;
+    }
+
+    .contenido {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .page-title {
+        margin: 0 0 15px;
+    }
+
+    .page-title h2 {
+        color: #183d32;
+        font-size: 25px;
+    }
+
+    .welcome {
+        background: white !important;
+        color: #183d32 !important;
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .welcome small,
+    .welcome p {
+        color: #555 !important;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+    }
+
+    .card-tabla {
+        break-inside: auto;
+    }
+
+    tr {
+        break-inside: avoid;
+    }
+
+    .estado {
+        border: 1px solid #aaa;
+    }
+
+    .nota {
+        color: #555;
+    }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<!-- ENCABEZADO -->
+
+<header class="header">
+    <div class="header-content">
+
+        <div class="brand">
+
+            <div class="brand-icon">🍏</div>
+
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Sistema de gestión</p>
+            </div>
+
         </div>
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
-            Salir
-        </a>
+
+        <!-- NAVEGACIÓN FLASK -->
+
+        <div class="header-actions">
+
+            <a href="{{ url_for('dashboard') if rol == 'Administrador' else url_for('ventas') }}"
+               class="btn-inicio">
+                🏠 Inicio
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="salir">
+                Salir
+            </a>
+
+        </div>
+
     </div>
 </header>
 
-<main class="mx-auto max-w-5xl px-6 py-8">
+<main class="contenido">
 
-    <a href="ventas.html"
-       class="text-sm font-medium text-blue-600 hover:underline">
+    <!-- VOLVER -->
+
+    <a href="{{ url_for('ventas') }}" class="volver">
         ← Volver a ventas
     </a>
 
-    <div class="mb-7 mt-5 flex flex-wrap items-center justify-between gap-4">
+    <!-- TÍTULO -->
+
+    <div class="page-title">
+
         <div>
-            <p class="text-sm font-medium text-blue-600">Administración</p>
-            <h2 class="text-3xl font-bold">Detalle de venta</h2>
-            <p id="folio" class="mt-2 text-sm text-slate-500"></p>
+            <small>ADMINISTRACIÓN</small>
+
+            <h2>Detalle de venta</h2>
+
+            <p id="folio">Cargando venta...</p>
         </div>
 
-        <button id="imprimir" type="button"
-                onclick="window.print()"
-                class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
-            Imprimir detalle
+        <!-- IMPRIMIR -->
+
+        <button id="imprimir"
+                type="button"
+                class="btn-imprimir hidden">
+            🖨️ Imprimir detalle
         </button>
+
     </div>
 
-    <div id="error"
-         class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
-        <h3 class="text-xl font-bold">Venta no encontrada</h3>
-        <p class="mt-2 text-slate-500">
-            El folio solicitado no existe en los registros de prueba.
+    <!-- ERROR -->
+
+    <div id="error" class="error-card hidden">
+
+        <div style="font-size:45px;margin-bottom:15px">
+            🔎
+        </div>
+
+        <h3>Venta no encontrada</h3>
+
+        <p>
+            No se encontró una venta de demostración
+            con el identificador solicitado.
         </p>
-        <a href="ventas.html"
-           class="mt-4 inline-block text-blue-600 hover:underline">
+
+        <a href="{{ url_for('ventas') }}"
+           class="btn-regresar">
             Regresar a ventas
         </a>
+
     </div>
 
-    <div id="contenido" class="space-y-6">
+    <!-- CONTENIDO -->
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-                Información de la operación
-            </h3>
+    <div id="contenido" class="hidden">
 
-            <div class="grid gap-5 sm:grid-cols-3">
+        <!-- BIENVENIDA -->
+
+        <section class="welcome">
+
+            <small>CONTROL COMERCIAL</small>
+
+            <h3>Información de la operación</h3>
+
+            <p>
+                Consulta los productos de la venta,
+                el cliente, el vendedor y los importes
+                registrados en el ejemplo.
+            </p>
+
+        </section>
+
+        <!-- INFORMACIÓN GENERAL -->
+
+        <section class="card">
+
+            <div class="card-heading">
+
+                <div class="card-icon">💳</div>
+
                 <div>
-                    <p class="text-sm text-slate-500">Fecha</p>
-                    <p id="fecha" class="mt-1 font-semibold"></p>
+                    <h3>Información de la operación</h3>
+                    <p>Datos generales de la venta</p>
                 </div>
+
+            </div>
+
+            <div class="info-grid tres">
+
                 <div>
-                    <p class="text-sm text-slate-500">Método de pago</p>
-                    <p id="metodo" class="mt-1 font-semibold"></p>
+                    <p class="info-label">Fecha</p>
+                    <p id="fecha" class="info-value"></p>
                 </div>
+
                 <div>
-                    <p class="text-sm text-slate-500">Estado</p>
-                    <span class="mt-1 inline-block rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">
+                    <p class="info-label">Método de pago</p>
+                    <p id="metodo" class="info-value"></p>
+                </div>
+
+                <div>
+                    <p class="info-label">Estado</p>
+                    <span class="estado">
                         Registrada (ejemplo)
                     </span>
                 </div>
+
             </div>
+
         </section>
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-                Datos del cliente y vendedor
-            </h3>
+        <!-- CLIENTE Y VENDEDOR -->
 
-            <div class="grid gap-5 sm:grid-cols-2">
+        <section class="card">
+
+            <div class="card-heading">
+
+                <div class="card-icon">👤</div>
+
                 <div>
-                    <p class="text-sm text-slate-500">Cliente</p>
-                    <p id="cliente" class="mt-1 font-semibold"></p>
+                    <h3>Datos del cliente y vendedor</h3>
+                    <p>Participantes de la operación</p>
                 </div>
-                <div>
-                    <p class="text-sm text-slate-500">Vendedor</p>
-                    <p id="vendedor" class="mt-1 font-semibold"></p>
-                </div>
+
             </div>
+
+            <div class="info-grid">
+
+                <div>
+                    <p class="info-label">Cliente</p>
+                    <p id="cliente" class="info-value"></p>
+                </div>
+
+                <div>
+                    <p class="info-label">Vendedor</p>
+                    <p id="vendedor" class="info-value"></p>
+                </div>
+
+            </div>
+
         </section>
 
-        <section class="overflow-hidden rounded-xl bg-white shadow-sm">
-            <div class="border-b p-6">
-                <h3 class="text-lg font-semibold">Productos vendidos</h3>
+        <!-- PRODUCTOS -->
+
+        <section class="card card-tabla">
+
+            <div class="card-heading">
+
+                <div class="card-icon">📦</div>
+
+                <div>
+                    <h3>Productos vendidos</h3>
+                    <p>Detalle de artículos e importes</p>
+                </div>
+
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+            <div class="tabla-scroll">
+
+                <table>
+
+                    <thead>
                         <tr>
-                            <th class="px-6 py-4">Producto</th>
-                            <th class="px-6 py-4">Precio</th>
-                            <th class="px-6 py-4">Cantidad</th>
-                            <th class="px-6 py-4 text-right">Importe</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th class="text-right">Importe</th>
                         </tr>
                     </thead>
-                    <tbody id="productos" class="divide-y divide-slate-100"></tbody>
+
+                    <tbody id="productos"></tbody>
+
                 </table>
+
             </div>
 
-            <div class="ml-auto max-w-sm space-y-3 p-6">
-                <div class="flex justify-between text-sm">
-                    <span class="text-slate-500">Subtotal</span>
-                    <span id="subtotal" class="font-semibold"></span>
+            <!-- RESUMEN -->
+
+            <div class="resumen-contenedor">
+
+                <div class="resumen">
+
+                    <div class="resumen-fila">
+                        <span>Subtotal</span>
+                        <strong id="subtotal">$0.00</strong>
+                    </div>
+
+                    <div class="resumen-fila total-fila">
+                        <span>Total</span>
+                        <strong id="total">$0.00</strong>
+                    </div>
+
+                    <p class="nota">
+                        Importes de demostración.
+                        Este documento no constituye
+                        un comprobante fiscal.
+                    </p>
+
                 </div>
-                <div class="flex justify-between border-t pt-4 text-xl">
-                    <strong>Total</strong>
-                    <strong id="total" class="text-blue-600"></strong>
-                </div>
-                <p class="text-xs text-slate-500">
-                    Importes de demostración. No constituyen un comprobante fiscal.
-                </p>
+
             </div>
+
         </section>
 
-        <div class="flex justify-end">
-            <a href="ventas.html"
-               class="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+        <!-- REGRESAR -->
+
+        <div class="acciones">
+
+            <a href="{{ url_for('ventas') }}"
+               class="btn-regresar">
                 Regresar a ventas
             </a>
+
         </div>
+
     </div>
+
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
+<footer>
     Manzanita Store · 2026
 </footer>
 
-<style>
-@media print {
-    header, footer, a, #imprimir {
-        display: none !important;
-    }
-    body { background: white !important; }
-    main { padding: 0 !important; }
-    section { box-shadow: none !important; }
-}
-</style>
-
 <script>
-    // Datos de prueba, correspondientes al historial de ventas.
-    // Los precios se consideran totales de línea sin IVA adicional.
+    // DATOS DE DEMOSTRACIÓN.
+    // NO PROVIENEN DE MYSQL.
+
     const ventas = [
         {
+            id: 1,
             folio: "VTA-001",
             fecha: "2026-11-10",
             cliente: "Juan Pérez",
             vendedor: "Carlos Fernando",
             metodo: "Tarjeta",
             productos: [
-                {nombre:"iPhone 13", precio:9500, cantidad:1}
+                {
+                    nombre: "iPhone 13",
+                    precio: 9500,
+                    cantidad: 1
+                }
             ]
         },
         {
+            id: 2,
             folio: "VTA-002",
             fecha: "2026-11-11",
             cliente: "María González",
             vendedor: "Axel Gael",
             metodo: "Transferencia",
             productos: [
-                {nombre:"MacBook Air M2", precio:18500, cantidad:1}
+                {
+                    nombre: "MacBook Air M2",
+                    precio: 18500,
+                    cantidad: 1
+                }
             ]
         },
         {
+            id: 3,
             folio: "VTA-003",
             fecha: "2026-11-12",
             cliente: "Carlos López",
             vendedor: "Carlos Fernando",
             metodo: "Efectivo",
             productos: [
-                {nombre:"Cargador USB-C", precio:450, cantidad:1}
+                {
+                    nombre: "Cargador USB-C",
+                    precio: 450,
+                    cantidad: 1
+                }
             ]
         },
         {
+            id: 4,
             folio: "VTA-004",
             fecha: "2026-11-12",
             cliente: "Ana Martínez",
             vendedor: "Axel Gael",
             metodo: "Tarjeta",
             productos: [
-                {nombre:"Pantalla iPhone 11", precio:1200, cantidad:1}
+                {
+                    nombre: "Pantalla iPhone 11",
+                    precio: 1200,
+                    cantidad: 1
+                }
             ]
         }
     ];
 
-    const moneda = valor => valor.toLocaleString("es-MX", {
-        style: "currency",
-        currency: "MXN"
-    });
+    // CONVERTIR VALORES A MONEDA MEXICANA.
 
-    const folio = new URLSearchParams(location.search).get("folio");
-    const venta = ventas.find(v => v.folio === folio);
+    function moneda(valor) {
+        return valor.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN"
+        });
+    }
+
+    // ID QUE RECIBE FLASK:
+    // /ventas/detalle/1
+    // /ventas/detalle/2
+    // /ventas/detalle/3
+    // /ventas/detalle/4
+
+    const idActual = {{ id|default(0)|int }};
+
+    // Compatibilidad con enlaces antiguos por folio.
+
+    const parametros = new URLSearchParams(location.search);
+    const folioSolicitado = parametros.get("folio");
+
+    // BUSCAR LA VENTA CORRESPONDIENTE.
+
+    const venta = folioSolicitado
+        ? ventas.find(v => v.folio === folioSolicitado)
+        : ventas.find(v => v.id === idActual);
+
+    // ELEMENTOS.
+
+    const contenido = document.getElementById("contenido");
+    const error = document.getElementById("error");
+    const imprimir = document.getElementById("imprimir");
+
+    // MOSTRAR ERROR SI NO EXISTE LA VENTA.
 
     if (!venta) {
-        document.getElementById("contenido").classList.add("hidden");
-        document.getElementById("imprimir").classList.add("hidden");
-        document.getElementById("error").classList.remove("hidden");
-        document.getElementById("folio").textContent = folio || "Sin folio";
+
+        contenido.classList.add("hidden");
+        imprimir.classList.add("hidden");
+        error.classList.remove("hidden");
+
+        document.getElementById("folio").textContent =
+            folioSolicitado || "Venta #" + idActual;
+
     } else {
-        ["folio", "fecha", "metodo", "cliente", "vendedor"]
-            .forEach(campo => {
-                document.getElementById(campo).textContent = venta[campo];
-            });
+
+        // MOSTRAR CONTENIDO.
+
+        contenido.classList.remove("hidden");
+        error.classList.add("hidden");
+        imprimir.classList.remove("hidden");
+
+        // FOLIO.
+
+        document.getElementById("folio").textContent =
+            venta.folio;
+
+        // DATOS GENERALES.
+
+        const campos = [
+            "fecha",
+            "metodo",
+            "cliente",
+            "vendedor"
+        ];
+
+        campos.forEach(campo => {
+
+            document.getElementById(campo).textContent =
+                venta[campo] || "No especificado";
+
+        });
+
+        // AGREGAR PRODUCTOS A LA TABLA.
 
         const tabla = document.getElementById("productos");
 
-        venta.productos.forEach(p => {
+        tabla.replaceChildren();
+
+        venta.productos.forEach(producto => {
+
             const fila = document.createElement("tr");
 
-            [
-                p.nombre,
-                moneda(p.precio),
-                String(p.cantidad),
-                moneda(p.precio * p.cantidad)
-            ].forEach((valor, indice) => {
+            const valores = [
+                producto.nombre,
+                moneda(producto.precio),
+                String(producto.cantidad),
+                moneda(producto.precio * producto.cantidad)
+            ];
+
+            valores.forEach((valor, indice) => {
+
                 const celda = document.createElement("td");
-                celda.className = "px-6 py-4" +
-                    (indice === 3 ? " text-right" : "");
+
                 celda.textContent = valor;
+
+                if (indice === 0) {
+                    celda.className = "producto-nombre";
+                }
+
+                if (indice === 3) {
+                    celda.className = "importe text-right";
+                }
+
                 fila.appendChild(celda);
             });
 
             tabla.appendChild(fila);
         });
 
+        // CALCULAR TOTAL DE LA VENTA.
+
         const total = venta.productos.reduce(
-            (suma, p) => suma + p.precio * p.cantidad, 0
+            (suma, producto) =>
+                suma + producto.precio * producto.cantidad,
+            0
         );
 
-        document.getElementById("subtotal").textContent = moneda(total);
-        document.getElementById("total").textContent = moneda(total);
+        document.getElementById("subtotal").textContent =
+            moneda(total);
+
+        document.getElementById("total").textContent =
+            moneda(total);
+
+        // BOTÓN IMPRIMIR.
+
+        imprimir.addEventListener("click", () => {
+            window.print();
+        });
     }
 </script>
 
