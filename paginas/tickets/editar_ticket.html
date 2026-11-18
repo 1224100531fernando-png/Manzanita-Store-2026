@@ -2,220 +2,800 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar ticket | Manzanita Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editar ticket | Manzanita Store</title>
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ENCABEZADO */
+
+.header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--limon);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+
+.brand h1 {
+    font-size: 21px;
+    font-weight: 750;
+    margin: 0;
+}
+
+.brand h1 span {
+    color: var(--limon);
+}
+
+.brand p {
+    color: #b6cfbe;
+    font-size: 12px;
+    margin: 4px 0 0;
+}
+
+.salir {
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 11px 20px;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    transition: .2s;
+}
+
+.salir:hover {
+    background: var(--medio);
+}
+
+/* CONTENIDO */
+
+.contenido {
+    max-width: 1050px;
+    margin: auto;
+    padding: 38px 25px;
+}
+
+.volver {
+    display: inline-block;
+    color: #548b1a;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.volver:hover {
+    text-decoration: underline;
+}
+
+.page-title {
+    margin: 22px 0 28px;
+}
+
+.page-title small {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+
+.page-title h2 {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--verde);
+    margin: 9px 0;
+}
+
+.page-title p {
+    color: var(--gris);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* PANEL DE BIENVENIDA */
+
+.welcome {
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    border-radius: 19px;
+    padding: 30px 35px;
+    color: white;
+    margin-bottom: 26px;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome::after {
+    content: "🎫";
+    position: absolute;
+    right: 42px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 85px;
+    opacity: .14;
+    pointer-events: none;
+}
+
+.welcome small {
+    color: var(--limon);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 3px;
+}
+
+.welcome h3 {
+    font-size: 23px;
+    font-weight: 750;
+    margin: 10px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.welcome p {
+    color: #d8e7dc;
+    font-size: 14px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+/* FORMULARIO */
+
+.form-card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 8px 25px rgba(24,61,50,.045);
+}
+
+.form-section {
+    margin-bottom: 34px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid #e8eee7;
+    margin-bottom: 23px;
+}
+
+.section-icon {
+    width: 43px;
+    height: 43px;
+    min-width: 43px;
+    background: #eff8dc;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 21px;
+}
+
+.section-heading h3 {
+    color: var(--verde);
+    font-size: 18px;
+    font-weight: 750;
+    margin: 0;
+}
+
+.section-heading p {
+    color: var(--gris);
+    font-size: 12px;
+    margin: 4px 0 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.campo label {
+    display: block;
+    font-size: 13px;
+    font-weight: 650;
+    color: #35473a;
+    margin-bottom: 9px;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: #fbfcfa;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: .2s;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color: var(--boton);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(117,173,22,.12);
+}
+
+.campo textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.campo input::placeholder,
+.campo textarea::placeholder {
+    color: #a0aba1;
+}
+
+.completo {
+    grid-column: 1 / -1;
+}
+
+.requerido {
+    color: var(--boton);
+}
+
+/* MENSAJES */
+
+.mensaje {
+    margin-top: 25px;
+    padding: 16px 19px;
+    border-radius: 11px;
+    background: #fff7e6;
+    border: 1px solid #f4d79d;
+    color: #875b13;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* BOTONES */
+
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 13px;
+    flex-wrap: wrap;
+    border-top: 1px solid #e8eee7;
+    padding-top: 27px;
+    margin-top: 30px;
+}
+
+.btn-cancelar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    background: white;
+    color: #516456;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.btn-cancelar:hover {
+    background: #f3f6f1;
+}
+
+.btn-guardar {
+    padding: 14px 24px;
+    border: none;
+    border-radius: 11px;
+    background: var(--boton);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn-guardar:hover {
+    background: #608f12;
+    transform: translateY(-2px);
+}
+
+/* ERROR */
+
+.error-card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    padding: 45px 25px;
+    text-align: center;
+}
+
+.error-card h3 {
+    color: var(--verde);
+    font-size: 22px;
+    font-weight: 750;
+    margin: 0;
+}
+
+.error-card p {
+    color: var(--gris);
+    font-size: 14px;
+    margin: 12px 0 25px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #929b93;
+    font-size: 12px;
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 650px) {
+    .contenido {
+        padding: 25px 15px;
+    }
+
+    .form-card {
+        padding: 23px 19px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .completo {
+        grid-column: auto;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+
+    .acciones > * {
+        flex: 1;
+        text-align: center;
+    }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<!-- ENCABEZADO -->
+
+<header class="header">
+    <div class="header-content">
+
+        <div class="brand">
+            <div class="brand-icon">🍏</div>
+
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Sistema de gestión</p>
+            </div>
         </div>
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+
+        <!-- CERRAR SESIÓN CON FLASK -->
+
+        <a href="{{ url_for('logout') }}" class="salir">
             Salir
         </a>
+
     </div>
 </header>
 
-<main class="mx-auto max-w-4xl px-6 py-8">
+<main class="contenido">
 
-    <a id="volver" href="tickets.html"
-       class="text-sm font-medium text-blue-600 hover:underline">
+    <!-- VOLVER AL DETALLE -->
+
+    <a id="volver"
+       href="{{ url_for('tickets') }}"
+       class="volver">
         ← Volver al detalle
     </a>
 
-    <div class="mb-7 mt-5">
-        <p class="text-sm font-medium text-blue-600">
-            Atención a clientes
-        </p>
-        <h2 class="text-3xl font-bold">Editar ticket</h2>
-        <p id="subtitulo" class="mt-2 text-sm text-slate-500">
+    <!-- TÍTULO -->
+
+    <div class="page-title">
+
+        <small>ATENCIÓN A CLIENTES</small>
+
+        <h2>Editar ticket</h2>
+
+        <p id="subtitulo">
             Actualiza la información de la solicitud.
         </p>
+
     </div>
 
-    <div id="error"
-         class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
-        <h3 class="text-xl font-bold">Ticket no encontrado</h3>
-        <p class="mt-2 text-slate-500">
-            No existe un registro de prueba con ese folio.
+    <!-- TICKET NO ENCONTRADO -->
+
+    <div id="error" class="error-card hidden">
+
+        <div style="font-size:45px;margin-bottom:15px">🔎</div>
+
+        <h3>Ticket no encontrado</h3>
+
+        <p>
+            No existe un ticket de demostración
+            con el identificador solicitado.
         </p>
-        <a href="tickets.html"
-           class="mt-4 inline-block text-blue-600 hover:underline">
+
+        <a href="{{ url_for('tickets') }}"
+           class="btn-cancelar">
             Regresar a tickets
         </a>
+
     </div>
 
-    <form id="formulario"
-          class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
+    <!-- CONTENIDO PRINCIPAL -->
 
-        <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-            Información del cliente
-        </h3>
+    <div id="contenido" class="hidden">
 
-        <div class="grid gap-5 sm:grid-cols-2">
+        <!-- BIENVENIDA -->
 
-            <div>
-                <label for="cliente" class="mb-2 block text-sm font-medium">
-                    Nombre del cliente *
-                </label>
-                <input id="cliente" type="text" required maxlength="100"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+        <section class="welcome">
+
+            <small>ACTUALIZACIÓN DE SOPORTE</small>
+
+            <h3>Administración de tickets</h3>
+
+            <p>
+                Modifica la información del cliente,
+                la solicitud registrada y el seguimiento
+                de su atención.
+            </p>
+
+        </section>
+
+        <!-- FORMULARIO -->
+
+        <form id="formulario" class="form-card">
+
+            <!-- CLIENTE -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">👤</div>
+
+                    <div>
+                        <h3>Información del cliente</h3>
+                        <p>Datos de contacto del solicitante</p>
+                    </div>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="campo">
+
+                        <label for="cliente">
+                            Nombre del cliente
+                            <span class="requerido">*</span>
+                        </label>
+
+                        <input id="cliente"
+                               name="cliente"
+                               type="text"
+                               required
+                               maxlength="100">
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="telefono">
+                            Teléfono
+                            <span class="requerido">*</span>
+                        </label>
+
+                        <input id="telefono"
+                               name="telefono"
+                               type="tel"
+                               pattern="[0-9]{10}"
+                               maxlength="10"
+                               title="Escribe 10 dígitos"
+                               required>
+
+                    </div>
+
+                    <div class="campo completo">
+
+                        <label for="correo">
+                            Correo electrónico
+                        </label>
+
+                        <input id="correo"
+                               name="correo"
+                               type="email"
+                               maxlength="150">
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- INFORMACIÓN DEL TICKET -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">🎫</div>
+
+                    <div>
+                        <h3>Información del ticket</h3>
+                        <p>Clasificación y descripción de la solicitud</p>
+                    </div>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="campo completo">
+
+                        <label for="asunto">
+                            Asunto
+                            <span class="requerido">*</span>
+                        </label>
+
+                        <input id="asunto"
+                               name="asunto"
+                               type="text"
+                               required
+                               maxlength="150">
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="categoria">
+                            Categoría
+                            <span class="requerido">*</span>
+                        </label>
+
+                        <select id="categoria"
+                                name="categoria"
+                                required>
+
+                            <option value="Reparación">Reparación</option>
+                            <option value="Garantía">Garantía</option>
+                            <option value="Venta">Venta</option>
+                            <option value="Producto">Producto</option>
+                            <option value="Queja">Queja</option>
+                            <option value="Otro">Otro</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="prioridad">
+                            Prioridad
+                            <span class="requerido">*</span>
+                        </label>
+
+                        <select id="prioridad"
+                                name="prioridad"
+                                required>
+
+                            <option value="Baja">Baja</option>
+                            <option value="Media">Media</option>
+                            <option value="Alta">Alta</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="fecha">
+                            Fecha de registro
+                            <span class="requerido">*</span>
+                        </label>
+
+                        <input id="fecha"
+                               name="fecha"
+                               type="date"
+                               required>
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="estado">
+                            Estado
+                            <span class="requerido">*</span>
+                        </label>
+
+                        <select id="estado"
+                                name="estado"
+                                required>
+
+                            <option value="Abierto">Abierto</option>
+                            <option value="En proceso">En proceso</option>
+                            <option value="Cerrado">Cerrado</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="campo completo">
+
+                        <label for="descripcion">
+                            Descripción del problema
+                            <span class="requerido">*</span>
+                        </label>
+
+                        <textarea id="descripcion"
+                                  name="descripcion"
+                                  rows="4"
+                                  required
+                                  maxlength="2000"></textarea>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- SEGUIMIENTO -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">🔧</div>
+
+                    <div>
+                        <h3>Seguimiento y atención</h3>
+                        <p>Responsable y acciones realizadas</p>
+                    </div>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="campo completo">
+
+                        <label for="responsable">
+                            Técnico o responsable asignado
+                        </label>
+
+                        <input id="responsable"
+                               name="responsable"
+                               type="text"
+                               maxlength="100"
+                               placeholder="Nombre del responsable">
+
+                    </div>
+
+                    <div class="campo completo">
+
+                        <label for="respuesta">
+                            Respuesta o seguimiento
+                        </label>
+
+                        <textarea id="respuesta"
+                                  name="respuesta"
+                                  rows="4"
+                                  maxlength="2000"
+                                  placeholder="Escribe las acciones realizadas para atender el ticket..."></textarea>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- MENSAJE -->
+
+            <div id="mensaje"
+                 role="status"
+                 aria-live="polite"
+                 class="mensaje hidden">
             </div>
 
-            <div>
-                <label for="telefono" class="mb-2 block text-sm font-medium">
-                    Teléfono *
-                </label>
-                <input id="telefono" type="tel" required
-                       pattern="[0-9]{10}" maxlength="10"
-                       title="Escribe 10 dígitos"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            <!-- BOTONES -->
+
+            <div class="acciones">
+
+                <a id="cancelar"
+                   href="{{ url_for('tickets') }}"
+                   class="btn-cancelar">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="btn-guardar">
+                    Guardar cambios
+                </button>
+
             </div>
 
-            <div class="sm:col-span-2">
-                <label for="correo" class="mb-2 block text-sm font-medium">
-                    Correo electrónico
-                </label>
-                <input id="correo" type="email" maxlength="150"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
+        </form>
 
-        </div>
-
-        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
-            Información del ticket
-        </h3>
-
-        <div class="grid gap-5 sm:grid-cols-2">
-
-            <div class="sm:col-span-2">
-                <label for="asunto" class="mb-2 block text-sm font-medium">
-                    Asunto *
-                </label>
-                <input id="asunto" type="text" required maxlength="150"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-
-            <div>
-                <label for="categoria" class="mb-2 block text-sm font-medium">
-                    Categoría *
-                </label>
-                <select id="categoria" required
-                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
-                    <option value="Reparación">Reparación</option>
-                    <option value="Garantía">Garantía</option>
-                    <option value="Venta">Venta</option>
-                    <option value="Producto">Producto</option>
-                    <option value="Queja">Queja</option>
-                    <option value="Otro">Otro</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="prioridad" class="mb-2 block text-sm font-medium">
-                    Prioridad *
-                </label>
-                <select id="prioridad" required
-                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
-                    <option value="Baja">Baja</option>
-                    <option value="Media">Media</option>
-                    <option value="Alta">Alta</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="fecha" class="mb-2 block text-sm font-medium">
-                    Fecha de registro *
-                </label>
-                <input id="fecha" type="date" required
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-
-            <div>
-                <label for="estado" class="mb-2 block text-sm font-medium">
-                    Estado *
-                </label>
-                <select id="estado" required
-                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
-                    <option value="Abierto">Abierto</option>
-                    <option value="En proceso">En proceso</option>
-                    <option value="Cerrado">Cerrado</option>
-                </select>
-            </div>
-
-            <div class="sm:col-span-2">
-                <label for="descripcion" class="mb-2 block text-sm font-medium">
-                    Descripción del problema *
-                </label>
-                <textarea id="descripcion" rows="4" required maxlength="2000"
-                          class="w-full rounded-lg border border-slate-300 px-4 py-3"></textarea>
-            </div>
-
-        </div>
-
-        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
-            Seguimiento y atención
-        </h3>
-
-        <div class="space-y-5">
-
-            <div>
-                <label for="responsable" class="mb-2 block text-sm font-medium">
-                    Técnico o responsable asignado
-                </label>
-                <input id="responsable" type="text" maxlength="100"
-                       placeholder="Nombre del responsable"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-
-            <div>
-                <label for="respuesta" class="mb-2 block text-sm font-medium">
-                    Respuesta o seguimiento
-                </label>
-                <textarea id="respuesta" rows="4" maxlength="2000"
-                          placeholder="Escribe las acciones realizadas para atender el ticket..."
-                          class="w-full rounded-lg border border-slate-300 px-4 py-3"></textarea>
-            </div>
-
-        </div>
-
-        <div id="mensaje" role="status" aria-live="polite"
-             class="mt-6 hidden rounded-lg bg-blue-50 p-4 text-sm text-blue-800">
-        </div>
-
-        <div class="mt-8 flex flex-wrap justify-end gap-3 border-t pt-6">
-            <a id="cancelar" href="tickets.html"
-               class="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold hover:bg-slate-100">
-                Cancelar
-            </a>
-
-            <button type="submit"
-                    class="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700">
-                Guardar cambios
-            </button>
-        </div>
-
-    </form>
+    </div>
 
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
+<footer>
     Manzanita Store · 2026
 </footer>
 
+<!-- DATOS DE PRUEBA Y NAVEGACIÓN FLASK -->
+
 <script>
-    // Datos de ejemplo. Después se cargarán desde MySQL.
+    // Estos tickets son únicamente de demostración.
+    // Los IDs 1, 2 y 3 NO provienen de MySQL.
+
     const tickets = [
         {
+            id: 1,
             folio: "TCK-001",
             cliente: "Juan Pérez",
             telefono: "4151234567",
@@ -226,10 +806,12 @@
             estado: "Abierto",
             fecha: "2026-11-10",
             responsable: "Sin asignar",
-            descripcion: "El cliente solicita información sobre el avance de su reparación.",
+            descripcion:
+                "El cliente solicita información sobre el avance de su reparación.",
             respuesta: "Pendiente de atención."
         },
         {
+            id: 2,
             folio: "TCK-002",
             cliente: "María González",
             telefono: "4159876543",
@@ -240,10 +822,13 @@
             estado: "En proceso",
             fecha: "2026-11-11",
             responsable: "Técnico asignado",
-            descripcion: "La cliente solicita revisar la garantía de su dispositivo.",
-            respuesta: "Se está verificando la información de garantía."
+            descripcion:
+                "La cliente solicita revisar la garantía de su dispositivo.",
+            respuesta:
+                "Se está verificando la información de garantía."
         },
         {
+            id: 3,
             folio: "TCK-003",
             cliente: "Carlos López",
             telefono: "4155551234",
@@ -254,50 +839,117 @@
             estado: "Cerrado",
             fecha: "2026-11-12",
             responsable: "Atención a clientes",
-            descripcion: "El cliente solicita información sobre un producto disponible.",
-            respuesta: "Se proporcionó la información solicitada."
+            descripcion:
+                "El cliente solicita información sobre un producto disponible.",
+            respuesta:
+                "Se proporcionó la información solicitada."
         }
     ];
 
-    const folio = new URLSearchParams(location.search).get("folio");
-    const ticket = tickets.find(t => t.folio === folio);
+    // ID que recibe Flask:
+    // /tickets/editar/1, /tickets/editar/2, etc.
+    const idActual = {{ id|default(0)|int }};
+
+    // Compatibilidad opcional con el folio de prueba.
+    const parametros = new URLSearchParams(location.search);
+    const folioSolicitado = parametros.get("folio");
+
+    // Encontrar el ticket seleccionado.
+    const ticket = folioSolicitado
+        ? tickets.find(t => t.folio === folioSolicitado)
+        : tickets.find(t => t.id === idActual);
+
+    // Ruta de detalle generada por Flask.
+    const rutaDetalle =
+        {{ url_for('detalle_ticket', id=0)|tojson }};
+
+    const rutaListado =
+        {{ url_for('tickets')|tojson }};
+
     const formulario = document.getElementById("formulario");
 
     if (!ticket) {
-        formulario.classList.add("hidden");
-        document.getElementById("error").classList.remove("hidden");
+
+        // No mostrar el formulario si el ticket no existe.
+        document.getElementById("contenido")
+            .classList.add("hidden");
+
+        document.getElementById("error")
+            .classList.remove("hidden");
+
+        // Volver al listado si el ID es inválido.
+        const volver = document.getElementById("volver");
+
+        volver.href = rutaListado;
+        volver.textContent = "← Volver a tickets";
+
     } else {
+
+        // Mostrar el formulario.
+        document.getElementById("contenido")
+            .classList.remove("hidden");
+
+        // Mostrar el folio seleccionado.
         document.getElementById("subtitulo").textContent =
             "Modificando el ticket " + ticket.folio;
 
+        // Cargar los datos del ticket.
         const campos = [
-            "cliente", "telefono", "correo", "asunto",
-            "categoria", "prioridad", "estado", "fecha",
-            "responsable", "descripcion", "respuesta"
+            "cliente",
+            "telefono",
+            "correo",
+            "asunto",
+            "categoria",
+            "prioridad",
+            "estado",
+            "fecha",
+            "responsable",
+            "descripcion",
+            "respuesta"
         ];
 
         campos.forEach(campo => {
+
             document.getElementById(campo).value =
                 ticket[campo] ?? "";
+
         });
 
-        const regreso = "detalle_ticket.html?folio=" +
-            encodeURIComponent(ticket.folio);
+        // Crear la ruta real a detalle.
+        const regreso = rutaDetalle.replace(
+            /\/0$/,
+            "/" + encodeURIComponent(ticket.id)
+        );
 
+        // CORREGIDO: VOLVER AL DETALLE.
         document.getElementById("volver").href = regreso;
+
+        // CORREGIDO: CANCELAR.
         document.getElementById("cancelar").href = regreso;
 
+        // Validación del formulario.
         formulario.addEventListener("submit", function(evento) {
+
             evento.preventDefault();
 
-            if (!formulario.reportValidity()) return;
+            if (!formulario.reportValidity()) {
+                return;
+            }
 
             const mensaje = document.getElementById("mensaje");
 
             mensaje.classList.remove("hidden");
+
             mensaje.textContent =
-                "Cambios validados correctamente para " + folio +
-                ". Todavía no se guardan; falta conectar MySQL.";
+                "Datos validados correctamente para " +
+                ticket.folio +
+                ". Los cambios todavía NO están guardados. " +
+                "Falta integrar la actualización con el servidor y MySQL.";
+
+            mensaje.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest"
+            });
         });
     }
 </script>

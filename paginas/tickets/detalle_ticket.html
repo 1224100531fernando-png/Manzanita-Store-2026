@@ -2,160 +2,685 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de ticket | Manzanita Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detalle de ticket | Manzanita Store</title>
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ENCABEZADO */
+
+.header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--limon);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+
+.brand h1 {
+    font-size: 21px;
+    font-weight: 750;
+    margin: 0;
+}
+
+.brand h1 span {
+    color: var(--limon);
+}
+
+.brand p {
+    font-size: 12px;
+    color: #b6cfbe;
+    margin: 4px 0 0;
+}
+
+.salir {
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 10px;
+    padding: 11px 20px;
+    color: white;
+    font-size: 13px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.salir:hover {
+    background: var(--medio);
+}
+
+/* CONTENIDO */
+
+.contenido {
+    max-width: 1100px;
+    margin: auto;
+    padding: 38px 25px;
+}
+
+.volver {
+    color: #548b1a;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.volver:hover {
+    text-decoration: underline;
+}
+
+.page-title {
+    margin: 24px 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.page-title small {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+
+.page-title h2 {
+    color: var(--verde);
+    font-size: 34px;
+    font-weight: 800;
+    margin: 8px 0;
+}
+
+.page-title p {
+    color: var(--gris);
+    font-size: 14px;
+    margin: 0;
+}
+
+/* BOTONES */
+
+.btn-editar {
+    display: inline-block;
+    background: var(--boton);
+    color: white;
+    padding: 14px 23px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.btn-editar:hover {
+    background: #608f12;
+    transform: translateY(-2px);
+}
+
+.btn-regresar {
+    display: inline-block;
+    background: var(--verde);
+    color: white;
+    padding: 14px 23px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.btn-regresar:hover {
+    background: var(--medio);
+}
+
+/* BIENVENIDA */
+
+.welcome {
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    border-radius: 19px;
+    padding: 30px 35px;
+    color: white;
+    margin-bottom: 27px;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome::after {
+    content: "🎫";
+    position: absolute;
+    right: 42px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 90px;
+    opacity: .14;
+    pointer-events: none;
+}
+
+.welcome small {
+    color: var(--limon);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 3px;
+}
+
+.welcome h3 {
+    font-size: 23px;
+    font-weight: 750;
+    margin: 11px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.welcome p {
+    color: #d8e7dc;
+    font-size: 14px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+/* TARJETAS */
+
+.card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    padding: 30px;
+    margin-bottom: 24px;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.card-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e8eee7;
+    margin-bottom: 24px;
+}
+
+.heading-left {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.card-icon {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    background: #eff8dc;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+}
+
+.card-heading h3 {
+    color: var(--verde);
+    font-size: 19px;
+    font-weight: 750;
+    margin: 0;
+}
+
+.card-heading p {
+    color: var(--gris);
+    font-size: 12px;
+    margin: 5px 0 0;
+}
+
+.etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.etiqueta {
+    display: inline-block;
+    padding: 9px 15px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+/* PRIORIDADES */
+
+.prioridad-alta {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.prioridad-media {
+    background: #fff3dc;
+    color: #b76b00;
+}
+
+.prioridad-baja {
+    background: #e4f7e7;
+    color: #16813a;
+}
+
+/* ESTADOS */
+
+.estado-abierto {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.estado-proceso {
+    background: #fff3dc;
+    color: #b76b00;
+}
+
+.estado-cerrado {
+    background: #e4f7e7;
+    color: #16813a;
+}
+
+/* INFORMACIÓN */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px;
+}
+
+.info-grid.tres {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.info-label {
+    color: var(--gris);
+    font-size: 13px;
+    margin-bottom: 9px;
+}
+
+.info-value {
+    color: var(--verde);
+    font-size: 15px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.info-asunto {
+    color: var(--verde);
+    font-size: 19px;
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.info-box {
+    background: #f5f8f3;
+    border: 1px solid #e9eee7;
+    border-radius: 12px;
+    padding: 17px 19px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #425647;
+    white-space: pre-wrap;
+    min-height: 65px;
+    overflow-wrap: anywhere;
+}
+
+.separacion {
+    margin-top: 27px;
+}
+
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 13px;
+    flex-wrap: wrap;
+    margin-top: 27px;
+}
+
+/* ERROR */
+
+.error-card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    padding: 45px 25px;
+    text-align: center;
+}
+
+.error-card h3 {
+    color: var(--verde);
+    font-size: 22px;
+    font-weight: 750;
+}
+
+.error-card p {
+    color: var(--gris);
+    font-size: 14px;
+    margin: 12px 0 25px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #929b93;
+    font-size: 12px;
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 700px) {
+    .contenido {
+        padding: 25px 15px;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+
+    .card {
+        padding: 22px;
+    }
+
+    .info-grid,
+    .info-grid.tres {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .acciones a {
+        flex: 1;
+        text-align: center;
+    }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<!-- ENCABEZADO -->
+
+<header class="header">
+    <div class="header-content">
+
+        <div class="brand">
+            <div class="brand-icon">🍏</div>
+
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Sistema de gestión</p>
+            </div>
         </div>
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+
+        <a href="{{ url_for('logout') }}" class="salir">
             Salir
         </a>
+
     </div>
 </header>
 
-<main class="mx-auto max-w-5xl px-6 py-8">
+<main class="contenido">
 
-    <a href="tickets.html"
-       class="text-sm font-medium text-blue-600 hover:underline">
+    <!-- VOLVER A TICKETS -->
+
+    <a href="{{ url_for('tickets') }}" class="volver">
         ← Volver a tickets
     </a>
 
-    <div class="mb-7 mt-5 flex flex-wrap items-center justify-between gap-4">
+    <!-- TÍTULO -->
+
+    <div class="page-title">
+
         <div>
-            <p class="text-sm font-medium text-blue-600">
-                Atención a clientes
-            </p>
-            <h2 class="text-3xl font-bold">Detalle de ticket</h2>
-            <p id="folio" class="mt-2 text-sm text-slate-500"></p>
+            <small>ATENCIÓN A CLIENTES</small>
+
+            <h2>Detalle de ticket</h2>
+
+            <p id="folio"></p>
         </div>
 
-        <a id="editar" href="#"
-           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+        <!-- ENLACE FLASK ASIGNADO DESDE JS -->
+
+        <a id="editar" href="#" class="btn-editar hidden">
             Editar ticket
         </a>
+
     </div>
 
-    <div id="error"
-         class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
-        <h3 class="text-xl font-bold">Ticket no encontrado</h3>
-        <p class="mt-2 text-slate-500">
-            El folio solicitado no existe en los registros de prueba.
+    <!-- ERROR -->
+
+    <div id="error" class="error-card hidden">
+
+        <div style="font-size:45px;margin-bottom:15px">🔎</div>
+
+        <h3>Ticket no encontrado</h3>
+
+        <p>
+            No se encontró un ticket de demostración
+            con el identificador solicitado.
         </p>
-        <a href="tickets.html"
-           class="mt-5 inline-block text-blue-600 hover:underline">
+
+        <a href="{{ url_for('tickets') }}"
+           class="btn-regresar">
             Volver a tickets
         </a>
+
     </div>
 
-    <div id="contenido" class="space-y-6">
+    <!-- CONTENIDO DEL TICKET -->
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
-            <div class="flex flex-wrap items-center justify-between gap-4">
-                <h3 class="text-lg font-semibold">Estado del ticket</h3>
+    <div id="contenido" class="hidden">
 
-                <div class="flex flex-wrap gap-3">
-                    <span id="prioridad"
-                          class="rounded-full px-4 py-2 text-sm font-semibold"></span>
-                    <span id="estado"
-                          class="rounded-full px-4 py-2 text-sm font-semibold"></span>
-                </div>
-            </div>
+        <!-- BIENVENIDA -->
 
-            <div class="mt-6 grid gap-5 sm:grid-cols-3">
-                <div>
-                    <p class="text-sm text-slate-500">Fecha de registro</p>
-                    <p id="fecha" class="mt-1 font-semibold"></p>
-                </div>
+        <section class="welcome">
 
-                <div>
-                    <p class="text-sm text-slate-500">Categoría</p>
-                    <p id="categoria" class="mt-1 font-semibold"></p>
-                </div>
+            <small>CONTROL DE INCIDENCIAS</small>
 
-                <div>
-                    <p class="text-sm text-slate-500">Responsable</p>
-                    <p id="responsable" class="mt-1 font-semibold"></p>
-                </div>
-            </div>
+            <h3>Información del ticket de soporte</h3>
+
+            <p>
+                Consulta los datos del cliente, la solicitud
+                registrada y el seguimiento de su atención.
+            </p>
+
         </section>
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-                Información del cliente
-            </h3>
+        <!-- ESTADO DEL TICKET -->
 
-            <div class="grid gap-5 sm:grid-cols-2">
-                <div>
-                    <p class="text-sm text-slate-500">Nombre completo</p>
-                    <p id="cliente" class="mt-1 font-medium"></p>
+        <section class="card">
+
+            <div class="card-heading">
+
+                <div class="heading-left">
+                    <div class="card-icon">⚙️</div>
+
+                    <div>
+                        <h3>Estado del ticket</h3>
+                        <p>Información general de la solicitud</p>
+                    </div>
                 </div>
 
-                <div>
-                    <p class="text-sm text-slate-500">Teléfono</p>
-                    <p id="telefono" class="mt-1 font-medium"></p>
+                <div class="etiquetas">
+                    <span id="prioridad" class="etiqueta"></span>
+                    <span id="estado" class="etiqueta"></span>
                 </div>
 
-                <div class="sm:col-span-2">
-                    <p class="text-sm text-slate-500">Correo electrónico</p>
-                    <p id="correo" class="mt-1 font-medium"></p>
-                </div>
             </div>
+
+            <div class="info-grid tres">
+
+                <div>
+                    <p class="info-label">Fecha de registro</p>
+                    <p id="fecha" class="info-value"></p>
+                </div>
+
+                <div>
+                    <p class="info-label">Categoría</p>
+                    <p id="categoria" class="info-value"></p>
+                </div>
+
+                <div>
+                    <p class="info-label">Responsable</p>
+                    <p id="responsable" class="info-value"></p>
+                </div>
+
+            </div>
+
         </section>
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-                Información de la solicitud
-            </h3>
+        <!-- CLIENTE -->
+
+        <section class="card">
+
+            <div class="card-heading">
+
+                <div class="heading-left">
+                    <div class="card-icon">👤</div>
+
+                    <div>
+                        <h3>Información del cliente</h3>
+                        <p>Datos de contacto del solicitante</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="info-grid">
+
+                <div>
+                    <p class="info-label">Nombre completo</p>
+                    <p id="cliente" class="info-value"></p>
+                </div>
+
+                <div>
+                    <p class="info-label">Teléfono</p>
+                    <p id="telefono" class="info-value"></p>
+                </div>
+
+                <div>
+                    <p class="info-label">Correo electrónico</p>
+                    <p id="correo" class="info-value"></p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- SOLICITUD -->
+
+        <section class="card">
+
+            <div class="card-heading">
+
+                <div class="heading-left">
+                    <div class="card-icon">🎫</div>
+
+                    <div>
+                        <h3>Información de la solicitud</h3>
+                        <p>Problema reportado y seguimiento</p>
+                    </div>
+                </div>
+
+            </div>
 
             <div>
-                <p class="text-sm text-slate-500">Asunto</p>
-                <p id="asunto" class="mt-1 text-lg font-semibold"></p>
+                <p class="info-label">Asunto del ticket</p>
+                <p id="asunto" class="info-asunto"></p>
             </div>
 
-            <div class="mt-6">
-                <p class="text-sm text-slate-500">Descripción del problema</p>
-                <p id="descripcion"
-                   class="mt-2 whitespace-pre-wrap rounded-lg bg-slate-50 p-4 text-sm"></p>
+            <div class="separacion">
+                <p class="info-label">Descripción del problema</p>
+                <p id="descripcion" class="info-box"></p>
             </div>
 
-            <div class="mt-6">
-                <p class="text-sm text-slate-500">Respuesta o seguimiento</p>
-                <p id="respuesta"
-                   class="mt-2 whitespace-pre-wrap rounded-lg bg-slate-50 p-4 text-sm"></p>
+            <div class="separacion">
+                <p class="info-label">Respuesta o seguimiento</p>
+                <p id="respuesta" class="info-box"></p>
             </div>
+
         </section>
 
-        <div class="flex justify-end">
-            <a href="tickets.html"
-               class="rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+        <!-- ACCIONES -->
+
+        <div class="acciones">
+
+            <a href="{{ url_for('tickets') }}"
+               class="btn-regresar">
                 Regresar a tickets
             </a>
+
         </div>
 
     </div>
 
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
+<footer>
     Manzanita Store · 2026
 </footer>
 
+<!-- JAVASCRIPT -->
+
 <script>
-    // Información de prueba. Después vendrá de MySQL.
+    // DATOS DEMOSTRATIVOS.
+    // No corresponden a registros de MySQL.
+
     const tickets = [
         {
+            id: 1,
             folio: "TCK-001",
             cliente: "Juan Pérez",
             telefono: "4151234567",
@@ -166,10 +691,12 @@
             estado: "Abierto",
             fecha: "2026-11-10",
             responsable: "Sin asignar",
-            descripcion: "El cliente solicita información sobre el avance de su reparación.",
+            descripcion:
+                "El cliente solicita información sobre el avance de su reparación.",
             respuesta: "Pendiente de atención."
         },
         {
+            id: 2,
             folio: "TCK-002",
             cliente: "María González",
             telefono: "4159876543",
@@ -180,10 +707,13 @@
             estado: "En proceso",
             fecha: "2026-11-11",
             responsable: "Técnico asignado",
-            descripcion: "La cliente solicita revisar la garantía de su dispositivo.",
-            respuesta: "Se está verificando la información de garantía."
+            descripcion:
+                "La cliente solicita revisar la garantía de su dispositivo.",
+            respuesta:
+                "Se está verificando la información de garantía."
         },
         {
+            id: 3,
             folio: "TCK-003",
             cliente: "Carlos López",
             telefono: "4155551234",
@@ -194,25 +724,64 @@
             estado: "Cerrado",
             fecha: "2026-11-12",
             responsable: "Atención a clientes",
-            descripcion: "El cliente solicita información sobre un producto disponible.",
-            respuesta: "Se proporcionó la información solicitada."
+            descripcion:
+                "El cliente solicita información sobre un producto disponible.",
+            respuesta:
+                "Se proporcionó la información solicitada."
         }
     ];
 
+    // ID proporcionado por Flask al cargar esta ruta.
+    const idActual = {{ id|default(0)|int }};
+
+    // Compatibilidad con folios para las pruebas.
     const parametros = new URLSearchParams(location.search);
-    const folio = parametros.get("folio");
-    const ticket = tickets.find(t => t.folio === folio);
+    const folioSolicitado = parametros.get("folio");
+
+    // Seleccionar el ticket.
+    const ticket = folioSolicitado
+        ? tickets.find(t => t.folio === folioSolicitado)
+        : tickets.find(t => t.id === idActual);
+
+    // FLASK: RUTA REAL PARA EDITAR.
+    const rutaEditar =
+        {{ url_for('editar_ticket', id=0)|tojson }};
 
     if (!ticket) {
-        document.getElementById("contenido").classList.add("hidden");
-        document.getElementById("editar").classList.add("hidden");
-        document.getElementById("error").classList.remove("hidden");
-        document.getElementById("folio").textContent = folio || "Sin folio";
+
+        document.getElementById("contenido")
+            .classList.add("hidden");
+
+        document.getElementById("editar")
+            .classList.add("hidden");
+
+        document.getElementById("error")
+            .classList.remove("hidden");
+
+        document.getElementById("folio").textContent =
+            folioSolicitado || "ID " + idActual;
+
     } else {
+
+        // Mostrar el contenido.
+        document.getElementById("contenido")
+            .classList.remove("hidden");
+
+        document.getElementById("editar")
+            .classList.remove("hidden");
+
+        // Llenar los campos.
         const campos = [
-            "folio", "cliente", "telefono", "correo",
-            "asunto", "categoria", "fecha", "responsable",
-            "descripcion", "respuesta"
+            "folio",
+            "cliente",
+            "telefono",
+            "correo",
+            "asunto",
+            "categoria",
+            "fecha",
+            "responsable",
+            "descripcion",
+            "respuesta"
         ];
 
         campos.forEach(campo => {
@@ -220,33 +789,43 @@
                 ticket[campo] || "No especificado";
         });
 
+        // Etiqueta de prioridad.
         const coloresPrioridad = {
-            "Alta": "bg-red-100 text-red-700",
-            "Media": "bg-amber-100 text-amber-700",
-            "Baja": "bg-emerald-100 text-emerald-700"
-        };
-
-        const coloresEstado = {
-            "Abierto": "bg-blue-100 text-blue-700",
-            "En proceso": "bg-amber-100 text-amber-700",
-            "Cerrado": "bg-emerald-100 text-emerald-700"
+            "Alta": "prioridad-alta",
+            "Media": "prioridad-media",
+            "Baja": "prioridad-baja"
         };
 
         const prioridad = document.getElementById("prioridad");
-        prioridad.textContent = "Prioridad: " + ticket.prioridad;
+
+        prioridad.textContent =
+            "Prioridad: " + ticket.prioridad;
+
         prioridad.className =
-            "rounded-full px-4 py-2 text-sm font-semibold " +
-            coloresPrioridad[ticket.prioridad];
+            "etiqueta " +
+            (coloresPrioridad[ticket.prioridad] || "prioridad-baja");
+
+        // Etiqueta de estado.
+        const coloresEstado = {
+            "Abierto": "estado-abierto",
+            "En proceso": "estado-proceso",
+            "Cerrado": "estado-cerrado"
+        };
 
         const estado = document.getElementById("estado");
-        estado.textContent = ticket.estado;
-        estado.className =
-            "rounded-full px-4 py-2 text-sm font-semibold " +
-            coloresEstado[ticket.estado];
 
+        estado.textContent = ticket.estado;
+
+        estado.className =
+            "etiqueta " +
+            (coloresEstado[ticket.estado] || "estado-abierto");
+
+        // CORREGIDO: EDITAR MEDIANTE FLASK.
         document.getElementById("editar").href =
-            "editar_ticket.html?folio=" +
-            encodeURIComponent(ticket.folio);
+            rutaEditar.replace(
+                /\/0$/,
+                "/" + encodeURIComponent(ticket.id)
+            );
     }
 </script>
 

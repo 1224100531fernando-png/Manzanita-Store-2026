@@ -2,113 +2,674 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tickets | Manzanita Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tickets | Manzanita Store</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* ENCABEZADO */
+
+.header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--limon);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+
+.brand h1 {
+    font-size: 21px;
+    font-weight: 750;
+}
+
+.brand h1 span {
+    color: var(--limon);
+}
+
+.brand p {
+    color: #b6cfbe;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.salir {
+    display: inline-block;
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 11px 20px;
+    border-radius: 10px;
+    color: white;
+    font-size: 13px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.salir:hover {
+    background: var(--medio);
+}
+
+/* CONTENIDO */
+
+.contenido {
+    max-width: 1280px;
+    margin: auto;
+    padding: 38px 25px;
+}
+
+.page-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.page-title small {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+
+.page-title h2 {
+    color: var(--verde);
+    font-size: 34px;
+    font-weight: 800;
+    margin: 8px 0;
+}
+
+.page-title p {
+    color: var(--gris);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.btn-nuevo {
+    display: inline-block;
+    background: var(--boton);
+    color: white;
+    padding: 14px 23px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.btn-nuevo:hover {
+    background: #608f12;
+    transform: translateY(-2px);
+}
+
+/* BIENVENIDA */
+
+.welcome {
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    border-radius: 19px;
+    padding: 30px 35px;
+    margin-bottom: 28px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome::after {
+    content: "🎫";
+    position: absolute;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 90px;
+    opacity: .14;
+    pointer-events: none;
+}
+
+.welcome small {
+    color: var(--limon);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 3px;
+}
+
+.welcome h3 {
+    font-size: 24px;
+    font-weight: 750;
+    margin: 10px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.welcome p {
+    color: #d8e7dc;
+    font-size: 14px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+/* ESTADÍSTICAS */
+
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.resumen-card {
+    display: flex;
+    align-items: center;
+    gap: 19px;
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 17px;
+    padding: 25px;
+    box-shadow: 0 5px 18px rgba(24,61,50,.035);
+}
+
+.resumen-icon {
+    width: 59px;
+    height: 59px;
+    min-width: 59px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    background: #eff8dc;
+    font-size: 27px;
+}
+
+.resumen-card:nth-child(2) .resumen-icon {
+    background: #fff3dc;
+}
+
+.resumen-card:nth-child(3) .resumen-icon {
+    background: #e4f3e9;
+}
+
+.resumen-card p {
+    color: var(--gris);
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.resumen-card h3 {
+    color: var(--verde);
+    font-size: 32px;
+    font-weight: 800;
+}
+
+#abiertos {
+    color: #d97706;
+}
+
+#cerrados {
+    color: #159447;
+}
+
+/* TABLA */
+
+.tabla-card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.tabla-heading {
+    padding: 25px 27px;
+    border-bottom: 1px solid #edf1eb;
+}
+
+.tabla-heading h3 {
+    color: var(--verde);
+    font-size: 19px;
+    font-weight: 750;
+}
+
+.tabla-heading p {
+    color: var(--gris);
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+/* BUSCADOR */
+
+.buscador {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 23px 27px;
+    border-bottom: 1px solid #edf1eb;
+}
+
+.buscador input {
+    flex: 1;
+    min-width: 180px;
+    padding: 14px 17px;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    background: #fbfcfa;
+    font-size: 14px;
+    outline: none;
+}
+
+.buscador select {
+    padding: 14px 17px;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    background: #fbfcfa;
+    color: var(--texto);
+    font-size: 14px;
+    outline: none;
+}
+
+.buscador input:focus,
+.buscador select:focus {
+    border-color: var(--boton);
+    box-shadow: 0 0 0 3px rgba(117,173,22,.12);
+}
+
+.btn-buscar {
+    background: var(--verde);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-buscar:hover {
+    background: var(--medio);
+}
+
+/* TABLA DE TICKETS */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead {
+    background: #f5f8f3;
+}
+
+th {
+    padding: 18px 24px;
+    color: #718177;
+    font-size: 11px;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+td {
+    padding: 19px 24px;
+    border-top: 1px solid #eef2ed;
+    font-size: 14px;
+}
+
+tbody tr:hover {
+    background: #f7faf4;
+}
+
+.folio {
+    color: var(--verde);
+    font-weight: 750;
+}
+
+.etiqueta {
+    display: inline-block;
+    padding: 8px 13px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+/* PRIORIDADES */
+
+.prioridad-alta {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.prioridad-media {
+    background: #fff3dc;
+    color: #b76b00;
+}
+
+.prioridad-baja {
+    background: #e4f7e7;
+    color: #16813a;
+}
+
+/* ESTADOS */
+
+.estado-abierto {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.estado-proceso {
+    background: #fff3dc;
+    color: #b76b00;
+}
+
+.estado-cerrado {
+    background: #e4f7e7;
+    color: #16813a;
+}
+
+.ver-detalle {
+    color: #548b1a;
+    font-size: 13px;
+    font-weight: 750;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.ver-detalle:hover {
+    text-decoration: underline;
+}
+
+.tabla-footer {
+    padding: 18px 27px;
+    border-top: 1px solid #edf1eb;
+    color: var(--gris);
+    font-size: 12px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #929b93;
+    font-size: 12px;
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 850px) {
+    .resumen {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 650px) {
+    .contenido {
+        padding: 25px 15px;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+
+    .buscador {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .buscador input,
+    .buscador select,
+    .btn-buscar {
+        width: 100%;
+    }
+
+    .resumen-card {
+        padding: 20px;
+    }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<!-- ENCABEZADO -->
+
+<header class="header">
+    <div class="header-content">
+
+        <div class="brand">
+            <div class="brand-icon">🍏</div>
+
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Sistema de gestión</p>
+            </div>
         </div>
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+
+        <!-- SALIR CON FLASK -->
+
+        <a href="{{ url_for('logout') }}" class="salir">
             Salir
         </a>
+
     </div>
 </header>
 
-<main class="mx-auto max-w-7xl px-6 py-8">
+<main class="contenido">
 
-    <div class="mb-7 flex flex-wrap items-center justify-between gap-4">
+    <!-- TÍTULO Y NUEVO TICKET -->
+
+    <div class="page-title">
+
         <div>
-            <p class="text-sm font-medium text-blue-600">Administración</p>
-            <h2 class="text-3xl font-bold">Tickets de soporte</h2>
-            <p class="mt-1 text-sm text-slate-500">
-                Administra las solicitudes e incidencias de los clientes.
+            <small>ADMINISTRACIÓN</small>
+
+            <h2>Tickets de soporte</h2>
+
+            <p>
+                Administra las solicitudes e incidencias
+                de los clientes.
             </p>
         </div>
 
-        <a href="crear_ticket.html"
-           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+        <!-- RUTA CORREGIDA DE FLASK -->
+
+        <a href="{{ url_for('crear_ticket') }}"
+           class="btn-nuevo">
             + Nuevo ticket
         </a>
+
     </div>
 
-    <section class="mb-6 grid gap-4 sm:grid-cols-3">
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Total de tickets</p>
-            <h3 id="total" class="mt-2 text-3xl font-bold">0</h3>
-        </div>
+    <!-- BIENVENIDA -->
 
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Tickets abiertos</p>
-            <h3 id="abiertos" class="mt-2 text-3xl font-bold text-amber-600">0</h3>
-        </div>
+    <section class="welcome">
 
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Tickets cerrados</p>
-            <h3 id="cerrados" class="mt-2 text-3xl font-bold text-emerald-600">0</h3>
-        </div>
+        <small>CONTROL DE INCIDENCIAS</small>
+
+        <h3>Gestión de tickets de soporte</h3>
+
+        <p>
+            Consulta las solicitudes registradas,
+            revisa su prioridad y da seguimiento
+            a cada incidencia.
+        </p>
+
     </section>
 
-    <section class="overflow-hidden rounded-xl bg-white shadow-sm">
+    <!-- ESTADÍSTICAS -->
 
-        <div class="flex flex-col gap-3 border-b p-5 sm:flex-row">
-            <input id="buscar" type="search"
-                   placeholder="Buscar folio, cliente o asunto..."
-                   class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+    <section class="resumen">
 
-            <select id="filtro"
-                    class="rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm">
-                <option value="">Todos los estados</option>
-                <option>Abierto</option>
-                <option>En proceso</option>
-                <option>Cerrado</option>
-            </select>
+        <div class="resumen-card">
 
-            <button onclick="filtrar()"
-                    class="rounded-lg bg-slate-900 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800">
-                Buscar
-            </button>
+            <div class="resumen-icon">🎫</div>
+
+            <div>
+                <p>Total de tickets</p>
+                <h3 id="total">0</h3>
+            </div>
+
         </div>
 
+        <div class="resumen-card">
+
+            <div class="resumen-icon">⏳</div>
+
+            <div>
+                <p>Tickets abiertos</p>
+                <h3 id="abiertos">0</h3>
+            </div>
+
+        </div>
+
+        <div class="resumen-card">
+
+            <div class="resumen-icon">✅</div>
+
+            <div>
+                <p>Tickets cerrados</p>
+                <h3 id="cerrados">0</h3>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- TABLA PRINCIPAL -->
+
+    <section class="tabla-card">
+
+        <div class="tabla-heading">
+            <h3>Listado de tickets</h3>
+
+            <p>
+                Consulta los folios, clientes, prioridades
+                y estados del soporte técnico.
+            </p>
+        </div>
+
+        <!-- BÚSQUEDA Y FILTROS -->
+
+        <div class="buscador">
+
+            <input id="buscar"
+                   type="search"
+                   placeholder="Buscar folio, cliente o asunto..."
+                   aria-label="Buscar tickets">
+
+            <select id="filtro"
+                    aria-label="Filtrar por estado">
+
+                <option value="">Todos los estados</option>
+                <option value="Abierto">Abierto</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Cerrado">Cerrado</option>
+
+            </select>
+
+            <button id="btnBuscar"
+                    type="button"
+                    class="btn-buscar">
+                Buscar
+            </button>
+
+        </div>
+
+        <!-- TABLA -->
+
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+
+            <table>
+
+                <thead>
                     <tr>
-                        <th class="px-6 py-4">Folio</th>
-                        <th class="px-6 py-4">Cliente</th>
-                        <th class="px-6 py-4">Asunto</th>
-                        <th class="px-6 py-4">Prioridad</th>
-                        <th class="px-6 py-4">Estado</th>
-                        <th class="px-6 py-4 text-right">Acciones</th>
+                        <th>Folio</th>
+                        <th>Cliente</th>
+                        <th>Asunto</th>
+                        <th>Prioridad</th>
+                        <th>Estado</th>
+                        <th class="text-right">Acciones</th>
                     </tr>
                 </thead>
 
-                <tbody id="tabla" class="divide-y divide-slate-100"></tbody>
+                <tbody id="tabla"></tbody>
+
             </table>
+
+        </div>
+
+        <div class="tabla-footer">
+            <span id="resultados">Mostrando 0 tickets</span>
         </div>
 
     </section>
 
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
+<footer>
     Manzanita Store · 2026
 </footer>
 
+<!-- JAVASCRIPT -->
+
 <script>
-    // Registros de demostración.
+    // REGISTROS DE DEMOSTRACIÓN.
+    // Los IDs 1, 2 y 3 NO provienen de MySQL.
+
     const tickets = [
         {
+            id: 1,
             folio: "TCK-001",
             cliente: "Juan Pérez",
             asunto: "Problema con reparación",
@@ -116,6 +677,7 @@
             estado: "Abierto"
         },
         {
+            id: 2,
             folio: "TCK-002",
             cliente: "María González",
             asunto: "Consulta sobre garantía",
@@ -123,6 +685,7 @@
             estado: "En proceso"
         },
         {
+            id: 3,
             folio: "TCK-003",
             cliente: "Carlos López",
             asunto: "Información de producto",
@@ -131,88 +694,181 @@
         }
     ];
 
+    // RUTA REAL DE FLASK.
+    // Genera /tickets/detalle/0 y reemplaza el ID del ejemplo.
+
+    const rutaDetalle =
+        {{ url_for('detalle_ticket', id=0)|tojson }};
+
+    // CLASES PARA CADA PRIORIDAD.
+
     const coloresPrioridad = {
-        "Alta": "bg-red-100 text-red-700",
-        "Media": "bg-amber-100 text-amber-700",
-        "Baja": "bg-emerald-100 text-emerald-700"
+        "Alta": "prioridad-alta",
+        "Media": "prioridad-media",
+        "Baja": "prioridad-baja"
     };
+
+    // CLASES PARA CADA ESTADO.
 
     const coloresEstado = {
-        "Abierto": "bg-blue-100 text-blue-700",
-        "En proceso": "bg-amber-100 text-amber-700",
-        "Cerrado": "bg-emerald-100 text-emerald-700"
+        "Abierto": "estado-abierto",
+        "En proceso": "estado-proceso",
+        "Cerrado": "estado-cerrado"
     };
 
+    // CREAR UNA CELDA SIN INSERTAR HTML INSEGURO.
+
     function agregarCelda(fila, valor, clase = "") {
+
         const celda = document.createElement("td");
-        celda.className = "px-6 py-4 " + clase;
+
+        celda.className = clase;
         celda.textContent = valor;
+
         fila.appendChild(celda);
+
         return celda;
     }
 
+    // CREAR UNA ETIQUETA DE PRIORIDAD O ESTADO.
+
     function agregarEtiqueta(fila, valor, colores) {
+
         const celda = agregarCelda(fila, "");
+
         const etiqueta = document.createElement("span");
+
         etiqueta.className =
-            "rounded-full px-3 py-1 text-xs font-medium " +
-            (colores[valor] || "bg-slate-100 text-slate-700");
+            "etiqueta " +
+            (colores[valor] || "estado-abierto");
+
         etiqueta.textContent = valor;
+
         celda.appendChild(etiqueta);
     }
 
+    // MOSTRAR TICKETS EN LA TABLA.
+
     function mostrar(datos) {
+
         const tabla = document.getElementById("tabla");
+
         tabla.replaceChildren();
 
         datos.forEach(ticket => {
+
             const fila = document.createElement("tr");
-            fila.className = "hover:bg-slate-50";
 
-            agregarCelda(fila, ticket.folio, "font-semibold");
-            agregarCelda(fila, ticket.cliente);
-            agregarCelda(fila, ticket.asunto);
-            agregarEtiqueta(fila, ticket.prioridad, coloresPrioridad);
-            agregarEtiqueta(fila, ticket.estado, coloresEstado);
+            // FOLIO
+            agregarCelda(
+                fila,
+                ticket.folio,
+                "folio"
+            );
 
-            const acciones = agregarCelda(fila, "", "text-right");
+            // CLIENTE
+            agregarCelda(
+                fila,
+                ticket.cliente
+            );
+
+            // ASUNTO
+            agregarCelda(
+                fila,
+                ticket.asunto
+            );
+
+            // PRIORIDAD
+            agregarEtiqueta(
+                fila,
+                ticket.prioridad,
+                coloresPrioridad
+            );
+
+            // ESTADO
+            agregarEtiqueta(
+                fila,
+                ticket.estado,
+                coloresEstado
+            );
+
+            // ACCIONES
+            const acciones = agregarCelda(
+                fila,
+                "",
+                "text-right"
+            );
 
             const enlace = document.createElement("a");
-            enlace.href = "detalle_ticket.html?folio=" +
-                encodeURIComponent(ticket.folio);
-            enlace.className = "font-medium text-blue-600 hover:underline";
+
+            // CORREGIDO: DIRECCIÓN REAL DE FLASK.
+
+            enlace.href = rutaDetalle.replace(
+                /\/0$/,
+                "/" + encodeURIComponent(ticket.id)
+            );
+
+            enlace.className = "ver-detalle";
             enlace.textContent = "Ver detalle";
 
             acciones.appendChild(enlace);
             tabla.appendChild(fila);
         });
 
-        if (!datos.length) {
+        // MENSAJE SI NO SE ENCUENTRAN TICKETS.
+
+        if (datos.length === 0) {
+
             const fila = document.createElement("tr");
-            const celda = agregarCelda(
-                fila,
-                "No se encontraron tickets.",
-                "text-center text-slate-500"
-            );
+
+            const celda = document.createElement("td");
+
             celda.colSpan = 6;
+            celda.className =
+                "text-center text-slate-500";
+
+            celda.textContent =
+                "No se encontraron tickets.";
+
+            fila.appendChild(celda);
             tabla.appendChild(fila);
         }
+
+        document.getElementById("resultados").textContent =
+            "Mostrando " + datos.length +
+            " de " + tickets.length + " tickets";
     }
 
+    // BÚSQUEDA Y FILTRO POR ESTADO.
+
     function filtrar() {
+
         const texto = document.getElementById("buscar")
             .value.toLowerCase().trim();
 
-        const estado = document.getElementById("filtro").value;
+        const estado = document.getElementById("filtro")
+            .value;
 
-        const resultado = tickets.filter(t =>
-            [t.folio, t.cliente, t.asunto].some(v =>
-                v.toLowerCase().includes(texto)
-            ) && (!estado || t.estado === estado)
-        );
+        const resultados = tickets.filter(ticket => {
 
-        mostrar(resultado);
+            const coincideTexto = [
+                ticket.folio,
+                ticket.cliente,
+                ticket.asunto
+            ].some(valor =>
+                valor.toLowerCase().includes(texto)
+            );
+
+            const coincideEstado =
+                !estado || ticket.estado === estado;
+
+            return coincideTexto && coincideEstado;
+        });
+
+        mostrar(resultados);
     }
+
+    // EVENTOS DE BÚSQUEDA.
 
     document.getElementById("buscar")
         .addEventListener("input", filtrar);
@@ -220,13 +876,25 @@
     document.getElementById("filtro")
         .addEventListener("change", filtrar);
 
-    document.getElementById("total").textContent = tickets.length;
+    document.getElementById("btnBuscar")
+        .addEventListener("click", filtrar);
+
+    // ESTADÍSTICAS.
+
+    document.getElementById("total").textContent =
+        tickets.length;
 
     document.getElementById("abiertos").textContent =
-        tickets.filter(t => t.estado !== "Cerrado").length;
+        tickets.filter(t =>
+            t.estado !== "Cerrado"
+        ).length;
 
     document.getElementById("cerrados").textContent =
-        tickets.filter(t => t.estado === "Cerrado").length;
+        tickets.filter(t =>
+            t.estado === "Cerrado"
+        ).length;
+
+    // MOSTRAR DATOS INICIALES.
 
     mostrar(tickets);
 </script>
