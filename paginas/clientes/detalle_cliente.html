@@ -1,1 +1,717 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Detalle del cliente | Manzanita Store</title><link rel="stylesheet" href="/static/clientes/clientes.css"></head><body data-pagina="detalle"><header class="topbar"><div class="topinner"><div class="brand">🍏 Manzanita Store<small>Gestión de clientes</small></div><a href="/dashboard" class="btn">Inicio</a></div></header><main class="container"><div class="eyebrow">ADMINISTRACIÓN / CLIENTES / EXPEDIENTE</div><h1>Expediente del cliente</h1><div id="mensaje" class="notice" hidden></div><section id="detalleCliente" class="card formcard"><div class="heading"><div><div class="muted">Cliente</div><h2 id="detalleNombre">Cargando...</h2></div><span id="detalleEstado" class="pill"></span></div><div class="detailgrid"><div><span class="muted">Teléfono</span><strong id="detalleTelefono"></strong></div><div><span class="muted">Correo electrónico</span><strong id="detalleCorreo"></strong></div><div><span class="muted">Fecha de registro</span><strong id="detalleFecha"></strong></div></div><div class="detailactions"><a id="btnEditarDetalle" class="btn primary" href="#">Editar cliente</a><button id="btnEstado" class="btn danger" type="button">Cambiar estado</button><a class="btn" href="/clientes">Regresar</a></div></section></main><script src="/static/clientes/clientes.js"></script></body></html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Detalle del cliente | Manzanita Store</title>
+
+<!-- CSS ORIGINAL DE CARLOS -->
+<link rel="stylesheet" href="/static/clientes/clientes.css">
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ENCABEZADO */
+
+.topbar {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    border-bottom: none;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.topinner {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand {
+    color: white;
+    font-size: 21px;
+    font-weight: 750;
+    line-height: 1.4;
+}
+
+.brand small {
+    display: block;
+    margin-top: 4px;
+    color: #b6cfbe;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* BOTONES */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 12px 20px;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    background: white;
+    color: var(--medio);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-decoration: none;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn:hover {
+    background: #eff8dc;
+    border-color: var(--boton);
+    color: var(--verde);
+}
+
+.btn.primary {
+    background: var(--boton);
+    border-color: var(--boton);
+    color: white;
+}
+
+.btn.primary:hover {
+    background: #608f12;
+    border-color: #608f12;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* BOTÓN INICIO */
+
+.btn-inicio {
+    background: var(--medio);
+    border: 1px solid rgba(255,255,255,.25);
+    color: white;
+}
+
+.btn-inicio:hover {
+    background: var(--boton);
+    border-color: var(--boton);
+    color: white;
+}
+
+/* BOTÓN SALIR */
+
+.btn-salir {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.25);
+    color: white;
+}
+
+.btn-salir:hover {
+    background: var(--medio);
+    border-color: rgba(255,255,255,.4);
+    color: white;
+}
+
+/* CONTENIDO */
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 38px 25px;
+}
+
+.volver {
+    display: inline-block;
+    margin-bottom: 22px;
+    color: #548b1a;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.volver:hover {
+    text-decoration: underline;
+}
+
+.eyebrow {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+h1 {
+    margin: 9px 0;
+    color: var(--verde);
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.page-description {
+    margin: 8px 0 28px;
+    color: var(--gris);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.muted {
+    color: var(--gris);
+}
+
+/* BIENVENIDA */
+
+.welcome {
+    position: relative;
+    overflow: hidden;
+    padding: 30px 35px;
+    margin-bottom: 27px;
+    border-radius: 19px;
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    color: white;
+}
+
+.welcome::after {
+    content: "👤";
+    position: absolute;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 90px;
+    opacity: .15;
+    pointer-events: none;
+}
+
+.welcome small {
+    display: block;
+    color: var(--limon);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 3px;
+}
+
+.welcome h2 {
+    position: relative;
+    z-index: 1;
+    margin: 10px 0;
+    color: white;
+    font-size: 24px;
+    font-weight: 750;
+}
+
+.welcome p {
+    position: relative;
+    z-index: 1;
+    color: #d8e7dc;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* TARJETA PRINCIPAL */
+
+.card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.formcard {
+    padding: 30px;
+    margin-bottom: 25px;
+}
+
+/* CABECERA DEL EXPEDIENTE */
+
+.heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding-bottom: 25px;
+    margin-bottom: 26px;
+    border-bottom: 1px solid #e8eee7;
+}
+
+.cliente-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.cliente-icon {
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    border-radius: 16px;
+    background: #eff8dc;
+    font-size: 29px;
+}
+
+.cliente-label {
+    margin-bottom: 7px;
+    color: var(--gris);
+    font-size: 13px;
+}
+
+#detalleNombre {
+    margin: 0;
+    color: var(--verde);
+    font-size: 25px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+/* ESTADO */
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 30px;
+    background: #eff8dc;
+    color: var(--medio);
+    font-size: 12px;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+.pill.activo,
+.pill.active,
+.pill.success,
+.pill.green {
+    background: #e4f7e7;
+    color: #16813a;
+}
+
+.pill.inactivo,
+.pill.inactive,
+.pill.danger,
+.pill.red {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* DATOS DEL CLIENTE */
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 24px;
+}
+
+.section-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    border-radius: 13px;
+    background: #eff8dc;
+    font-size: 23px;
+}
+
+.section-heading h3 {
+    margin: 0;
+    color: var(--verde);
+    font-size: 19px;
+    font-weight: 750;
+}
+
+.section-heading p {
+    margin: 5px 0 0;
+    color: var(--gris);
+    font-size: 12px;
+}
+
+.detailgrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 20px;
+}
+
+.detail-item {
+    padding: 22px;
+    border: 1px solid #e8eee7;
+    border-radius: 14px;
+    background: #fbfcfa;
+    min-width: 0;
+}
+
+.detail-item span {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--gris);
+    font-size: 13px;
+}
+
+.detail-item strong {
+    display: block;
+    color: var(--verde);
+    font-size: 16px;
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+/* MENSAJES DE CARLOS */
+
+.notice {
+    margin: 0 0 22px;
+    padding: 16px 20px;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    background: #eff8dc;
+    color: var(--verde);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.notice[hidden] {
+    display: none !important;
+}
+
+.notice.error,
+.notice.danger {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #b91c1c;
+}
+
+.notice.success {
+    background: #e4f7e7;
+    border-color: #bde5c5;
+    color: #16813a;
+}
+
+/* BOTONES DEL EXPEDIENTE */
+
+.detailactions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 13px;
+    margin-top: 30px;
+    padding-top: 26px;
+    border-top: 1px solid #e8eee7;
+}
+
+.btn.danger {
+    background: #fff3dc;
+    border-color: #f4d79d;
+    color: #a66b13;
+}
+
+.btn.danger:hover {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: #b91c1c;
+}
+
+/* PIE */
+
+.footer {
+    padding: 25px;
+    text-align: center;
+    color: #929b93;
+    font-size: 12px;
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 700px) {
+    .container {
+        padding: 25px 15px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+
+    .formcard {
+        padding: 23px 19px;
+    }
+
+    .detailgrid {
+        grid-template-columns: 1fr;
+    }
+
+    .detailactions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .detailactions .btn {
+        width: 100%;
+    }
+
+    #detalleNombre {
+        font-size: 21px;
+    }
+}
+
+@media(max-width: 480px) {
+    .topinner {
+        padding: 0 12px;
+    }
+
+    .brand {
+        font-size: 17px;
+    }
+
+    .header-actions {
+        gap: 7px;
+    }
+
+    .btn-inicio,
+    .btn-salir {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .cliente-header {
+        align-items: flex-start;
+    }
+
+    .cliente-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        font-size: 23px;
+    }
+}
+</style>
+</head>
+
+<body data-pagina="detalle">
+
+<!-- ENCABEZADO -->
+
+<header class="topbar">
+
+    <div class="topinner">
+
+        <div class="brand">
+            🍏 Manzanita Store
+            <small>Sistema de gestión</small>
+        </div>
+
+        <div class="header-actions">
+
+            <a href="/dashboard" class="btn btn-inicio">
+                🏠 Inicio
+            </a>
+
+            <a href="/logout" class="btn btn-salir">
+                Salir
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+    <!-- VOLVER -->
+
+    <a href="/clientes" class="volver">
+        ← Volver a clientes
+    </a>
+
+    <!-- TÍTULO -->
+
+    <div class="eyebrow">
+        ADMINISTRACIÓN / CLIENTES / EXPEDIENTE
+    </div>
+
+    <h1>Expediente del cliente</h1>
+
+    <p class="page-description">
+        Consulta los datos registrados y
+        administra la información del cliente.
+    </p>
+
+    <!-- BIENVENIDA -->
+
+    <section class="welcome">
+
+        <small>INFORMACIÓN DEL CLIENTE</small>
+
+        <h2>Consulta de expediente</h2>
+
+        <p>
+            Revisa la información personal,
+            los datos de contacto y el estado
+            actual del cliente seleccionado.
+        </p>
+
+    </section>
+
+    <!-- MENSAJE ORIGINAL -->
+
+    <div id="mensaje" class="notice" hidden></div>
+
+    <!-- EXPEDIENTE -->
+
+    <section id="detalleCliente" class="card formcard">
+
+        <!-- NOMBRE Y ESTADO -->
+
+        <div class="heading">
+
+            <div class="cliente-header">
+
+                <div class="cliente-icon">👤</div>
+
+                <div>
+                    <div class="cliente-label">
+                        Cliente
+                    </div>
+
+                    <h2 id="detalleNombre">
+                        Cargando...
+                    </h2>
+                </div>
+
+            </div>
+
+            <span id="detalleEstado" class="pill"></span>
+
+        </div>
+
+        <!-- DATOS GENERALES -->
+
+        <div class="section-heading">
+
+            <div class="section-icon">📋</div>
+
+            <div>
+                <h3>Información del cliente</h3>
+                <p>Datos de contacto y registro</p>
+            </div>
+
+        </div>
+
+        <div class="detailgrid">
+
+            <!-- TELÉFONO -->
+
+            <div class="detail-item">
+
+                <span class="muted">
+                    📞 Teléfono
+                </span>
+
+                <strong id="detalleTelefono"></strong>
+
+            </div>
+
+            <!-- CORREO -->
+
+            <div class="detail-item">
+
+                <span class="muted">
+                    ✉️ Correo electrónico
+                </span>
+
+                <strong id="detalleCorreo"></strong>
+
+            </div>
+
+            <!-- FECHA -->
+
+            <div class="detail-item">
+
+                <span class="muted">
+                    📅 Fecha de registro
+                </span>
+
+                <strong id="detalleFecha"></strong>
+
+            </div>
+
+        </div>
+
+        <!-- ACCIONES -->
+
+        <div class="detailactions">
+
+            <a
+                id="btnEditarDetalle"
+                class="btn primary"
+                href="#">
+                ✏️ Editar cliente
+            </a>
+
+            <button
+                id="btnEstado"
+                class="btn danger"
+                type="button">
+                🔄 Cambiar estado
+            </button>
+
+            <a class="btn" href="/clientes">
+                Regresar
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="footer">
+    Manzanita Store · 2026
+</footer>
+
+<!-- JAVASCRIPT ORIGINAL DE CARLOS -->
+<script src="/static/clientes/clientes.js"></script>
+
+</body>
+</html>
