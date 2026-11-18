@@ -5,351 +5,1231 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nueva venta | Manzanita Store</title>
-<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ENCABEZADO */
+
+.header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--limon);
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+
+.brand h1 {
+    font-size: 21px;
+    font-weight: 750;
+    margin: 0;
+}
+
+.brand h1 span {
+    color: var(--limon);
+}
+
+.brand p {
+    color: #b6cfbe;
+    font-size: 12px;
+    margin: 4px 0 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-inicio,
+.salir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.25);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.btn-inicio {
+    background: var(--medio);
+}
+
+.btn-inicio:hover {
+    background: var(--boton);
+}
+
+.salir:hover {
+    background: var(--medio);
+}
+
+/* CONTENIDO */
+
+.contenido {
+    max-width: 1100px;
+    margin: auto;
+    padding: 38px 25px;
+}
+
+.volver {
+    color: #548b1a;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.volver:hover {
+    text-decoration: underline;
+}
+
+.page-title {
+    margin: 22px 0 28px;
+}
+
+.page-title small {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+
+.page-title h2 {
+    color: var(--verde);
+    font-size: 34px;
+    font-weight: 800;
+    margin: 9px 0;
+}
+
+.page-title p {
+    color: var(--gris);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* BIENVENIDA */
+
+.welcome {
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    border-radius: 19px;
+    padding: 30px 35px;
+    color: white;
+    margin-bottom: 27px;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome::after {
+    content: "🛍️";
+    position: absolute;
+    right: 42px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 85px;
+    opacity: .15;
+    pointer-events: none;
+}
+
+.welcome small {
+    color: var(--limon);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 3px;
+}
+
+.welcome h3 {
+    font-size: 23px;
+    font-weight: 750;
+    margin: 10px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.welcome p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #d8e7dc;
+    position: relative;
+    z-index: 1;
+}
+
+/* TARJETAS */
+
+.card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e8eee7;
+    margin-bottom: 25px;
+}
+
+.section-icon {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    border-radius: 13px;
+    background: #eff8dc;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+}
+
+.section-heading h3 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 750;
+    color: var(--verde);
+}
+
+.section-heading p {
+    margin: 5px 0 0;
+    font-size: 12px;
+    color: var(--gris);
+}
+
+/* CAMPOS */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 9px;
+    color: #35473a;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.campo input,
+.campo select {
+    width: 100%;
+    padding: 14px 16px;
+    background: #fbfcfa;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    color: var(--texto);
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: .2s;
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-color: var(--boton);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(117,173,22,.12);
+}
+
+.campo input::placeholder {
+    color: #a0aba1;
+}
+
+.requerido {
+    color: var(--boton);
+}
+
+/* PRODUCTOS */
+
+.producto-grid {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 18px;
+    align-items: end;
+}
+
+.btn-agregar {
+    margin-top: 20px;
+    padding: 14px 23px;
+    border: none;
+    border-radius: 11px;
+    background: var(--verde);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn-agregar:hover {
+    background: var(--medio);
+}
+
+.aviso {
+    margin: 12px 0 0;
+    color: #b91c1c;
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 18px;
+}
+
+/* TABLA */
+
+.tabla-scroll {
+    overflow-x: auto;
+    margin-top: 24px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead {
+    background: #f5f8f3;
+}
+
+th {
+    padding: 17px 15px;
+    font-size: 11px;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #718177;
+}
+
+td {
+    padding: 18px 15px;
+    border-top: 1px solid #eef2ed;
+    font-size: 14px;
+}
+
+tbody tr:hover {
+    background: #f7faf4;
+}
+
+.producto-nombre {
+    color: var(--verde);
+    font-weight: 700;
+}
+
+.importe {
+    color: #16813a;
+    font-weight: 750;
+}
+
+.btn-quitar {
+    border: none;
+    background: #fee2e2;
+    color: #b91c1c;
+    border-radius: 8px;
+    padding: 9px 13px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-quitar:hover {
+    background: #fecaca;
+}
+
+.vacio {
+    text-align: center;
+    color: var(--gris);
+    padding: 27px 15px;
+}
+
+/* RESUMEN */
+
+.resumen {
+    max-width: 400px;
+    margin-left: auto;
+}
+
+.resumen-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.resumen-fila strong {
+    color: var(--verde);
+    font-weight: 750;
+}
+
+.iva-select {
+    border: 1px solid #d5ded6;
+    border-radius: 9px;
+    background: #fbfcfa;
+    padding: 10px 13px;
+    font-size: 13px;
+    color: var(--texto);
+    outline: none;
+}
+
+.total-fila {
+    padding-top: 19px;
+    border-top: 1px solid #e8eee7;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+#total {
+    color: #16813a;
+    font-size: 26px;
+}
+
+.nota {
+    margin-top: 22px;
+    color: var(--gris);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* MENSAJE */
+
+.mensaje {
+    padding: 16px 19px;
+    margin-top: 24px;
+    border-radius: 11px;
+    background: #fff7e6;
+    border: 1px solid #f4d79d;
+    color: #875b13;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* ACCIONES */
+
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 13px;
+    flex-wrap: wrap;
+    border-top: 1px solid #e8eee7;
+    padding-top: 27px;
+    margin-top: 28px;
+}
+
+.btn-cancelar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    background: white;
+    color: #516456;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.btn-cancelar:hover {
+    background: #f3f6f1;
+}
+
+.btn-registrar {
+    padding: 14px 24px;
+    border: none;
+    border-radius: 11px;
+    background: var(--boton);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn-registrar:hover {
+    background: #608f12;
+    transform: translateY(-2px);
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #929b93;
+    font-size: 12px;
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 700px) {
+    .contenido {
+        padding: 25px 15px;
+    }
+
+    .card {
+        padding: 23px 19px;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .form-grid,
+    .producto-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+
+    .resumen {
+        max-width: 100%;
+    }
+
+    .acciones > * {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+@media(max-width: 480px) {
+    .header-content {
+        padding: 0 12px;
+    }
+
+    .header-actions {
+        gap: 7px;
+    }
+
+    .btn-inicio,
+    .salir {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<!-- ENCABEZADO -->
+
+<header class="header">
+    <div class="header-content">
+
+        <div class="brand">
+            <div class="brand-icon">🍏</div>
+
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Sistema de gestión</p>
+            </div>
         </div>
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
-            Salir
-        </a>
+
+        <!-- NAVEGACIÓN FLASK -->
+
+        <div class="header-actions">
+
+            <a href="{{ url_for('dashboard') if rol == 'Administrador' else url_for('ventas') }}"
+               class="btn-inicio">
+                🏠 Inicio
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="salir">
+                Salir
+            </a>
+
+        </div>
+
     </div>
 </header>
 
-<main class="mx-auto max-w-5xl px-6 py-8">
+<main class="contenido">
 
-    <a href="ventas.html"
-       class="text-sm font-medium text-blue-600 hover:underline">
+    <!-- VOLVER -->
+
+    <a href="{{ url_for('ventas') }}" class="volver">
         ← Volver a ventas
     </a>
 
-    <div class="mb-7 mt-5">
-        <p class="text-sm font-medium text-blue-600">Administración</p>
-        <h2 class="text-3xl font-bold">Registrar nueva venta</h2>
-        <p class="mt-2 text-sm text-slate-500">
-            Selecciona los productos y calcula el total de la operación.
+    <!-- TÍTULO -->
+
+    <div class="page-title">
+
+        <small>ADMINISTRACIÓN</small>
+
+        <h2>Registrar nueva venta</h2>
+
+        <p>
+            Selecciona los productos y calcula
+            el total de la operación.
         </p>
+
     </div>
 
-    <form id="formulario" class="space-y-6">
+    <!-- BIENVENIDA -->
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-                Información de la venta
-            </h3>
+    <section class="welcome">
 
-            <div class="grid gap-5 sm:grid-cols-2">
+        <small>REGISTRO COMERCIAL</small>
 
-                <div>
-                    <label for="cliente" class="mb-2 block text-sm font-medium">
-                        Cliente *
-                    </label>
-                    <input id="cliente" required maxlength="100"
-                           placeholder="Nombre del cliente"
-                           class="w-full rounded-lg border border-slate-300 px-4 py-3">
-                </div>
+        <h3>Crear una nueva venta</h3>
 
-                <div>
-                    <label for="vendedor" class="mb-2 block text-sm font-medium">
-                        Vendedor *
-                    </label>
-                    <input id="vendedor" required maxlength="100"
-                           placeholder="Nombre del vendedor"
-                           class="w-full rounded-lg border border-slate-300 px-4 py-3">
-                </div>
+        <p>
+            Registra los datos del cliente, selecciona
+            los productos y revisa el importe total
+            antes de realizar la operación.
+        </p>
 
-                <div>
-                    <label for="fecha" class="mb-2 block text-sm font-medium">
-                        Fecha *
-                    </label>
-                    <input id="fecha" type="date" required
-                           class="w-full rounded-lg border border-slate-300 px-4 py-3">
-                </div>
+    </section>
+
+    <!-- FORMULARIO -->
+
+    <form id="formulario">
+
+        <!-- INFORMACIÓN DE LA VENTA -->
+
+        <section class="card">
+
+            <div class="section-heading">
+
+                <div class="section-icon">👤</div>
 
                 <div>
-                    <label for="metodo" class="mb-2 block text-sm font-medium">
-                        Método de pago *
-                    </label>
-                    <select id="metodo" required
-                            class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
-                        <option value="">Selecciona un método</option>
-                        <option>Efectivo</option>
-                        <option>Tarjeta</option>
-                        <option>Transferencia</option>
-                    </select>
+                    <h3>Información de la venta</h3>
+                    <p>Datos del cliente y del vendedor</p>
                 </div>
+
             </div>
+
+            <div class="form-grid">
+
+                <div class="campo">
+
+                    <label for="cliente">
+                        Cliente <span class="requerido">*</span>
+                    </label>
+
+                    <input
+                        id="cliente"
+                        name="cliente"
+                        type="text"
+                        required
+                        maxlength="100"
+                        placeholder="Nombre del cliente">
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="vendedor">
+                        Vendedor <span class="requerido">*</span>
+                    </label>
+
+                    <input
+                        id="vendedor"
+                        name="vendedor"
+                        type="text"
+                        required
+                        maxlength="100"
+                        placeholder="Nombre del vendedor">
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="fecha">
+                        Fecha <span class="requerido">*</span>
+                    </label>
+
+                    <input
+                        id="fecha"
+                        name="fecha"
+                        type="date"
+                        required>
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="metodo">
+                        Método de pago
+                        <span class="requerido">*</span>
+                    </label>
+
+                    <select
+                        id="metodo"
+                        name="metodo"
+                        required>
+
+                        <option value="">Selecciona un método</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                        <option value="Transferencia">Transferencia</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
         </section>
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
+        <!-- AGREGAR PRODUCTOS -->
 
-            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-                Agregar productos
-            </h3>
+        <section class="card">
 
-            <div class="grid gap-4 sm:grid-cols-4">
+            <div class="section-heading">
 
-                <div class="sm:col-span-3">
-                    <label for="producto" class="mb-2 block text-sm font-medium">
-                        Producto
-                    </label>
-                    <select id="producto"
-                            class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
-                        <option value="">Selecciona un producto</option>
-                    </select>
-                </div>
+                <div class="section-icon">📦</div>
 
                 <div>
-                    <label for="cantidad" class="mb-2 block text-sm font-medium">
-                        Cantidad
-                    </label>
-                    <input id="cantidad" type="number" min="1"
-                           step="1" value="1"
-                           class="w-full rounded-lg border border-slate-300 px-4 py-3">
+                    <h3>Agregar productos</h3>
+                    <p>Selecciona los artículos que deseas vender</p>
                 </div>
+
             </div>
 
-            <button id="agregar" type="button"
-                    class="mt-5 rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+            <div class="producto-grid">
+
+                <div class="campo">
+
+                    <label for="producto">
+                        Producto
+                    </label>
+
+                    <select id="producto">
+                        <option value="">
+                            Selecciona un producto
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="campo">
+
+                    <label for="cantidad">
+                        Cantidad
+                    </label>
+
+                    <input
+                        id="cantidad"
+                        type="number"
+                        min="1"
+                        step="1"
+                        value="1">
+
+                </div>
+
+            </div>
+
+            <button
+                id="agregar"
+                type="button"
+                class="btn-agregar">
                 + Agregar producto
             </button>
 
-            <p id="aviso" role="status" aria-live="polite"
-               class="mt-3 text-sm text-red-600"></p>
+            <p
+                id="aviso"
+                role="status"
+                aria-live="polite"
+                class="aviso">
+            </p>
 
-            <div class="mt-6 overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+            <!-- CARRITO -->
+
+            <div class="tabla-scroll">
+
+                <table>
+
+                    <thead>
                         <tr>
-                            <th class="px-4 py-4">Producto</th>
-                            <th class="px-4 py-4">Precio</th>
-                            <th class="px-4 py-4">Cantidad</th>
-                            <th class="px-4 py-4">Importe</th>
-                            <th class="px-4 py-4">Acción</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Importe</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
-                    <tbody id="carrito" class="divide-y divide-slate-100">
-                    </tbody>
+
+                    <tbody id="carrito"></tbody>
+
                 </table>
+
             </div>
+
         </section>
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-                Resumen de la venta
-            </h3>
+        <!-- RESUMEN -->
 
-            <div class="ml-auto max-w-sm space-y-4">
+        <section class="card">
 
-                <div class="flex justify-between">
-                    <span>Subtotal</span>
-                    <strong id="subtotal">$0.00</strong>
+            <div class="section-heading">
+
+                <div class="section-icon">💰</div>
+
+                <div>
+                    <h3>Resumen de la venta</h3>
+                    <p>Importes calculados automáticamente</p>
                 </div>
 
-                <div class="flex items-center justify-between gap-4">
+            </div>
+
+            <div class="resumen">
+
+                <div class="resumen-fila">
+
+                    <span>Subtotal</span>
+                    <strong id="subtotal">$0.00</strong>
+
+                </div>
+
+                <div class="resumen-fila">
+
                     <label for="iva">IVA de demostración</label>
-                    <select id="iva" class="rounded-lg border px-3 py-2">
+
+                    <select id="iva" class="iva-select">
                         <option value="0">0%</option>
                         <option value="0.16">16%</option>
                     </select>
+
                 </div>
 
-                <div class="flex justify-between">
+                <div class="resumen-fila">
+
                     <span>IVA</span>
                     <strong id="impuesto">$0.00</strong>
+
                 </div>
 
-                <div class="flex justify-between border-t pt-4 text-xl">
-                    <strong>Total</strong>
-                    <strong id="total" class="text-blue-600">$0.00</strong>
+                <div class="resumen-fila total-fila">
+
+                    <span>Total</span>
+                    <strong id="total">$0.00</strong>
+
                 </div>
+
             </div>
 
-            <p class="mt-5 text-xs text-slate-500">
-                Los precios son de ejemplo. La aplicación definitiva
-                deberá utilizar los precios y el tratamiento fiscal
-                configurados en el servidor.
+            <p class="nota">
+                Los productos, precios, existencias e impuestos
+                son datos de demostración. El sistema definitivo
+                deberá consultar el inventario y calcular los
+                importes desde el servidor.
             </p>
 
-            <div id="mensaje" role="status" aria-live="polite"
-                 class="mt-6 hidden rounded-lg bg-blue-50 p-4 text-sm text-blue-800">
+            <!-- MENSAJE DE VALIDACIÓN -->
+
+            <div
+                id="mensaje"
+                role="status"
+                aria-live="polite"
+                class="mensaje hidden">
             </div>
 
-            <div class="mt-7 flex flex-wrap justify-end gap-3 border-t pt-6">
-                <a href="ventas.html"
-                   class="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold">
+            <!-- BOTONES -->
+
+            <div class="acciones">
+
+                <a href="{{ url_for('ventas') }}"
+                   class="btn-cancelar">
                     Cancelar
                 </a>
 
-                <button type="submit"
-                        class="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+                <button
+                    type="submit"
+                    class="btn-registrar">
                     Registrar venta
                 </button>
+
             </div>
+
         </section>
 
     </form>
+
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
+<footer>
     Manzanita Store · 2026
 </footer>
 
 <script>
-    // Datos de prueba, iguales a los del inventario.
+    // PRODUCTOS DEMOSTRATIVOS.
+    // NO SE CONSULTAN DESDE MYSQL.
+
     const productos = [
-        {codigo:"PROD-001", nombre:"iPhone 13", precio:9500, stock:8},
-        {codigo:"PROD-002", nombre:"MacBook Air M2", precio:18500, stock:2},
-        {codigo:"PROD-003", nombre:"Cargador USB-C", precio:450, stock:15},
-        {codigo:"PROD-004", nombre:"Pantalla iPhone 11", precio:1200, stock:0}
+        {
+            codigo: "PROD-001",
+            nombre: "iPhone 13",
+            precio: 9500,
+            stock: 8
+        },
+        {
+            codigo: "PROD-002",
+            nombre: "MacBook Air M2",
+            precio: 18500,
+            stock: 2
+        },
+        {
+            codigo: "PROD-003",
+            nombre: "Cargador USB-C",
+            precio: 450,
+            stock: 15
+        },
+        {
+            codigo: "PROD-004",
+            nombre: "Pantalla iPhone 11",
+            precio: 1200,
+            stock: 0
+        }
     ];
 
+    // ELEMENTOS DEL FORMULARIO.
+
     const carrito = [];
+
     const selector = document.getElementById("producto");
     const tbody = document.getElementById("carrito");
     const aviso = document.getElementById("aviso");
     const mensaje = document.getElementById("mensaje");
 
-    const hoy = new Date();
-    document.getElementById("fecha").value =
-        new Date(hoy.getTime() - hoy.getTimezoneOffset() * 60000)
-        .toISOString().slice(0, 10);
+    // FECHA ACTUAL LOCAL.
 
-    const moneda = valor => valor.toLocaleString("es-MX", {
-        style:"currency", currency:"MXN"
-    });
+    const hoy = new Date();
+
+    document.getElementById("fecha").value =
+        new Date(
+            hoy.getTime() - hoy.getTimezoneOffset() * 60000
+        ).toISOString().slice(0, 10);
+
+    // FORMATO MXN.
+
+    function moneda(valor) {
+        return valor.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN"
+        });
+    }
+
+    // CARGAR PRODUCTOS.
 
     productos.forEach(p => {
+
         const opcion = document.createElement("option");
+
         opcion.value = p.codigo;
+
         opcion.textContent =
-            `${p.nombre} - ${moneda(p.precio)} (${p.stock} disponibles)`;
+            p.nombre + " - " +
+            moneda(p.precio) +
+            " (" + p.stock + " disponibles)";
+
         opcion.disabled = p.stock === 0;
+
         selector.appendChild(opcion);
     });
 
-    function calcular() {
-        const subtotal = carrito.reduce(
-            (s, p) => s + p.precio * p.cantidad, 0
-        );
-        const impuesto = subtotal *
-            Number(document.getElementById("iva").value);
+    // CALCULAR IMPORTES.
 
-        document.getElementById("subtotal").textContent = moneda(subtotal);
-        document.getElementById("impuesto").textContent = moneda(impuesto);
+    function calcular() {
+
+        const subtotal = carrito.reduce(
+            (suma, p) =>
+                suma + p.precio * p.cantidad,
+            0
+        );
+
+        const porcentajeIVA = Number(
+            document.getElementById("iva").value
+        );
+
+        const impuesto = subtotal * porcentajeIVA;
+
+        const total = subtotal + impuesto;
+
+        document.getElementById("subtotal").textContent =
+            moneda(subtotal);
+
+        document.getElementById("impuesto").textContent =
+            moneda(impuesto);
+
         document.getElementById("total").textContent =
-            moneda(subtotal + impuesto);
+            moneda(total);
     }
 
+    // CREAR CELDAS SEGURAS.
+
+    function agregarCelda(fila, valor, clase = "") {
+
+        const celda = document.createElement("td");
+
+        celda.textContent = valor;
+        celda.className = clase;
+
+        fila.appendChild(celda);
+
+        return celda;
+    }
+
+    // MOSTRAR CARRITO.
+
     function mostrarCarrito() {
+
         tbody.replaceChildren();
 
+        // CARRITO VACÍO.
+
         if (!carrito.length) {
+
             const fila = document.createElement("tr");
-            const celda = document.createElement("td");
+
+            const celda = agregarCelda(
+                fila,
+                "Todavía no hay productos agregados.",
+                "vacio"
+            );
+
             celda.colSpan = 5;
-            celda.className = "px-4 py-5 text-center text-slate-500";
-            celda.textContent = "Todavía no hay productos agregados.";
-            fila.appendChild(celda);
+
             tbody.appendChild(fila);
         }
 
         carrito.forEach((p, indice) => {
+
             const fila = document.createElement("tr");
 
-            [
-                p.nombre, moneda(p.precio),
-                String(p.cantidad), moneda(p.precio * p.cantidad)
-            ].forEach(valor => {
-                const td = document.createElement("td");
-                td.className = "px-4 py-4";
-                td.textContent = valor;
-                fila.appendChild(td);
-            });
+            agregarCelda(
+                fila,
+                p.nombre,
+                "producto-nombre"
+            );
 
-            const td = document.createElement("td");
-            td.className = "px-4 py-4";
+            agregarCelda(
+                fila,
+                moneda(p.precio)
+            );
+
+            agregarCelda(
+                fila,
+                String(p.cantidad)
+            );
+
+            agregarCelda(
+                fila,
+                moneda(p.precio * p.cantidad),
+                "importe"
+            );
+
+            // BOTÓN QUITAR.
+
+            const celdaAccion = document.createElement("td");
 
             const boton = document.createElement("button");
+
             boton.type = "button";
             boton.textContent = "Quitar";
-            boton.className = "font-medium text-red-600 hover:underline";
+            boton.className = "btn-quitar";
 
             boton.addEventListener("click", () => {
+
                 carrito.splice(indice, 1);
+
+                aviso.textContent = "";
+                mensaje.classList.add("hidden");
+
                 mostrarCarrito();
             });
 
-            td.appendChild(boton);
-            fila.appendChild(td);
+            celdaAccion.appendChild(boton);
+            fila.appendChild(celdaAccion);
             tbody.appendChild(fila);
         });
 
         calcular();
     }
 
-    document.getElementById("agregar").addEventListener("click", () => {
-        aviso.textContent = "";
+    // AGREGAR PRODUCTO AL CARRITO.
 
-        const p = productos.find(x => x.codigo === selector.value);
-        const cantidadInput = document.getElementById("cantidad");
+    document.getElementById("agregar")
+        .addEventListener("click", () => {
 
-        if (!p) {
-            aviso.textContent = "Selecciona un producto.";
-            return;
-        }
+            aviso.textContent = "";
+            mensaje.classList.add("hidden");
 
-        if (!cantidadInput.reportValidity()) return;
+            const producto = productos.find(
+                p => p.codigo === selector.value
+            );
 
-        const cantidad = Number(cantidadInput.value);
-        const existente = carrito.find(x => x.codigo === p.codigo);
-        const acumulado = cantidad + (existente?.cantidad || 0);
+            const cantidadInput =
+                document.getElementById("cantidad");
 
-        if (!Number.isSafeInteger(cantidad) || cantidad < 1 ||
-            acumulado > p.stock) {
-            aviso.textContent =
-                "Cantidad inválida o superior a las existencias disponibles.";
-            return;
-        }
+            // VALIDAR PRODUCTO.
 
-        if (existente) {
-            existente.cantidad = acumulado;
-        } else {
-            carrito.push({...p, cantidad});
-        }
-
-        mostrarCarrito();
-    });
-
-    document.getElementById("iva")
-        .addEventListener("change", calcular);
-
-    document.getElementById("formulario")
-        .addEventListener("submit", evento => {
-            evento.preventDefault();
-
-            if (!evento.target.reportValidity()) return;
-
-            if (!carrito.length) {
-                aviso.textContent = "Agrega al menos un producto.";
+            if (!producto) {
+                aviso.textContent =
+                    "Selecciona un producto.";
                 return;
             }
 
+            // VALIDAR CANTIDAD.
+
+            if (!cantidadInput.reportValidity()) {
+                return;
+            }
+
+            const cantidad = Number(cantidadInput.value);
+
+            const existente = carrito.find(
+                p => p.codigo === producto.codigo
+            );
+
+            const acumulado =
+                cantidad + (existente?.cantidad || 0);
+
+            if (
+                !Number.isSafeInteger(cantidad) ||
+                cantidad < 1 ||
+                acumulado > producto.stock
+            ) {
+                aviso.textContent =
+                    "Cantidad inválida o superior a las existencias disponibles.";
+                return;
+            }
+
+            // ACTUALIZAR SI YA ESTÁ EN CARRITO.
+
+            if (existente) {
+                existente.cantidad = acumulado;
+            } else {
+                carrito.push({
+                    ...producto,
+                    cantidad
+                });
+            }
+
+            cantidadInput.value = 1;
+
+            mostrarCarrito();
+        });
+
+    // ACTUALIZAR IVA AL CAMBIAR.
+
+    document.getElementById("iva")
+        .addEventListener("change", () => {
+
+            mensaje.classList.add("hidden");
+            calcular();
+        });
+
+    // VALIDAR REGISTRO DE VENTA.
+
+    document.getElementById("formulario")
+        .addEventListener("submit", evento => {
+
+            evento.preventDefault();
+
+            if (!evento.target.reportValidity()) {
+                return;
+            }
+
+            aviso.textContent = "";
+
+            // OBLIGATORIO TENER PRODUCTOS.
+
+            if (!carrito.length) {
+                aviso.textContent =
+                    "Agrega al menos un producto.";
+
+                document.getElementById("agregar")
+                    .scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+
+                return;
+            }
+
+            // SOLO VALIDACIÓN.
+            // NO REGISTRA EN MYSQL.
+
             mensaje.classList.remove("hidden");
+
             mensaje.textContent =
                 "Venta validada correctamente. " +
-                "Aún no se registra ni descuenta existencias; " +
-                "falta conectar el backend y MySQL.";
+                "Los datos y los importes están completos. " +
+                "La venta todavía NO se ha registrado " +
+                "ni se han descontado existencias. " +
+                "Falta conectar el backend y MySQL.";
+
+            mensaje.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest"
+            });
         });
+
+    // MOSTRAR CARRITO INICIAL.
 
     mostrarCarrito();
 </script>
