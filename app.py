@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import secrets
 import time
@@ -1855,12 +1856,97 @@ def registrar_producto():
         nombre=session.get("nombre")
     )
 
-registrar_pagina(
-    "editar_producto",
-    "/inventario/editar/<int:id>",
-    "inventario/editar_producto.html",
-    ("Administrador",)
-)
+@app.route("/inventario/editar/<string:id>", methods=["GET", "POST"])
+@requiere_rol("Administrador")
+def editar_producto(id):
+    # Los productos se identifican por su UUID, no por su posición.
+    productos = cargar_productos()
+    producto = next(
+        (p for p in productos if isinstance(p, dict) and p.get("id") == id),
+        None
+    )
+
+    if producto is None:
+        flash("Producto no encontrado.", "error")
+        return redirect(url_for("inventario"))
+
+    if "csrf_token_inventario" not in session:
+        session["csrf_token_inventario"] = secrets.token_urlsafe(32)
+
+    if request.method == "POST":
+        token = request.form.get("csrf_token", "")
+        if not secrets.compare_digest(token, session["csrf_token_inventario"]):
+            flash("Solicitud inválida. Actualiza la página e intenta nuevamente.", "error")
+            return redirect(url_for("editar_producto", id=id))
+
+        nombre = request.form.get("nombre", "").strip()
+        categoria = request.form.get("categoria", "").strip()
+        marca = request.form.get("marca", "").strip()
+        proveedor = request.form.get("proveedor", "").strip()
+        descripcion = request.form.get("descripcion", "").strip()
+        activo = request.form.get("activo", "")
+
+        if (
+            not 1 <= len(nombre) <= 120
+            or categoria not in ("iPhone", "Mac", "Accesorios", "Refacciones")
+            or not 1 <= len(marca) <= 80
+            or len(proveedor) > 120
+            or len(descripcion) > 1000
+            or activo not in ("true", "false")
+        ):
+            flash("Revisa los datos del producto.", "error")
+            return redirect(url_for("editar_producto", id=id))
+
+        try:
+            costo = float(request.form.get("costo", ""))
+            precio = float(request.form.get("precio", ""))
+            stock_txt = request.form.get("stock", "")
+            minimo_txt = request.form.get("minimo", "")
+            if not stock_txt.isdecimal() or not minimo_txt.isdecimal():
+                raise ValueError("Las existencias deben ser enteros.")
+            stock = int(stock_txt)
+            minimo = int(minimo_txt)
+            if (
+                not math.isfinite(costo) or not math.isfinite(precio)
+                or costo < 0 or precio < costo
+                or costo > 999999999 or precio > 999999999
+                or stock > 999999 or minimo > 999999
+            ):
+                raise ValueError("Valores fuera de rango.")
+        except (ValueError, TypeError, OverflowError):
+            flash("Revisa los precios y las existencias.", "error")
+            return redirect(url_for("editar_producto", id=id))
+
+        # Se actualiza el producto sin alterar código, ID o imagen.
+        producto.update({
+            "nombre": nombre,
+            "categoria": categoria,
+            "marca": marca,
+            "proveedor": proveedor,
+            "descripcion": descripcion,
+            "costo": round(costo, 2),
+            "precio": round(precio, 2),
+            "stock": stock,
+            "minimo": minimo,
+            "activo": activo == "true"
+        })
+
+        try:
+            guardar_productos(productos)
+        except OSError:
+            flash("No fue posible guardar los cambios.", "error")
+            return redirect(url_for("editar_producto", id=id))
+
+        flash("Producto actualizado correctamente.", "success")
+        return redirect(url_for("inventario"))
+
+    return render_template(
+        "inventario/editar_producto.html",
+        producto=producto,
+        csrf_token=session["csrf_token_inventario"],
+        rol=obtener_rol(),
+        nombre=session.get("nombre")
+    )
 
 
 # ==========================================================
