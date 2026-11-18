@@ -2,197 +2,714 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar reparación | Manzanita Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editar reparación | Manzanita Store</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+    --verde: #183d32;
+    --verde-medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* ENCABEZADO */
+
+.header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--limon);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+
+.brand h1 {
+    font-size: 21px;
+    font-weight: 750;
+}
+
+.brand h1 span {
+    color: var(--limon);
+}
+
+.brand p {
+    font-size: 12px;
+    color: #b6cfbe;
+    margin-top: 4px;
+}
+
+.salir {
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 11px 20px;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.salir:hover {
+    background: var(--verde-medio);
+}
+
+/* CONTENIDO */
+
+.contenido {
+    max-width: 1050px;
+    margin: auto;
+    padding: 38px 25px;
+}
+
+.volver {
+    display: inline-block;
+    color: #548b1a;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.volver:hover {
+    text-decoration: underline;
+}
+
+.page-title {
+    margin: 22px 0 28px;
+}
+
+.page-title small {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+
+.page-title h2 {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--verde);
+    margin: 9px 0;
+}
+
+.page-title p {
+    color: var(--gris);
+    font-size: 14px;
+}
+
+/* BIENVENIDA */
+
+.welcome {
+    background: linear-gradient(115deg, var(--verde), var(--verde-medio));
+    border-radius: 19px;
+    padding: 29px 35px;
+    color: white;
+    margin-bottom: 26px;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome::after {
+    content: "🔧";
+    position: absolute;
+    right: 42px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 85px;
+    opacity: .13;
+    pointer-events: none;
+}
+
+.welcome small {
+    color: var(--limon);
+    letter-spacing: 3px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.welcome h3 {
+    font-size: 23px;
+    font-weight: 750;
+    margin: 10px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.welcome p {
+    color: #d8e7dc;
+    font-size: 14px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+/* FORMULARIO */
+
+.form-card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 8px 25px rgba(24,61,50,.045);
+}
+
+.form-section {
+    margin-bottom: 32px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding-bottom: 17px;
+    border-bottom: 1px solid #e8eee7;
+    margin-bottom: 23px;
+}
+
+.section-icon {
+    width: 43px;
+    height: 43px;
+    min-width: 43px;
+    background: #eff8dc;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 21px;
+}
+
+.section-heading h3 {
+    color: var(--verde);
+    font-size: 18px;
+    font-weight: 750;
+}
+
+.section-heading p {
+    color: var(--gris);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 22px;
+}
+
+.campo label {
+    display: block;
+    font-size: 13px;
+    font-weight: 650;
+    color: #35473a;
+    margin-bottom: 9px;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    width: 100%;
+    background: #fbfcfa;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--texto);
+    outline: none;
+    transition: .2s;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color: var(--boton);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(117,173,22,.12);
+}
+
+.campo textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.completo {
+    grid-column: 1 / -1;
+}
+
+.requerido {
+    color: #75ad16;
+}
+
+/* BOTONES */
+
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 13px;
+    flex-wrap: wrap;
+    border-top: 1px solid #e8eee7;
+    padding-top: 27px;
+    margin-top: 30px;
+}
+
+.btn-cancelar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    background: white;
+    color: #516456;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.btn-cancelar:hover {
+    background: #f3f6f1;
+}
+
+.btn-guardar {
+    background: var(--boton);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn-guardar:hover {
+    background: #608f12;
+    transform: translateY(-2px);
+}
+
+/* MENSAJES */
+
+.mensaje {
+    background: #e4f7e7;
+    border: 1px solid #c5e9cb;
+    color: #28733b;
+    border-radius: 11px;
+    padding: 16px 19px;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.error-card {
+    background: white;
+    padding: 40px 25px;
+    border-radius: 19px;
+    text-align: center;
+    border: 1px solid #e5ede5;
+}
+
+.error-card h3 {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--verde);
+}
+
+.error-card p {
+    color: var(--gris);
+    margin: 12px 0 25px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #929b93;
+    font-size: 12px;
+}
+
+@media(max-width: 650px) {
+    .contenido {
+        padding: 25px 15px;
+    }
+
+    .form-card {
+        padding: 23px 19px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .completo {
+        grid-column: auto;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .acciones > * {
+        flex: 1;
+        text-align: center;
+    }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<!-- ENCABEZADO -->
+
+<header class="header">
+    <div class="header-content">
+
+        <div class="brand">
+            <div class="brand-icon">🍏</div>
+
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Sistema de gestión</p>
+            </div>
         </div>
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+
+        <a href="{{ url_for('logout') }}" class="salir">
             Salir
         </a>
+
     </div>
 </header>
 
-<main class="mx-auto max-w-4xl px-6 py-8">
+<main class="contenido">
 
-    <a id="volver" href="reparaciones.html"
-       class="text-sm font-medium text-blue-600 hover:underline">
+    <!-- VOLVER AL DETALLE -->
+
+    <a id="volver"
+       href="{{ url_for('reparaciones') }}"
+       class="volver">
         ← Volver al detalle
     </a>
 
-    <div class="mb-7 mt-5">
-        <p class="text-sm font-medium text-blue-600">Servicio técnico</p>
-        <h2 class="text-3xl font-bold">Editar reparación</h2>
-        <p id="subtitulo" class="mt-2 text-sm text-slate-500">
+    <!-- TÍTULO -->
+
+    <div class="page-title">
+        <small>SERVICIO TÉCNICO</small>
+
+        <h2>Editar reparación</h2>
+
+        <p id="subtitulo">
             Actualiza la información del servicio.
         </p>
     </div>
 
-    <div id="error"
-         class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
-        <h3 class="text-xl font-bold">Reparación no encontrada</h3>
-        <p class="mt-2 text-slate-500">
-            No existe un registro de prueba con ese folio.
+    <!-- ERROR -->
+
+    <div id="error" class="error-card hidden">
+
+        <div class="text-5xl mb-5">🔎</div>
+
+        <h3>Reparación no encontrada</h3>
+
+        <p>
+            No existe un registro de demostración
+            con el identificador solicitado.
         </p>
-        <a href="reparaciones.html"
-           class="mt-4 inline-block text-blue-600 hover:underline">
+
+        <a href="{{ url_for('reparaciones') }}"
+           class="btn-cancelar">
             Volver a reparaciones
         </a>
     </div>
 
-    <form id="formulario"
-          class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
+    <!-- FORMULARIO -->
 
-        <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-            Datos del cliente
-        </h3>
+    <div id="contenido" class="hidden">
 
-        <div class="grid gap-5 sm:grid-cols-2">
-            <div>
-                <label for="cliente" class="mb-2 block text-sm font-medium">
-                    Nombre del cliente *
-                </label>
-                <input id="cliente" required maxlength="100"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+        <!-- BIENVENIDA -->
+
+        <section class="welcome">
+            <small>ACTUALIZACIÓN DE SERVICIO</small>
+
+            <h3>Administración de reparaciones</h3>
+
+            <p>
+                Revisa y modifica los datos del cliente,
+                dispositivo y servicio técnico.
+            </p>
+        </section>
+
+        <form id="formulario" class="form-card">
+
+            <!-- CLIENTE -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+                    <div class="section-icon">👤</div>
+
+                    <div>
+                        <h3>Datos del cliente</h3>
+                        <p>Información de contacto</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="campo">
+
+                        <label for="cliente">
+                            Nombre del cliente <span class="requerido">*</span>
+                        </label>
+
+                        <input id="cliente"
+                               name="cliente"
+                               type="text"
+                               required
+                               maxlength="100">
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="telefono">
+                            Teléfono <span class="requerido">*</span>
+                        </label>
+
+                        <input id="telefono"
+                               name="telefono"
+                               type="tel"
+                               required
+                               pattern="[0-9]{10}"
+                               maxlength="10"
+                               title="Introduce 10 dígitos">
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- DISPOSITIVO -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+                    <div class="section-icon">📱</div>
+
+                    <div>
+                        <h3>Información del dispositivo</h3>
+                        <p>Características y diagnóstico</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="campo">
+
+                        <label for="dispositivo">
+                            Dispositivo <span class="requerido">*</span>
+                        </label>
+
+                        <input id="dispositivo"
+                               name="dispositivo"
+                               required
+                               maxlength="100">
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="serie">Número de serie</label>
+
+                        <input id="serie"
+                               name="serie"
+                               maxlength="100">
+                    </div>
+
+                    <div class="campo completo">
+
+                        <label for="falla">
+                            Falla reportada <span class="requerido">*</span>
+                        </label>
+
+                        <textarea id="falla"
+                                  name="falla"
+                                  rows="3"
+                                  required
+                                  maxlength="1000"></textarea>
+                    </div>
+
+                    <div class="campo completo">
+
+                        <label for="diagnostico">
+                            Diagnóstico técnico
+                        </label>
+
+                        <textarea id="diagnostico"
+                                  name="diagnostico"
+                                  rows="3"
+                                  maxlength="1000"
+                                  placeholder="Describe el diagnóstico del equipo..."></textarea>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- SERVICIO -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+                    <div class="section-icon">🔧</div>
+
+                    <div>
+                        <h3>Información del servicio</h3>
+                        <p>Técnico, costo, fecha y estado</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="campo">
+
+                        <label for="tecnico">
+                            Técnico responsable <span class="requerido">*</span>
+                        </label>
+
+                        <input id="tecnico"
+                               name="tecnico"
+                               required
+                               maxlength="100">
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="costo">
+                            Costo estimado (MXN) <span class="requerido">*</span>
+                        </label>
+
+                        <input id="costo"
+                               name="costo"
+                               type="number"
+                               min="0"
+                               step="0.01"
+                               required>
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="fecha">
+                            Fecha de recepción <span class="requerido">*</span>
+                        </label>
+
+                        <input id="fecha"
+                               name="fecha"
+                               type="date"
+                               required>
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="estado">
+                            Estado de reparación <span class="requerido">*</span>
+                        </label>
+
+                        <select id="estado"
+                                name="estado"
+                                required>
+
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En proceso">En proceso</option>
+                            <option value="Finalizada">Finalizada</option>
+                            <option value="Entregada">Entregada</option>
+                            <option value="Cancelada">Cancelada</option>
+
+                        </select>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- MENSAJE -->
+
+            <div id="mensaje"
+                 role="status"
+                 aria-live="polite"
+                 class="mensaje hidden">
             </div>
 
-            <div>
-                <label for="telefono" class="mb-2 block text-sm font-medium">
-                    Teléfono *
-                </label>
-                <input id="telefono" type="tel" required
-                       pattern="[0-9]{10}" maxlength="10"
-                       title="Introduce 10 dígitos"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-        </div>
+            <!-- ACCIONES -->
 
-        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
-            Información del dispositivo
-        </h3>
+            <div class="acciones">
 
-        <div class="grid gap-5 sm:grid-cols-2">
-            <div>
-                <label for="dispositivo" class="mb-2 block text-sm font-medium">
-                    Dispositivo *
-                </label>
-                <input id="dispositivo" required maxlength="100"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+                <a id="cancelar"
+                   href="{{ url_for('reparaciones') }}"
+                   class="btn-cancelar">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="btn-guardar">
+                    Guardar cambios
+                </button>
+
             </div>
 
-            <div>
-                <label for="serie" class="mb-2 block text-sm font-medium">
-                    Número de serie
-                </label>
-                <input id="serie" maxlength="100"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
+        </form>
 
-            <div class="sm:col-span-2">
-                <label for="falla" class="mb-2 block text-sm font-medium">
-                    Falla reportada *
-                </label>
-                <textarea id="falla" rows="3" required maxlength="1000"
-                          class="w-full rounded-lg border border-slate-300 px-4 py-3"></textarea>
-            </div>
-
-            <div class="sm:col-span-2">
-                <label for="diagnostico" class="mb-2 block text-sm font-medium">
-                    Diagnóstico técnico
-                </label>
-                <textarea id="diagnostico" rows="3" maxlength="1000"
-                          placeholder="Describe el diagnóstico del equipo..."
-                          class="w-full rounded-lg border border-slate-300 px-4 py-3"></textarea>
-            </div>
-        </div>
-
-        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
-            Información del servicio
-        </h3>
-
-        <div class="grid gap-5 sm:grid-cols-2">
-
-            <div>
-                <label for="tecnico" class="mb-2 block text-sm font-medium">
-                    Técnico responsable *
-                </label>
-                <input id="tecnico" required maxlength="100"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-
-            <div>
-                <label for="costo" class="mb-2 block text-sm font-medium">
-                    Costo estimado (MXN) *
-                </label>
-                <input id="costo" type="number" min="0"
-                       step="0.01" required
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-
-            <div>
-                <label for="fecha" class="mb-2 block text-sm font-medium">
-                    Fecha de recepción *
-                </label>
-                <input id="fecha" type="date" required
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-
-            <div>
-                <label for="estado" class="mb-2 block text-sm font-medium">
-                    Estado de reparación *
-                </label>
-                <select id="estado" required
-                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
-                    <option value="Pendiente">Pendiente</option>
-                    <option value="En proceso">En proceso</option>
-                    <option value="Finalizada">Finalizada</option>
-                    <option value="Entregada">Entregada</option>
-                    <option value="Cancelada">Cancelada</option>
-                </select>
-            </div>
-
-        </div>
-
-        <div id="mensaje" role="status" aria-live="polite"
-             class="mt-6 hidden rounded-lg bg-blue-50 p-4 text-sm text-blue-700">
-        </div>
-
-        <div class="mt-8 flex flex-wrap justify-end gap-3 border-t pt-6">
-            <a id="cancelar" href="reparaciones.html"
-               class="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold hover:bg-slate-100">
-                Cancelar
-            </a>
-
-            <button type="submit"
-                    class="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700">
-                Guardar cambios
-            </button>
-        </div>
-
-    </form>
+    </div>
 
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
+<footer>
     Manzanita Store · 2026
 </footer>
 
+<!-- DATOS DE DEMOSTRACIÓN Y RUTAS FLASK -->
+
 <script>
-    // Datos temporales para demostrar la edición.
+    // Estos son registros de demostración.
+    // Sus ID 1, 2 y 3 no son identificadores de MySQL.
+
     const reparaciones = [
         {
+            id: 1,
             folio: "REP-001",
             cliente: "Juan Pérez",
             telefono: "4151234567",
@@ -206,6 +723,7 @@
             estado: "En proceso"
         },
         {
+            id: 2,
             folio: "REP-002",
             cliente: "María González",
             telefono: "4159876543",
@@ -219,6 +737,7 @@
             estado: "Finalizada"
         },
         {
+            id: 3,
             folio: "REP-003",
             cliente: "Carlos López",
             telefono: "4155551234",
@@ -233,44 +752,91 @@
         }
     ];
 
+    // Flask entrega el ID al renderizar esta pantalla.
+    const idActual = {{ id|default(0)|int }};
+
+    // Compatibilidad con ?folio para los ejemplos.
     const parametros = new URLSearchParams(location.search);
-    const folio = parametros.get("folio");
-    const reparacion = reparaciones.find(r => r.folio === folio);
+    const folioSolicitado = parametros.get("folio");
+
+    const reparacion = folioSolicitado
+        ? reparaciones.find(r => r.folio === folioSolicitado)
+        : reparaciones.find(r => r.id === idActual);
+
+    // Ruta de detalle generada por Flask.
+    const rutaDetalleBase =
+        {{ url_for('detalle_reparacion', id=0)|tojson }};
+
     const formulario = document.getElementById("formulario");
 
     if (!reparacion) {
-        formulario.classList.add("hidden");
-        document.getElementById("error").classList.remove("hidden");
+
+        document.getElementById("contenido")
+            .classList.add("hidden");
+
+        document.getElementById("error")
+            .classList.remove("hidden");
+
+        // Cuando no existe el registro, volver al listado.
+        document.getElementById("volver").href =
+            {{ url_for('reparaciones')|tojson }};
+
+        document.getElementById("volver").textContent =
+            "← Volver a reparaciones";
+
     } else {
+
+        document.getElementById("contenido")
+            .classList.remove("hidden");
+
         document.getElementById("subtitulo").textContent =
             "Modificando el servicio " + reparacion.folio;
 
         const campos = [
-            "cliente", "telefono", "dispositivo", "serie",
-            "falla", "diagnostico", "tecnico", "costo",
-            "fecha", "estado"
+            "cliente",
+            "telefono",
+            "dispositivo",
+            "serie",
+            "falla",
+            "diagnostico",
+            "tecnico",
+            "costo",
+            "fecha",
+            "estado"
         ];
 
+        // Cargar los datos de la reparación seleccionada.
         campos.forEach(campo => {
             document.getElementById(campo).value =
                 reparacion[campo] ?? "";
         });
 
-        const regreso = "detalle_reparacion.html?folio=" +
-            encodeURIComponent(folio);
+        // Construir la ruta Flask con ID numérico.
+        const regreso = rutaDetalleBase.replace(
+            /\/0$/,
+            "/" + encodeURIComponent(reparacion.id)
+        );
 
+        // CORREGIDO: VOLVER AL DETALLE.
         document.getElementById("volver").href = regreso;
+
+        // CORREGIDO: CANCELAR.
         document.getElementById("cancelar").href = regreso;
 
+        // CONSERVAR LA VALIDACIÓN ORIGINAL.
         formulario.addEventListener("submit", function(evento) {
+
             evento.preventDefault();
 
             if (!formulario.reportValidity()) return;
 
             const mensaje = document.getElementById("mensaje");
+
             mensaje.classList.remove("hidden");
+
             mensaje.textContent =
-                "Cambios validados correctamente para " + folio +
+                "Cambios validados correctamente para " +
+                reparacion.folio +
                 ". Los datos aún no se guardan; falta conectar MySQL.";
         });
     }

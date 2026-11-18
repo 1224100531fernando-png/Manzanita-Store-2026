@@ -6,207 +6,749 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar reparación | Manzanita Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --verde-oscuro: #183d32;
+            --verde-medio: #326b43;
+            --verde-principal: #75ad16;
+            --verde-limon: #a3d900;
+            --fondo: #f3f6f1;
+            --texto: #26352c;
+            --gris: #78827a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--fondo);
+            color: var(--texto);
+        }
+
+        /* ENCABEZADO */
+
+        .header {
+            background: var(--verde-oscuro);
+            color: white;
+            padding: 18px 0;
+            box-shadow: 0 4px 15px rgba(24,61,50,.12);
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: auto;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--verde-limon);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+        }
+
+        .brand h1 {
+            font-size: 21px;
+            font-weight: 750;
+            line-height: 1.2;
+        }
+
+        .brand h1 span {
+            color: var(--verde-limon);
+        }
+
+        .brand p {
+            color: #b6cfbe;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .salir {
+            border: 1px solid rgba(255,255,255,.25);
+            padding: 11px 20px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        .salir:hover {
+            background: var(--verde-medio);
+        }
+
+        /* CONTENIDO */
+
+        .contenido {
+            max-width: 1050px;
+            margin: auto;
+            padding: 38px 25px;
+        }
+
+        .volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #548b1a;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .volver:hover {
+            color: var(--verde-oscuro);
+            text-decoration: underline;
+        }
+
+        .page-title {
+            margin: 22px 0 28px;
+        }
+
+        .page-title small {
+            color: var(--verde-principal);
+            font-weight: 750;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        .page-title h2 {
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--verde-oscuro);
+            margin: 9px 0;
+        }
+
+        .page-title p {
+            color: var(--gris);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* PANEL DE BIENVENIDA */
+
+        .welcome {
+            background: linear-gradient(115deg, #183d32, #326b43);
+            color: white;
+            border-radius: 19px;
+            padding: 28px 35px;
+            margin-bottom: 26px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome::after {
+            content: "🔧";
+            position: absolute;
+            right: 42px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 85px;
+            opacity: .13;
+            pointer-events: none;
+        }
+
+        .welcome small {
+            color: var(--verde-limon);
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .welcome h3 {
+            font-size: 23px;
+            font-weight: 750;
+            margin: 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #d8e7dc;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* FORMULARIO */
+
+        .form-card {
+            background: white;
+            border: 1px solid #e5ede5;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 8px 25px rgba(24,61,50,.045);
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding-bottom: 17px;
+            border-bottom: 1px solid #e8eee7;
+            margin-bottom: 23px;
+        }
+
+        .section-icon {
+            width: 43px;
+            height: 43px;
+            min-width: 43px;
+            border-radius: 12px;
+            background: #eff8dc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
+
+        .section-heading h3 {
+            color: var(--verde-oscuro);
+            font-size: 18px;
+            font-weight: 750;
+        }
+
+        .section-heading p {
+            color: var(--gris);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .form-field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 650;
+            color: #35473a;
+            margin-bottom: 9px;
+        }
+
+        .required {
+            color: #75ad16;
+        }
+
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            width: 100%;
+            border: 1px solid #d5ded6;
+            background: #fbfcfa;
+            border-radius: 11px;
+            padding: 14px 16px;
+            font-size: 14px;
+            color: var(--texto);
+            outline: none;
+            transition: .2s;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            border-color: var(--verde-principal);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(117,173,22,.12);
+        }
+
+        .form-field input::placeholder,
+        .form-field textarea::placeholder {
+            color: #a0aba1;
+        }
+
+        .form-field textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* MENSAJES */
+
+        .mensaje {
+            margin-top: 25px;
+            padding: 16px 19px;
+            border-radius: 11px;
+            background: #e4f7e7;
+            border: 1px solid #c5e9cb;
+            color: #28733b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* BOTONES */
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 13px;
+            border-top: 1px solid #e8eee7;
+            padding-top: 27px;
+            margin-top: 30px;
+        }
+
+        .btn-cancelar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 24px;
+            border: 1px solid #d5ded6;
+            border-radius: 11px;
+            background: white;
+            color: #516456;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .2s;
+        }
+
+        .btn-cancelar:hover {
+            background: #f3f6f1;
+        }
+
+        .btn-guardar {
+            padding: 14px 24px;
+            border-radius: 11px;
+            background: var(--verde-principal);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+            box-shadow: 0 5px 15px rgba(117,173,22,.16);
+        }
+
+        .btn-guardar:hover {
+            background: #608f12;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #929b93;
+            font-size: 12px;
+        }
+
+        /* DISEÑO RESPONSIVO */
+
+        @media(max-width: 650px) {
+            .contenido {
+                padding: 26px 15px;
+            }
+
+            .form-card {
+                padding: 23px 19px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .page-title h2 {
+                font-size: 28px;
+            }
+
+            .welcome {
+                padding: 24px;
+            }
+
+            .welcome::after {
+                display: none;
+            }
+
+            .form-actions > * {
+                flex: 1;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+    <!-- ENCABEZADO -->
+
+    <header class="header">
+        <div class="header-content">
+
+            <div class="brand">
+                <div class="brand-icon">🍏</div>
+
+                <div>
+                    <h1>
+                        Manzanita <span>Store</span>
+                    </h1>
+                    <p>Sistema de gestión</p>
+                </div>
+            </div>
+
+            <!-- CORREGIDO: CERRAR SESIÓN CON FLASK -->
+
+            <a href="{{ url_for('logout') }}" class="salir">
+                Salir
+            </a>
+
         </div>
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
-            Salir
-        </a>
-    </div>
-</header>
+    </header>
 
-<main class="mx-auto max-w-4xl px-6 py-8">
+    <main class="contenido">
 
-    <div class="mb-7">
-        <a href="reparaciones.html"
-           class="text-sm font-medium text-blue-600 hover:underline">
+        <!-- CORREGIDO: VOLVER CON FLASK -->
+
+        <a href="{{ url_for('reparaciones') }}" class="volver">
             ← Volver a reparaciones
         </a>
 
-        <h2 class="mt-4 text-3xl font-bold text-slate-900">
-            Registrar reparación
-        </h2>
-        <p class="mt-2 text-sm text-slate-500">
-            Captura los datos del dispositivo que ingresa a servicio técnico.
-        </p>
-    </div>
+        <!-- TÍTULO -->
 
-    <form id="formulario" class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
+        <div class="page-title">
 
-        <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-            Información del cliente
-        </h3>
+            <small>CONTROL DE SERVICIOS</small>
 
-        <div class="mb-7 grid gap-5 sm:grid-cols-2">
-            <div>
-                <label for="cliente" class="mb-2 block text-sm font-medium">
-                    Nombre del cliente *
-                </label>
-                <input id="cliente" name="cliente" type="text" required maxlength="100"
-                       placeholder="Ej. Juan Pérez"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500">
-            </div>
+            <h2>Registrar reparación</h2>
 
-            <div>
-                <label for="telefono" class="mb-2 block text-sm font-medium">
-                    Teléfono *
-                </label>
-                <input id="telefono" name="telefono" type="tel" required
-                       pattern="[0-9]{10}" maxlength="10"
-                       title="Escribe 10 dígitos"
-                       placeholder="Ej. 4151234567"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-500">
-            </div>
+            <p>
+                Captura los datos del dispositivo
+                que ingresa a servicio técnico.
+            </p>
+
         </div>
 
-        <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-            Información del dispositivo
-        </h3>
+        <!-- BIENVENIDA -->
 
-        <div class="grid gap-5 sm:grid-cols-2">
-            <div>
-                <label for="dispositivo" class="mb-2 block text-sm font-medium">
-                    Tipo de dispositivo *
-                </label>
-                <select id="dispositivo" name="dispositivo" required
-                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
-                    <option value="">Selecciona un dispositivo</option>
-                    <option>iPhone</option>
-                    <option>iPad</option>
-                    <option>MacBook</option>
-                    <option>iMac</option>
-                    <option>Apple Watch</option>
-                    <option>Otro</option>
-                </select>
+        <section class="welcome">
+
+            <small>NUEVO REGISTRO</small>
+
+            <h3>Ingreso de equipo a servicio técnico</h3>
+
+            <p>
+                Completa la información del cliente, el dispositivo
+                y el servicio para registrar una reparación.
+            </p>
+
+        </section>
+
+        <!-- FORMULARIO -->
+
+        <form id="formulario" class="form-card">
+
+            <!-- INFORMACIÓN DEL CLIENTE -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">👤</div>
+
+                    <div>
+                        <h3>Información del cliente</h3>
+                        <p>Datos de contacto del propietario del equipo</p>
+                    </div>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-field">
+
+                        <label for="cliente">
+                            Nombre del cliente <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="cliente"
+                            name="cliente"
+                            type="text"
+                            required
+                            maxlength="100"
+                            placeholder="Ej. Juan Pérez">
+
+                    </div>
+
+                    <div class="form-field">
+
+                        <label for="telefono">
+                            Teléfono <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="telefono"
+                            name="telefono"
+                            type="tel"
+                            required
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                            title="Escribe 10 dígitos"
+                            placeholder="Ej. 4151234567">
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- INFORMACIÓN DEL DISPOSITIVO -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">📱</div>
+
+                    <div>
+                        <h3>Información del dispositivo</h3>
+                        <p>Características del equipo recibido</p>
+                    </div>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-field">
+
+                        <label for="dispositivo">
+                            Tipo de dispositivo <span class="required">*</span>
+                        </label>
+
+                        <select id="dispositivo" name="dispositivo" required>
+                            <option value="">Selecciona un dispositivo</option>
+                            <option>iPhone</option>
+                            <option>iPad</option>
+                            <option>MacBook</option>
+                            <option>iMac</option>
+                            <option>Apple Watch</option>
+                            <option>Otro</option>
+                        </select>
+
+                    </div>
+
+                    <div class="form-field">
+
+                        <label for="modelo">
+                            Modelo <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="modelo"
+                            name="modelo"
+                            type="text"
+                            required
+                            maxlength="100"
+                            placeholder="Ej. iPhone 13 Pro">
+
+                    </div>
+
+                    <div class="form-field">
+
+                        <label for="serie">
+                            Número de serie
+                        </label>
+
+                        <input
+                            id="serie"
+                            name="serie"
+                            type="text"
+                            maxlength="100"
+                            placeholder="Número de serie del equipo">
+
+                    </div>
+
+                    <div class="form-field">
+
+                        <label for="fecha">
+                            Fecha de recepción <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="fecha"
+                            name="fecha"
+                            type="date"
+                            required>
+
+                    </div>
+
+                    <div class="form-field full-width">
+
+                        <label for="falla">
+                            Descripción de la falla <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            id="falla"
+                            name="falla"
+                            rows="4"
+                            required
+                            maxlength="1000"
+                            placeholder="Describe el problema que presenta el dispositivo..."></textarea>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- INFORMACIÓN DEL SERVICIO -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">🔧</div>
+
+                    <div>
+                        <h3>Información del servicio</h3>
+                        <p>Responsable, costo y estado inicial</p>
+                    </div>
+
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-field">
+
+                        <label for="tecnico">
+                            Técnico responsable <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="tecnico"
+                            name="tecnico"
+                            type="text"
+                            required
+                            maxlength="100"
+                            placeholder="Nombre del técnico">
+
+                    </div>
+
+                    <div class="form-field">
+
+                        <label for="costo">
+                            Costo estimado (MXN) <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="costo"
+                            name="costo"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            required
+                            placeholder="0.00">
+
+                    </div>
+
+                    <div class="form-field">
+
+                        <label for="estado">
+                            Estado inicial <span class="required">*</span>
+                        </label>
+
+                        <select id="estado" name="estado" required>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En proceso">En proceso</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- MENSAJE ORIGINAL -->
+
+            <div
+                id="mensaje"
+                role="status"
+                aria-live="polite"
+                class="mensaje hidden">
             </div>
 
-            <div>
-                <label for="modelo" class="mb-2 block text-sm font-medium">
-                    Modelo *
-                </label>
-                <input id="modelo" name="modelo" type="text" required maxlength="100"
-                       placeholder="Ej. iPhone 13 Pro"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+            <!-- BOTONES -->
+
+            <div class="form-actions">
+
+                <!-- CORREGIDO: CANCELAR CON FLASK -->
+
+                <a href="{{ url_for('reparaciones') }}"
+                   class="btn-cancelar">
+                    Cancelar
+                </a>
+
+                <button type="submit" class="btn-guardar">
+                    Guardar reparación
+                </button>
+
             </div>
 
-            <div>
-                <label for="serie" class="mb-2 block text-sm font-medium">
-                    Número de serie
-                </label>
-                <input id="serie" name="serie" type="text" maxlength="100"
-                       placeholder="Número de serie del equipo"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
+        </form>
 
-            <div>
-                <label for="fecha" class="mb-2 block text-sm font-medium">
-                    Fecha de recepción *
-                </label>
-                <input id="fecha" name="fecha" type="date" required
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-        </div>
+    </main>
 
-        <div class="mt-5">
-            <label for="falla" class="mb-2 block text-sm font-medium">
-                Descripción de la falla *
-            </label>
-            <textarea id="falla" name="falla" rows="4" required maxlength="1000"
-                      placeholder="Describe el problema que presenta el dispositivo..."
-                      class="w-full rounded-lg border border-slate-300 px-4 py-3"></textarea>
-        </div>
+    <footer>
+        Manzanita Store · 2026
+    </footer>
 
-        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
-            Información del servicio
-        </h3>
+    <!-- JAVASCRIPT ORIGINAL, SIN CAMBIOS -->
 
-        <div class="grid gap-5 sm:grid-cols-2">
-            <div>
-                <label for="tecnico" class="mb-2 block text-sm font-medium">
-                    Técnico responsable *
-                </label>
-                <input id="tecnico" name="tecnico" type="text" required maxlength="100"
-                       placeholder="Nombre del técnico"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
+    <script>
+        const formulario = document.getElementById("formulario");
+        const mensaje = document.getElementById("mensaje");
 
-            <div>
-                <label for="costo" class="mb-2 block text-sm font-medium">
-                    Costo estimado (MXN) *
-                </label>
-                <input id="costo" name="costo" type="number"
-                       min="0" step="0.01" required
-                       placeholder="0.00"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
+        // Fecha local para evitar cambios por zona horaria.
+        const hoy = new Date();
 
-            <div>
-                <label for="estado" class="mb-2 block text-sm font-medium">
-                    Estado inicial *
-                </label>
-                <select id="estado" name="estado" required
-                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
-                    <option value="Pendiente">Pendiente</option>
-                    <option value="En proceso">En proceso</option>
-                </select>
-            </div>
-        </div>
+        const fechaLocal = new Date(
+            hoy.getTime() - hoy.getTimezoneOffset() * 60000
+        ).toISOString().slice(0, 10);
 
-        <div id="mensaje" role="status" aria-live="polite"
-             class="mt-6 hidden rounded-lg bg-blue-50 p-4 text-sm text-blue-800"></div>
+        document.getElementById("fecha").value = fechaLocal;
 
-        <div class="mt-8 flex flex-wrap justify-end gap-3 border-t pt-6">
-            <a href="reparaciones.html"
-               class="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold hover:bg-slate-100">
-                Cancelar
-            </a>
+        formulario.addEventListener("submit", function(evento) {
+            evento.preventDefault();
 
-            <button type="submit"
-                    class="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700">
-                Guardar reparación
-            </button>
-        </div>
+            if (!formulario.reportValidity()) return;
 
-    </form>
-</main>
+            mensaje.classList.remove("hidden");
 
-<footer class="py-6 text-center text-xs text-slate-400">
-    Manzanita Store · 2026
-</footer>
-
-<script>
-    const formulario = document.getElementById("formulario");
-    const mensaje = document.getElementById("mensaje");
-
-    // Fecha local para evitar cambios por zona horaria.
-    const hoy = new Date();
-    const fechaLocal = new Date(
-        hoy.getTime() - hoy.getTimezoneOffset() * 60000
-    ).toISOString().slice(0, 10);
-
-    document.getElementById("fecha").value = fechaLocal;
-
-    formulario.addEventListener("submit", function(evento) {
-        evento.preventDefault();
-
-        if (!formulario.reportValidity()) return;
-
-        mensaje.classList.remove("hidden");
-        mensaje.textContent =
-            "Formulario validado correctamente. " +
-            "Falta conectar el servidor y la base de datos para guardar la reparación.";
-    });
-</script>
+            mensaje.textContent =
+                "Formulario validado correctamente. " +
+                "Falta conectar el servidor y la base de datos para guardar la reparación.";
+        });
+    </script>
 
 </body>
 </html>
