@@ -2,143 +2,772 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seguimiento | Manzanita Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguimiento de reparación | Manzanita Store</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* ENCABEZADO */
+
+.header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--limon);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+
+.brand h1 {
+    font-size: 21px;
+    font-weight: 750;
+}
+
+.brand h1 span {
+    color: var(--limon);
+}
+
+.brand p {
+    color: #b6cfbe;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.salir {
+    border: 1px solid rgba(255,255,255,.25);
+    padding: 11px 20px;
+    border-radius: 10px;
+    color: white;
+    font-size: 13px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.salir:hover {
+    background: var(--medio);
+}
+
+/* CONTENIDO */
+
+.contenido {
+    max-width: 1100px;
+    margin: auto;
+    padding: 38px 25px;
+}
+
+.volver {
+    color: #548b1a;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.volver:hover {
+    text-decoration: underline;
+}
+
+.page-title {
+    margin: 24px 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.page-title small {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+
+.page-title h2 {
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--verde);
+    margin: 8px 0;
+}
+
+.page-title p {
+    color: var(--gris);
+    font-size: 14px;
+}
+
+/* BIENVENIDA */
+
+.welcome {
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    border-radius: 19px;
+    padding: 30px 35px;
+    color: white;
+    margin-bottom: 27px;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome::after {
+    content: "🔧";
+    position: absolute;
+    right: 42px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 90px;
+    opacity: .14;
+    pointer-events: none;
+}
+
+.welcome small {
+    color: var(--limon);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.welcome h3 {
+    font-size: 23px;
+    font-weight: 750;
+    margin: 11px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.welcome p {
+    font-size: 14px;
+    color: #d8e7dc;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+/* TARJETAS */
+
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 27px;
+}
+
+.resumen-card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 17px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    box-shadow: 0 5px 18px rgba(24,61,50,.035);
+}
+
+.resumen-icon {
+    width: 55px;
+    height: 55px;
+    min-width: 55px;
+    border-radius: 14px;
+    background: #eff8dc;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+}
+
+.resumen-card:nth-child(2) .resumen-icon {
+    background: #e4f3e9;
+}
+
+.resumen-card:nth-child(3) .resumen-icon {
+    background: #fff3dc;
+}
+
+.resumen-card p {
+    color: var(--gris);
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.resumen-card strong {
+    display: block;
+    color: var(--verde);
+    font-size: 17px;
+    overflow-wrap: anywhere;
+}
+
+.card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e8eee7;
+    margin-bottom: 25px;
+}
+
+.card-heading h3 {
+    color: var(--verde);
+    font-size: 20px;
+    font-weight: 750;
+}
+
+.card-heading p {
+    color: var(--gris);
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+/* PROGRESO */
+
+.porcentaje {
+    font-size: 26px;
+    font-weight: 800;
+    color: #548b1a;
+}
+
+.barra-fondo {
+    width: 100%;
+    height: 13px;
+    background: #e8eee7;
+    border-radius: 30px;
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.barra-avance {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #75ad16, #a3d900);
+    border-radius: 30px;
+    transition: width .5s ease;
+}
+
+/* ETAPAS */
+
+.etapa {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    position: relative;
+    padding-bottom: 28px;
+}
+
+.etapa:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 42px;
+    left: 21px;
+    width: 2px;
+    height: calc(100% - 42px);
+    background: #e3eadf;
+}
+
+.etapa.completada:not(:last-child)::before {
+    background: #a3d900;
+}
+
+.etapa-icono {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #e8eee7;
+    color: #849188;
+    font-size: 15px;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+}
+
+.etapa.completada .etapa-icono {
+    background: var(--boton);
+    color: white;
+}
+
+.etapa-texto {
+    padding-top: 4px;
+}
+
+.etapa-texto h4 {
+    font-size: 15px;
+    font-weight: 750;
+    color: var(--verde);
+}
+
+.etapa-texto p {
+    font-size: 13px;
+    color: var(--gris);
+    margin-top: 6px;
+    line-height: 1.6;
+}
+
+/* INFORMACIÓN ADICIONAL */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+}
+
+.info-label {
+    font-size: 13px;
+    color: var(--gris);
+    margin-bottom: 9px;
+}
+
+.info-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--verde);
+}
+
+.info-box {
+    padding: 17px 19px;
+    background: #f5f8f3;
+    border: 1px solid #e9eee7;
+    border-radius: 12px;
+    color: #425647;
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 60px;
+}
+
+/* ESTADOS */
+
+.estado {
+    display: inline-block;
+    padding: 9px 16px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.estado-pendiente {
+    background: #f1f3f5;
+    color: #64748b;
+}
+
+.estado-proceso {
+    background: #fff3dc;
+    color: #b76b00;
+}
+
+.estado-finalizada {
+    background: #e4f7e7;
+    color: #16813a;
+}
+
+.estado-entregada {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.estado-cancelada {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* BOTONES */
+
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 13px;
+    flex-wrap: wrap;
+    margin-top: 27px;
+}
+
+.btn-editar {
+    display: inline-block;
+    background: var(--boton);
+    color: white;
+    padding: 14px 23px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.btn-editar:hover {
+    background: #608f12;
+}
+
+.btn-regresar {
+    display: inline-block;
+    background: var(--verde);
+    color: white;
+    padding: 14px 23px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.btn-regresar:hover {
+    background: var(--medio);
+}
+
+.error-card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    padding: 45px 25px;
+    text-align: center;
+}
+
+.error-card h3 {
+    color: var(--verde);
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.error-card p {
+    color: var(--gris);
+    font-size: 14px;
+    margin: 12px 0 25px;
+}
+
+.aviso {
+    color: #929b93;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 22px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #929b93;
+    font-size: 12px;
+}
+
+@media(max-width: 750px) {
+    .contenido {
+        padding: 25px 15px;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+
+    .resumen {
+        grid-template-columns: 1fr;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .card {
+        padding: 23px 20px;
+    }
+
+    .acciones a {
+        flex: 1;
+        text-align: center;
+    }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<!-- ENCABEZADO -->
+
+<header class="header">
+    <div class="header-content">
+
+        <div class="brand">
+            <div class="brand-icon">🍏</div>
+
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Sistema de gestión</p>
+            </div>
         </div>
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+
+        <a href="{{ url_for('logout') }}" class="salir">
             Salir
         </a>
+
     </div>
 </header>
 
-<main class="mx-auto max-w-5xl px-6 py-8">
+<main class="contenido">
 
-    <a id="volver" href="reparaciones.html"
-       class="text-sm font-medium text-blue-600 hover:underline">
+    <!-- VOLVER AL DETALLE -->
+
+    <a id="volver"
+       href="{{ url_for('reparaciones') }}"
+       class="volver">
         ← Volver al detalle
     </a>
 
-    <div class="mb-7 mt-5 flex flex-wrap items-center justify-between gap-4">
+    <!-- TÍTULO -->
+
+    <div class="page-title">
+
         <div>
-            <p class="text-sm font-medium text-blue-600">Servicio técnico</p>
-            <h2 class="text-3xl font-bold">Seguimiento de reparación</h2>
-            <p id="folio" class="mt-2 text-sm text-slate-500"></p>
+            <small>SERVICIO TÉCNICO</small>
+
+            <h2>Seguimiento de reparación</h2>
+
+            <p id="folio"></p>
         </div>
-        <span id="estado"
-              class="rounded-full px-4 py-2 text-sm font-semibold"></span>
+
+        <span id="estado" class="estado hidden"></span>
+
     </div>
 
-    <div id="error" class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
-        <h3 class="text-xl font-bold">Reparación no encontrada</h3>
-        <p class="mt-2 text-slate-500">Verifica el folio seleccionado.</p>
-        <a href="reparaciones.html"
-           class="mt-4 inline-block text-blue-600 hover:underline">
+    <!-- ERROR -->
+
+    <div id="error" class="error-card hidden">
+
+        <div class="text-5xl mb-5">🔎</div>
+
+        <h3>Reparación no encontrada</h3>
+
+        <p>
+            No existe un registro de demostración
+            con el identificador solicitado.
+        </p>
+
+        <a href="{{ url_for('reparaciones') }}"
+           class="btn-regresar">
             Volver a reparaciones
         </a>
+
     </div>
 
-    <div id="contenido">
+    <!-- CONTENIDO -->
 
-        <section class="mb-6 grid gap-4 sm:grid-cols-3">
-            <div class="rounded-xl bg-white p-5 shadow-sm">
-                <p class="text-sm text-slate-500">Cliente</p>
-                <p id="cliente" class="mt-2 text-lg font-semibold"></p>
-            </div>
+    <div id="contenido" class="hidden">
 
-            <div class="rounded-xl bg-white p-5 shadow-sm">
-                <p class="text-sm text-slate-500">Dispositivo</p>
-                <p id="dispositivo" class="mt-2 text-lg font-semibold"></p>
-            </div>
+        <!-- BIENVENIDA -->
 
-            <div class="rounded-xl bg-white p-5 shadow-sm">
-                <p class="text-sm text-slate-500">Técnico responsable</p>
-                <p id="tecnico" class="mt-2 text-lg font-semibold"></p>
-            </div>
-        </section>
+        <section class="welcome">
 
-        <section class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
+            <small>CONTROL DE SERVICIOS</small>
 
-            <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
-                <h3 class="text-xl font-bold">Progreso del servicio</h3>
-                <span id="porcentaje" class="font-bold text-blue-600"></span>
-            </div>
+            <h3>Seguimiento del servicio técnico</h3>
 
-            <div class="mb-8 h-3 overflow-hidden rounded-full bg-slate-200">
-                <div id="barra"
-                     class="h-full rounded-full bg-blue-600 transition-all">
-                </div>
-            </div>
-
-            <div id="etapas" class="space-y-6"></div>
-
-        </section>
-
-        <section class="mt-6 rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-                Información del seguimiento
-            </h3>
-
-            <div class="grid gap-5 sm:grid-cols-2">
-                <div>
-                    <p class="text-sm text-slate-500">Fecha de recepción</p>
-                    <p id="fecha" class="mt-1 font-semibold"></p>
-                </div>
-
-                <div>
-                    <p class="text-sm text-slate-500">Costo estimado</p>
-                    <p id="costo" class="mt-1 font-semibold"></p>
-                </div>
-            </div>
-
-            <div class="mt-6">
-                <p class="text-sm text-slate-500">Observaciones técnicas</p>
-                <p id="observaciones"
-                   class="mt-2 rounded-lg bg-slate-50 p-4 text-sm"></p>
-            </div>
-
-            <p class="mt-5 text-xs text-slate-400">
-                Seguimiento demostrativo. Los avances se conectarán
-                con el historial real cuando se integre la base de datos.
+            <p>
+                Consulta el progreso de la reparación,
+                sus etapas y la información del equipo.
             </p>
+
         </section>
 
-        <div class="mt-7 flex flex-wrap justify-end gap-3">
-            <a id="editar" href="#"
-               class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+        <!-- RESUMEN -->
+
+        <section class="resumen">
+
+            <div class="resumen-card">
+                <div class="resumen-icon">👤</div>
+
+                <div>
+                    <p>Cliente</p>
+                    <strong id="cliente"></strong>
+                </div>
+            </div>
+
+            <div class="resumen-card">
+                <div class="resumen-icon">📱</div>
+
+                <div>
+                    <p>Dispositivo</p>
+                    <strong id="dispositivo"></strong>
+                </div>
+            </div>
+
+            <div class="resumen-card">
+                <div class="resumen-icon">🔧</div>
+
+                <div>
+                    <p>Técnico responsable</p>
+                    <strong id="tecnico"></strong>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- PROGRESO -->
+
+        <section class="card">
+
+            <div class="card-heading">
+
+                <div>
+                    <h3>Progreso del servicio</h3>
+
+                    <p>
+                        Etapas del proceso de reparación
+                    </p>
+                </div>
+
+                <span id="porcentaje" class="porcentaje">
+                    0%
+                </span>
+
+            </div>
+
+            <div
+                id="barra-contenedor"
+                class="barra-fondo"
+                role="progressbar"
+                aria-label="Progreso del servicio"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0">
+
+                <div id="barra" class="barra-avance"></div>
+
+            </div>
+
+            <div id="etapas"></div>
+
+        </section>
+
+        <!-- INFORMACIÓN DEL SERVICIO -->
+
+        <section class="card">
+
+            <div class="card-heading">
+                <div class="card-icon">📋</div>
+
+                <div>
+                    <h3>Información del seguimiento</h3>
+
+                    <p>Detalles generales del servicio</p>
+                </div>
+            </div>
+
+            <div class="info-grid">
+
+                <div>
+                    <p class="info-label">Fecha de recepción</p>
+                    <p id="fecha" class="info-value"></p>
+                </div>
+
+                <div>
+                    <p class="info-label">Costo estimado</p>
+                    <p id="costo" class="info-value"></p>
+                </div>
+
+            </div>
+
+            <div class="mt-7">
+                <p class="info-label">Observaciones técnicas</p>
+
+                <p id="observaciones" class="info-box"></p>
+            </div>
+
+            <p class="aviso">
+                Seguimiento demostrativo. Los avances se conectarán
+                con el historial real cuando se integre MySQL.
+            </p>
+
+        </section>
+
+        <!-- BOTONES -->
+
+        <div class="acciones">
+
+            <a id="editar"
+               href="#"
+               class="btn-editar">
                 Actualizar reparación
             </a>
 
-            <a href="reparaciones.html"
-               class="rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+            <a href="{{ url_for('reparaciones') }}"
+               class="btn-regresar">
                 Regresar
             </a>
+
         </div>
 
     </div>
+
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
+<footer>
     Manzanita Store · 2026
 </footer>
 
+<!-- JAVASCRIPT -->
+
 <script>
-    // Registros de prueba. Se sustituirán por datos de MySQL.
+    // Registros originales de demostración.
+    // Los identificadores 1, 2 y 3 NO son IDs de MySQL.
+
     const reparaciones = [
         {
+            id: 1,
             folio: "REP-001",
             cliente: "Juan Pérez",
             dispositivo: "iPhone 13",
@@ -149,6 +778,7 @@
             observaciones: "Revisión del puerto de carga pendiente."
         },
         {
+            id: 2,
             folio: "REP-002",
             cliente: "María González",
             dispositivo: "MacBook Air",
@@ -159,6 +789,7 @@
             observaciones: "Se realizó revisión y servicio de batería."
         },
         {
+            id: 3,
             folio: "REP-003",
             cliente: "Carlos López",
             dispositivo: "iPad Pro",
@@ -169,6 +800,8 @@
             observaciones: "Pendiente de revisión técnica."
         }
     ];
+
+    // Etapas originales del seguimiento.
 
     const nombres = [
         "Recepción del dispositivo",
@@ -194,44 +827,96 @@
         "Cancelada": 0
     };
 
-    const folio = new URLSearchParams(location.search).get("folio");
-    const r = reparaciones.find(item => item.folio === folio);
+    // ID que Flask recibe en /reparaciones/seguimiento/<int:id>.
+    const idActual = {{ id|default(0)|int }};
 
-    if (!r) {
-        document.getElementById("contenido").classList.add("hidden");
-        document.getElementById("error").classList.remove("hidden");
-        document.getElementById("estado").classList.add("hidden");
-        document.getElementById("folio").textContent = folio || "Sin folio";
+    // Compatibilidad con los folios de demostración.
+    const parametros = new URLSearchParams(location.search);
+    const folioSolicitado = parametros.get("folio");
+
+    // Registro de prueba correspondiente.
+    const reparacion = folioSolicitado
+        ? reparaciones.find(r => r.folio === folioSolicitado)
+        : reparaciones.find(r => r.id === idActual);
+
+    // Generar rutas reales desde Flask.
+    const rutaDetalle =
+        {{ url_for('detalle_reparacion', id=0)|tojson }};
+
+    const rutaEditar =
+        {{ url_for('editar_reparacion', id=0)|tojson }};
+
+    const rutaListado =
+        {{ url_for('reparaciones')|tojson }};
+
+    if (!reparacion) {
+
+        document.getElementById("contenido")
+            .classList.add("hidden");
+
+        document.getElementById("error")
+            .classList.remove("hidden");
+
+        document.getElementById("estado")
+            .classList.add("hidden");
+
+        document.getElementById("folio").textContent =
+            folioSolicitado || "ID " + idActual;
+
+        const volver = document.getElementById("volver");
+        volver.href = rutaListado;
+        volver.textContent = "← Volver a reparaciones";
+
     } else {
-        ["folio", "cliente", "dispositivo", "tecnico", "fecha"]
-            .forEach(id => {
-                document.getElementById(id).textContent = r[id];
-            });
+
+        // Mostrar el contenido de la reparación.
+        document.getElementById("contenido")
+            .classList.remove("hidden");
+
+        document.getElementById("estado")
+            .classList.remove("hidden");
+
+        document.getElementById("folio").textContent =
+            reparacion.folio;
+
+        [
+            "cliente",
+            "dispositivo",
+            "tecnico",
+            "fecha"
+        ].forEach(campo => {
+            document.getElementById(campo).textContent =
+                reparacion[campo];
+        });
 
         document.getElementById("observaciones").textContent =
-            r.observaciones;
+            reparacion.observaciones;
 
         document.getElementById("costo").textContent =
-            r.costo.toLocaleString("es-MX", {
+            reparacion.costo.toLocaleString("es-MX", {
                 style: "currency",
                 currency: "MXN"
             });
 
+        // Mostrar estado con su color.
         const estado = document.getElementById("estado");
-        estado.textContent = r.estado;
+
+        estado.textContent = reparacion.estado;
 
         const colores = {
-            "Pendiente": "bg-slate-200 text-slate-700",
-            "En proceso": "bg-amber-100 text-amber-700",
-            "Finalizada": "bg-emerald-100 text-emerald-700",
-            "Entregada": "bg-blue-100 text-blue-700",
-            "Cancelada": "bg-red-100 text-red-700"
+            "Pendiente": "estado-pendiente",
+            "En proceso": "estado-proceso",
+            "Finalizada": "estado-finalizada",
+            "Entregada": "estado-entregada",
+            "Cancelada": "estado-cancelada"
         };
 
-        estado.className = "rounded-full px-4 py-2 text-sm font-semibold " +
-            colores[r.estado];
+        estado.className =
+            "estado " +
+            (colores[reparacion.estado] || "estado-pendiente");
 
-        const completadas = avances[r.estado] ?? 0;
+        // Calcular el avance original.
+        const completadas = avances[reparacion.estado] ?? 0;
         const porcentaje = completadas * 20;
 
         document.getElementById("porcentaje").textContent =
@@ -240,42 +925,55 @@
         document.getElementById("barra").style.width =
             porcentaje + "%";
 
-        const contenedor = document.getElementById("etapas");
+        document.getElementById("barra-contenedor")
+            .setAttribute("aria-valuenow", porcentaje);
+
+        // Construir las etapas del servicio.
+        const etapas = document.getElementById("etapas");
 
         nombres.forEach((nombre, i) => {
+
             const terminada = i < completadas;
 
             const fila = document.createElement("div");
-            fila.className = "flex items-start gap-4";
+
+            fila.className = terminada
+                ? "etapa completada"
+                : "etapa";
 
             const circulo = document.createElement("div");
-            circulo.className = terminada
-                ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white"
-                : "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-200 font-bold text-slate-500";
-            circulo.textContent = terminada ? "✓" : String(i + 1);
+            circulo.className = "etapa-icono";
+
+            circulo.textContent =
+                terminada ? "✓" : String(i + 1);
 
             const texto = document.createElement("div");
+            texto.className = "etapa-texto";
 
             const titulo = document.createElement("h4");
-            titulo.className = "font-semibold";
             titulo.textContent = nombre;
 
             const descripcion = document.createElement("p");
-            descripcion.className = "mt-1 text-sm text-slate-500";
             descripcion.textContent = descripciones[i];
 
             texto.append(titulo, descripcion);
             fila.append(circulo, texto);
-            contenedor.appendChild(fila);
+            etapas.appendChild(fila);
         });
 
-        const codigo = encodeURIComponent(r.folio);
-
-        document.getElementById("editar").href =
-            "editar_reparacion.html?folio=" + codigo;
-
+        // CORREGIDO: VOLVER AL DETALLE MEDIANTE FLASK.
         document.getElementById("volver").href =
-            "detalle_reparacion.html?folio=" + codigo;
+            rutaDetalle.replace(
+                /\/0$/,
+                "/" + encodeURIComponent(reparacion.id)
+            );
+
+        // CORREGIDO: ACTUALIZAR REPARACIÓN MEDIANTE FLASK.
+        document.getElementById("editar").href =
+            rutaEditar.replace(
+                /\/0$/,
+                "/" + encodeURIComponent(reparacion.id)
+            );
     }
 </script>
 

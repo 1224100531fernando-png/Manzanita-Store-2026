@@ -2,148 +2,420 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de reparación | Manzanita Store</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detalle de reparación | Manzanita Store</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --gris: #78827a;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: #26352c;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+.header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+}
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--limon);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+.brand h1 { font-size: 21px; font-weight: bold; }
+.brand h1 span { color: var(--limon); }
+.brand p { color: #b6cfbe; font-size: 12px; }
+.salir {
+    border: 1px solid #ffffff40;
+    color: white;
+    padding: 11px 20px;
+    border-radius: 10px;
+}
+.salir:hover { background: var(--medio); }
+.contenido {
+    max-width: 1100px;
+    margin: auto;
+    padding: 38px 25px;
+}
+.volver { color: #548b1a; font-weight: bold; font-size: 13px; }
+.volver:hover { text-decoration: underline; }
+.page-title {
+    margin: 24px 0 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.page-title small {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+.page-title h2 {
+    font-size: 34px;
+    font-weight: bold;
+    color: var(--verde);
+    margin: 8px 0;
+}
+.page-title p { color: var(--gris); font-size: 14px; }
+.btn-editar, .btn-regresar {
+    display: inline-block;
+    background: var(--boton);
+    color: white;
+    padding: 14px 22px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: bold;
+}
+.btn-editar:hover { background: #608f12; }
+.btn-regresar { background: var(--verde); }
+.btn-regresar:hover { background: var(--medio); }
+.btn-secundario {
+    display: inline-block;
+    border: 1px solid var(--boton);
+    color: #548b1a;
+    background: white;
+    padding: 13px 22px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: bold;
+}
+.btn-secundario:hover { background: #eff8dc; }
+.welcome {
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    padding: 30px 35px;
+    color: white;
+    border-radius: 19px;
+    margin-bottom: 27px;
+    position: relative;
+    overflow: hidden;
+}
+.welcome::after {
+    content: "🔧";
+    position: absolute;
+    right: 42px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 90px;
+    opacity: .14;
+}
+.welcome small {
+    color: var(--limon);
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+.welcome h3 { font-size: 23px; font-weight: bold; margin: 11px 0; }
+.welcome p { color: #d8e7dc; font-size: 14px; }
+.card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    padding: 30px;
+    margin-bottom: 24px;
+    box-shadow: 0 6px 20px #183d320a;
+}
+.card-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    border-bottom: 1px solid #e8eee7;
+    padding-bottom: 18px;
+    margin-bottom: 24px;
+}
+.card-icon {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    background: #eff8dc;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+}
+.card-heading h3 {
+    color: var(--verde);
+    font-size: 19px;
+    font-weight: bold;
+}
+.card-heading p {
+    color: var(--gris);
+    font-size: 12px;
+}
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+}
+.info-grid.tres { grid-template-columns: repeat(3, 1fr); }
+.info-label {
+    color: var(--gris);
+    font-size: 13px;
+    margin-bottom: 9px;
+}
+.info-value {
+    color: var(--verde);
+    font-size: 15px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+.info-box {
+    padding: 17px 19px;
+    background: #f5f8f3;
+    border: 1px solid #e9eee7;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 62px;
+}
+.estado {
+    display: inline-block;
+    padding: 9px 16px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.estado-proceso { background: #fff3dc; color: #b76b00; }
+.estado-finalizada { background: #e4f7e7; color: #16813a; }
+.estado-pendiente { background: #f1f3f5; color: #64748b; }
+.acciones {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 13px;
+    margin-top: 27px;
+}
+.error-card {
+    background: white;
+    padding: 40px 25px;
+    border-radius: 19px;
+    text-align: center;
+}
+.error-card h3 {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--verde);
+}
+.error-card p {
+    color: var(--gris);
+    margin: 12px 0 25px;
+}
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #929b93;
+    font-size: 12px;
+}
+@media(max-width: 700px) {
+    .contenido { padding: 25px 15px; }
+    .page-title h2 { font-size: 28px; }
+    .welcome { padding: 25px; }
+    .card { padding: 22px; }
+    .info-grid, .info-grid.tres {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<header class="header">
+    <div class="header-content">
+        <div class="brand">
+            <div class="brand-icon">🍏</div>
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Sistema de gestión</p>
+            </div>
         </div>
 
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
+        <a href="{{ url_for('logout') }}" class="salir">
             Salir
         </a>
     </div>
 </header>
 
-<main class="mx-auto max-w-5xl px-6 py-8">
+<main class="contenido">
 
-    <a href="reparaciones.html"
-       class="text-sm font-medium text-blue-600 hover:underline">
+    <a href="{{ url_for('reparaciones') }}" class="volver">
         ← Volver a reparaciones
     </a>
 
-    <div class="mb-7 mt-5 flex flex-wrap items-center justify-between gap-4">
+    <div class="page-title">
         <div>
-            <p class="text-sm font-medium text-blue-600">Servicio técnico</p>
-            <h2 class="text-3xl font-bold">Detalle de reparación</h2>
-            <p id="folio" class="mt-2 text-sm text-slate-500"></p>
+            <small>SERVICIO TÉCNICO</small>
+            <h2>Detalle de reparación</h2>
+            <p id="folio"></p>
         </div>
 
-        <a id="editar" href="#"
-           class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
+        <a id="editar" href="#" class="btn-editar hidden">
             Editar reparación
         </a>
     </div>
 
-    <div id="contenido" class="space-y-6">
+    <div id="contenido" class="hidden">
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-                <h3 class="text-lg font-semibold">Estado del servicio</h3>
-                <span id="estado" class="rounded-full px-4 py-2 text-sm font-semibold"></span>
+        <section class="welcome">
+            <small>SEGUIMIENTO DEL SERVICIO</small>
+            <h3>Información de la reparación</h3>
+            <p>
+                Consulta la información del cliente, el equipo recibido
+                y los detalles del servicio técnico.
+            </p>
+        </section>
+
+        <section class="card">
+            <div class="card-heading">
+                <div class="card-icon">⚙️</div>
+                <div>
+                    <h3>Estado del servicio</h3>
+                    <p>Información general de la reparación</p>
+                </div>
             </div>
 
-            <div class="mt-5 grid gap-5 sm:grid-cols-3">
+            <div class="mb-7">
+                <span id="estado" class="estado"></span>
+            </div>
+
+            <div class="info-grid tres">
                 <div>
-                    <p class="text-sm text-slate-500">Fecha de recepción</p>
-                    <p id="fecha" class="mt-1 font-semibold"></p>
+                    <p class="info-label">Fecha de recepción</p>
+                    <p id="fecha" class="info-value"></p>
                 </div>
                 <div>
-                    <p class="text-sm text-slate-500">Técnico responsable</p>
-                    <p id="tecnico" class="mt-1 font-semibold"></p>
+                    <p class="info-label">Técnico responsable</p>
+                    <p id="tecnico" class="info-value"></p>
                 </div>
                 <div>
-                    <p class="text-sm text-slate-500">Costo estimado</p>
-                    <p id="costo" class="mt-1 font-semibold"></p>
+                    <p class="info-label">Costo estimado</p>
+                    <p id="costo" class="info-value"></p>
                 </div>
             </div>
         </section>
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-                Información del cliente
-            </h3>
-
-            <div class="grid gap-5 sm:grid-cols-2">
+        <section class="card">
+            <div class="card-heading">
+                <div class="card-icon">👤</div>
                 <div>
-                    <p class="text-sm text-slate-500">Nombre completo</p>
-                    <p id="cliente" class="mt-1 font-medium"></p>
+                    <h3>Información del cliente</h3>
+                    <p>Datos del propietario del dispositivo</p>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div>
+                    <p class="info-label">Nombre completo</p>
+                    <p id="cliente" class="info-value"></p>
                 </div>
                 <div>
-                    <p class="text-sm text-slate-500">Teléfono</p>
-                    <p id="telefono" class="mt-1 font-medium"></p>
+                    <p class="info-label">Teléfono</p>
+                    <p id="telefono" class="info-value"></p>
                 </div>
             </div>
         </section>
 
-        <section class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-                Información del dispositivo
-            </h3>
+        <section class="card">
+            <div class="card-heading">
+                <div class="card-icon">📱</div>
+                <div>
+                    <h3>Información del dispositivo</h3>
+                    <p>Características y diagnóstico del equipo</p>
+                </div>
+            </div>
 
-            <div class="grid gap-5 sm:grid-cols-2">
+            <div class="info-grid">
                 <div>
-                    <p class="text-sm text-slate-500">Dispositivo</p>
-                    <p id="dispositivo" class="mt-1 font-medium"></p>
+                    <p class="info-label">Dispositivo</p>
+                    <p id="dispositivo" class="info-value"></p>
                 </div>
                 <div>
-                    <p class="text-sm text-slate-500">Número de serie</p>
-                    <p id="serie" class="mt-1 font-medium"></p>
+                    <p class="info-label">Número de serie</p>
+                    <p id="serie" class="info-value"></p>
                 </div>
+            </div>
+
+            <div class="mt-7">
+                <p class="info-label">Falla reportada</p>
+                <p id="falla" class="info-box"></p>
             </div>
 
             <div class="mt-6">
-                <p class="text-sm text-slate-500">Falla reportada</p>
-                <p id="falla" class="mt-2 rounded-lg bg-slate-50 p-4 text-sm"></p>
-            </div>
-
-            <div class="mt-5">
-                <p class="text-sm text-slate-500">Diagnóstico técnico</p>
-                <p id="diagnostico" class="mt-2 rounded-lg bg-slate-50 p-4 text-sm"></p>
+                <p class="info-label">Diagnóstico técnico</p>
+                <p id="diagnostico" class="info-box"></p>
             </div>
         </section>
 
-        <div class="flex flex-wrap justify-end gap-3">
-            <a id="seguimiento" href="#"
-               class="rounded-lg border border-blue-600 px-5 py-3 text-sm font-semibold text-blue-600 hover:bg-blue-50">
+        <div class="acciones">
+            <a id="seguimiento"
+               href="#"
+               class="btn-secundario">
                 Ver seguimiento
             </a>
-            <a href="reparaciones.html"
-               class="rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+
+            <a href="{{ url_for('reparaciones') }}"
+               class="btn-regresar">
                 Regresar
             </a>
         </div>
+
     </div>
 
-    <div id="error" class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
-        <h3 class="text-xl font-bold">Reparación no encontrada</h3>
-        <p class="mt-2 text-slate-500">El folio solicitado no existe en los registros de prueba.</p>
-        <a href="reparaciones.html" class="mt-5 inline-block text-blue-600 hover:underline">
+    <div id="error" class="error-card hidden">
+        <div class="text-4xl mb-4">🔎</div>
+        <h3>Reparación no encontrada</h3>
+        <p>
+            El identificador solicitado no corresponde
+            a los registros de demostración.
+        </p>
+
+        <a href="{{ url_for('reparaciones') }}"
+           class="btn-secundario">
             Volver a reparaciones
         </a>
     </div>
 
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
-    Manzanita Store · 2026
-</footer>
+<footer>Manzanita Store · 2026</footer>
 
 <script>
-    // Datos de demostración. Posteriormente vendrán de MySQL.
+    // Datos de demostración.
+    // No se consultan registros reales de MySQL.
     const registros = [
         {
+            id: 1,
             folio: "REP-001",
             cliente: "Juan Pérez",
             telefono: "4151234567",
@@ -157,6 +429,7 @@
             estado: "En proceso"
         },
         {
+            id: 2,
             folio: "REP-002",
             cliente: "María González",
             telefono: "4159876543",
@@ -170,6 +443,7 @@
             estado: "Finalizada"
         },
         {
+            id: 3,
             folio: "REP-003",
             cliente: "Carlos López",
             telefono: "4155551234",
@@ -184,23 +458,51 @@
         }
     ];
 
+    // Direcciones reales registradas en Flask.
+    const rutaEditar =
+        {{ url_for('editar_reparacion', id=0)|tojson }};
+
+    const rutaSeguimiento =
+        {{ url_for('seguimiento_reparacion', id=0)|tojson }};
+
+    // Flask proporciona id al renderizar esta página.
+    const idActual = {{ id|default(0)|int }};
+
     const parametros = new URLSearchParams(window.location.search);
-    const folio = parametros.get("folio");
-    const reparacion = registros.find(r => r.folio === folio);
+    const folioSolicitado = parametros.get("folio");
+
+    const reparacion = folioSolicitado
+        ? registros.find(r => r.folio === folioSolicitado)
+        : registros.find(r => r.id === idActual);
 
     if (!reparacion) {
-        document.getElementById("contenido").classList.add("hidden");
-        document.getElementById("editar").classList.add("hidden");
-        document.getElementById("error").classList.remove("hidden");
-        document.getElementById("folio").textContent = folio || "Sin folio";
+        document.getElementById("contenido")
+            .classList.add("hidden");
+
+        document.getElementById("editar")
+            .classList.add("hidden");
+
+        document.getElementById("error")
+            .classList.remove("hidden");
+
+        document.getElementById("folio").textContent =
+            folioSolicitado || "ID " + idActual;
+
     } else {
+        document.getElementById("contenido")
+            .classList.remove("hidden");
+
+        document.getElementById("editar")
+            .classList.remove("hidden");
+
         const campos = [
             "folio", "cliente", "telefono", "dispositivo",
             "serie", "falla", "diagnostico", "tecnico", "fecha"
         ];
 
         campos.forEach(campo => {
-            document.getElementById(campo).textContent = reparacion[campo];
+            document.getElementById(campo).textContent =
+                reparacion[campo];
         });
 
         document.getElementById("costo").textContent =
@@ -213,21 +515,26 @@
         estado.textContent = reparacion.estado;
 
         const colores = {
-            "Pendiente": "bg-slate-100 text-slate-700",
-            "En proceso": "bg-amber-100 text-amber-700",
-            "Finalizada": "bg-emerald-100 text-emerald-700"
+            "Pendiente": "estado-pendiente",
+            "En proceso": "estado-proceso",
+            "Finalizada": "estado-finalizada"
         };
 
-        estado.className = "rounded-full px-4 py-2 text-sm font-semibold " +
-            (colores[reparacion.estado] || colores["Pendiente"]);
+        estado.className = "estado " +
+            (colores[reparacion.estado] || "estado-pendiente");
 
-        const codigo = encodeURIComponent(reparacion.folio);
-
+        // CORREGIDO: BOTONES CON DIRECCIONES FLASK.
         document.getElementById("editar").href =
-            "editar_reparacion.html?folio=" + codigo;
+            rutaEditar.replace(
+                /\/0$/,
+                "/" + encodeURIComponent(reparacion.id)
+            );
 
         document.getElementById("seguimiento").href =
-            "seguimiento_reparacion.html?folio=" + codigo;
+            rutaSeguimiento.replace(
+                /\/0$/,
+                "/" + encodeURIComponent(reparacion.id)
+            );
     }
 </script>
 
