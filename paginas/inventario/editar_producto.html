@@ -2,319 +2,454 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar producto | Manzanita Store</title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editar producto | Manzanita Store</title>
+<style>
+:root {
+    --verde:#183d32;
+    --medio:#326b43;
+    --limon:#a3d900;
+    --boton:#75ad16;
+    --fondo:#f3f6f1;
+    --texto:#26352c;
+    --gris:#78827a;
+}
+* { box-sizing:border-box; }
+body {
+    margin:0;
+    min-height:100vh;
+    background:var(--fondo);
+    color:var(--texto);
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+.header {
+    background:var(--verde);
+    padding:18px 0;
+    color:white;
+    box-shadow:0 4px 15px #183d321f;
+}
+.header-content {
+    max-width:1280px;
+    margin:auto;
+    padding:0 25px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+.brand {
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+.brand-icon {
+    display:grid;
+    place-items:center;
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    background:var(--limon);
+    font-size:27px;
+}
+.brand h1 {
+    margin:0;
+    font-size:21px;
+}
+.brand h1 span { color:var(--limon); }
+.brand p {
+    margin:4px 0 0;
+    font-size:12px;
+    color:#b6cfbe;
+}
+.header-actions { display:flex; gap:10px; }
+.btn-inicio,.btn-salir {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:11px 18px;
+    border:1px solid #ffffff45;
+    border-radius:10px;
+    color:white;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+}
+.btn-inicio { background:var(--medio); }
+.btn-inicio:hover { background:var(--boton); }
+.btn-salir:hover { background:var(--medio); }
+.container {
+    max-width:1050px;
+    margin:auto;
+    padding:38px 25px;
+}
+.volver {
+    display:inline-block;
+    margin-bottom:20px;
+    color:#548b1a;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+}
+.volver:hover { text-decoration:underline; }
+.eyebrow {
+    color:var(--boton);
+    letter-spacing:2px;
+    font-size:11px;
+    font-weight:800;
+}
+h2 {
+    margin:9px 0;
+    color:var(--verde);
+    font-size:34px;
+}
+.description {
+    color:var(--gris);
+    font-size:14px;
+    margin-bottom:26px;
+}
+.welcome {
+    background:linear-gradient(115deg,var(--verde),var(--medio));
+    color:white;
+    padding:30px 35px;
+    border-radius:19px;
+    margin-bottom:26px;
+}
+.welcome small {
+    color:var(--limon);
+    font-weight:800;
+    letter-spacing:2px;
+}
+.welcome h3 { margin:10px 0; font-size:23px; }
+.welcome p {
+    color:#d8e7dc;
+    font-size:14px;
+    line-height:1.7;
+}
+.card {
+    background:white;
+    padding:30px;
+    margin-bottom:24px;
+    border:1px solid #e5ede5;
+    border-radius:19px;
+    box-shadow:0 6px 20px #183d320b;
+}
+.card h3 {
+    margin:0 0 22px;
+    padding-bottom:15px;
+    border-bottom:1px solid #e8eee7;
+    color:var(--verde);
+    font-size:19px;
+}
+.grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:20px;
+}
+.field-group { min-width:0; }
+.full { grid-column:1/-1; }
+label {
+    display:block;
+    margin-bottom:9px;
+    color:#35473a;
+    font-size:13px;
+    font-weight:650;
+}
+input,select,textarea {
+    display:block;
+    width:100%;
+    padding:14px 16px;
+    border:1px solid #d5ded6;
+    border-radius:11px;
+    background:#fbfcfa;
+    color:var(--texto);
+    font:inherit;
+    font-size:14px;
+    outline:none;
+}
+input:focus,select:focus,textarea:focus {
+    border-color:var(--boton);
+    box-shadow:0 0 0 3px #75ad1620;
+}
+input[readonly] {
+    background:#eef2ed;
+    color:#657569;
+}
+textarea { resize:vertical; min-height:115px; }
+.required { color:var(--boton); }
+.help {
+    margin:7px 0 0;
+    color:var(--gris);
+    font-size:12px;
+}
+.actions {
+    display:flex;
+    justify-content:flex-end;
+    flex-wrap:wrap;
+    gap:12px;
+}
+.btn {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:14px 23px;
+    border:1px solid #d5ded6;
+    border-radius:11px;
+    background:white;
+    color:var(--medio);
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+}
+.btn-primary {
+    background:var(--boton);
+    color:white;
+    border-color:var(--boton);
+}
+.btn-primary:hover { background:#608f12; }
+.alerta {
+    padding:15px 20px;
+    border-radius:11px;
+    margin-bottom:20px;
+    font-size:13px;
+    background:#fff3dc;
+    border:1px solid #f4d79d;
+    color:#875b13;
+}
+footer {
+    padding:25px;
+    text-align:center;
+    color:#929b93;
+    font-size:12px;
+}
+@media(max-width:700px) {
+    .container { padding:25px 15px; }
+    h2 { font-size:28px; }
+    .card,.welcome { padding:23px 19px; }
+    .grid { grid-template-columns:1fr; }
+    .full { grid-column:auto; }
+    .actions { flex-direction:column-reverse; }
+    .actions .btn { width:100%; }
+}
+@media(max-width:480px) {
+    .header-content { padding:0 12px; }
+    .brand h1 { font-size:16px; }
+    .btn-inicio,.btn-salir {
+        padding:10px 11px;
+        font-size:12px;
+    }
+}
+</style>
 </head>
+<body>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
-
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<header class="header">
+    <div class="header-content">
+        <div class="brand">
+            <div class="brand-icon">🍏</div>
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Gestión de inventario</p>
+            </div>
         </div>
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
-            Salir
-        </a>
+        <div class="header-actions">
+            <a href="{{ url_for('dashboard') }}"
+               class="btn-inicio">🏠 Inicio</a>
+            <a href="{{ url_for('logout') }}"
+               class="btn-salir">Salir</a>
+        </div>
     </div>
 </header>
 
-<main class="mx-auto max-w-4xl px-6 py-8">
-<div class="mb-6 flex flex-wrap gap-3">
+<main class="container">
 
-<a href="/dashboard"
-   data-regresar-menu="true"
-   class="inline-flex items-center justify-center rounded-lg bg-green-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-green-800">
-    Regresar al menú
-</a>
+    <a href="{{ url_for('inventario') }}"
+       class="volver">← Volver al inventario</a>
 
-</div>
+    <div class="eyebrow">ADMINISTRACIÓN / INVENTARIO</div>
+    <h2>Editar producto</h2>
+    <p class="description">
+        Actualiza los datos y existencias del producto.
+    </p>
 
-
-    <a href="inventario.html"
-       class="text-sm font-medium text-blue-600 hover:underline">
-        ← Volver al inventario
-    </a>
-
-    <div class="mb-7 mt-5">
-        <p class="text-sm font-medium text-blue-600">Administración</p>
-        <h2 class="text-3xl font-bold">Editar producto</h2>
-        <p id="subtitulo" class="mt-2 text-sm text-slate-500">
-            Actualiza la información del inventario.
+    <section class="welcome">
+        <small>ACTUALIZACIÓN DE INVENTARIO</small>
+        <h3>{{ producto.nombre }}</h3>
+        <p>
+            Código: {{ producto.codigo }}
+            · Modifica su información y guarda los cambios.
         </p>
-    </div>
+    </section>
 
-    <div id="error"
-         class="hidden rounded-xl bg-white p-8 text-center shadow-sm">
-        <h3 class="text-xl font-bold">Producto no encontrado</h3>
-        <p class="mt-2 text-slate-500">
-            El código solicitado no existe.
-        </p>
-        <a href="inventario.html"
-           class="mt-4 inline-block text-blue-600">
-            Volver al inventario
-        </a>
-    </div>
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+      {% for categoria_mensaje, texto in mensajes %}
+      <div class="alerta" role="alert">{{ texto }}</div>
+      {% endfor %}
+    {% endwith %}
 
     <form id="formulario"
-          class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
+          method="POST"
+          action="{{ url_for('editar_producto', id=producto.id) }}">
 
-        <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
-            Información del producto
-        </h3>
+        <input type="hidden"
+               name="csrf_token"
+               value="{{ csrf_token }}">
 
-        <div class="grid gap-5 sm:grid-cols-2">
+        <section class="card">
+            <h3>📦 Información del producto</h3>
 
-            <div>
-                <label for="codigo" class="mb-2 block text-sm font-medium">
-                    Código del producto
-                </label>
-                <input id="codigo" readonly
-                       class="w-full rounded-lg border border-slate-300 bg-slate-100 px-4 py-3">
+            <div class="grid">
+                <div class="field-group">
+                    <label for="codigo">Código</label>
+                    <input id="codigo"
+                           value="{{ producto.codigo }}"
+                           readonly>
+                    <p class="help">El código no se modifica.</p>
+                </div>
+
+                <div class="field-group">
+                    <label for="nombre">
+                        Nombre del producto <span class="required">*</span>
+                    </label>
+                    <input id="nombre" name="nombre"
+                           value="{{ producto.nombre }}"
+                           required maxlength="120">
+                </div>
+
+                <div class="field-group">
+                    <label for="categoria">
+                        Categoría <span class="required">*</span>
+                    </label>
+                    <select id="categoria" name="categoria" required>
+                        {% for categoria in [
+                          'iPhone','Mac','Accesorios','Refacciones'
+                        ] %}
+                        <option value="{{ categoria }}"
+                          {% if producto.categoria == categoria %}selected{% endif %}>
+                            {{ categoria }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="marca">
+                        Marca <span class="required">*</span>
+                    </label>
+                    <input id="marca" name="marca"
+                           value="{{ producto.marca }}"
+                           required maxlength="80">
+                </div>
             </div>
+        </section>
 
-            <div>
-                <label for="nombre" class="mb-2 block text-sm font-medium">
-                    Nombre del producto *
-                </label>
-                <input id="nombre" required maxlength="120"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+        <section class="card">
+            <h3>💰 Precios del producto</h3>
+            <div class="grid">
+                <div class="field-group">
+                    <label for="costo">
+                        Costo de compra (MXN) *
+                    </label>
+                    <input id="costo" name="costo"
+                           type="number" min="0" max="999999999"
+                           step="0.01" required
+                           value="{{ producto.costo }}">
+                </div>
+
+                <div class="field-group">
+                    <label for="precio">
+                        Precio de venta (MXN) *
+                    </label>
+                    <input id="precio" name="precio"
+                           type="number" min="0" max="999999999"
+                           step="0.01" required
+                           value="{{ producto.precio }}">
+                </div>
             </div>
+        </section>
 
-            <div>
-                <label for="categoria" class="mb-2 block text-sm font-medium">
-                    Categoría *
-                </label>
-                <select id="categoria" required
-                        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
-                    <option value="iPhone">iPhone</option>
-                    <option value="Mac">Mac</option>
-                    <option value="Accesorios">Accesorios</option>
-                    <option value="Refacciones">Refacciones</option>
-                </select>
+        <section class="card">
+            <h3>📊 Control de existencias</h3>
+            <div class="grid">
+                <div class="field-group">
+                    <label for="stock">Existencias actuales *</label>
+                    <input id="stock" name="stock"
+                           type="number" min="0" max="999999"
+                           step="1" required
+                           value="{{ producto.stock }}">
+                </div>
+
+                <div class="field-group">
+                    <label for="minimo">Stock mínimo *</label>
+                    <input id="minimo" name="minimo"
+                           type="number" min="0" max="999999"
+                           step="1" required
+                           value="{{ producto.minimo }}">
+                </div>
+
+                <div class="field-group full">
+                    <label for="proveedor">Proveedor</label>
+                    <input id="proveedor" name="proveedor"
+                           maxlength="120"
+                           value="{{ producto.proveedor | default('', true) }}">
+                </div>
+
+                <div class="field-group full">
+                    <label for="activo">Estado del producto</label>
+                    <select id="activo" name="activo">
+                        <option value="true"
+                          {% if producto.activo != false %}selected{% endif %}>
+                            Activo
+                        </option>
+                        <option value="false"
+                          {% if producto.activo == false %}selected{% endif %}>
+                            Inactivo
+                        </option>
+                    </select>
+                </div>
             </div>
+        </section>
 
-            <div>
-                <label for="marca" class="mb-2 block text-sm font-medium">
-                    Marca *
-                </label>
-                <input id="marca" required maxlength="80"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
+        <section class="card">
+            <h3>📝 Información adicional</h3>
+            <div class="field-group">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion"
+                          name="descripcion"
+                          rows="4"
+                          maxlength="1000">{{ producto.descripcion | default('', true) }}</textarea>
             </div>
+        </section>
 
-        </div>
-
-        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
-            Precios del producto
-        </h3>
-
-        <div class="grid gap-5 sm:grid-cols-2">
-            <div>
-                <label for="costo" class="mb-2 block text-sm font-medium">
-                    Costo de compra (MXN) *
-                </label>
-                <input id="costo" type="number" required
-                       min="0" max="999999999" step="0.01"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-
-            <div>
-                <label for="precio" class="mb-2 block text-sm font-medium">
-                    Precio de venta (MXN) *
-                </label>
-                <input id="precio" type="number" required
-                       min="0" max="999999999" step="0.01"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-        </div>
-
-        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
-            Control de existencias
-        </h3>
-
-        <div class="grid gap-5 sm:grid-cols-2">
-            <div>
-                <label for="stock" class="mb-2 block text-sm font-medium">
-                    Existencias actuales *
-                </label>
-                <input id="stock" type="number" required
-                       min="0" max="999999" step="1"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-
-            <div>
-                <label for="minimo" class="mb-2 block text-sm font-medium">
-                    Stock mínimo *
-                </label>
-                <input id="minimo" type="number" required
-                       min="0" max="999999" step="1"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-
-            <div class="sm:col-span-2">
-                <label for="proveedor" class="mb-2 block text-sm font-medium">
-                    Proveedor
-                </label>
-                <input id="proveedor" maxlength="120"
-                       class="w-full rounded-lg border border-slate-300 px-4 py-3">
-            </div>
-        </div>
-
-        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
-            Información adicional
-        </h3>
-
-        <div>
-            <label for="descripcion" class="mb-2 block text-sm font-medium">
-                Descripción
-            </label>
-            <textarea id="descripcion" rows="4" maxlength="1000"
-                      class="w-full rounded-lg border border-slate-300 px-4 py-3"></textarea>
-        </div>
-
-        <div id="mensaje" role="status" aria-live="polite"
-             class="mt-6 hidden rounded-lg p-4 text-sm">
-        </div>
-
-        <div class="mt-8 flex flex-wrap justify-end gap-3 border-t pt-6">
-            <a href="inventario.html"
-               class="rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold hover:bg-slate-100">
-                Cancelar
-            </a>
+        <div class="actions">
+            <a href="{{ url_for('inventario') }}"
+               class="btn">Cancelar</a>
 
             <button type="submit"
-                    class="rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700">
-                Guardar cambios
+                    class="btn btn-primary">
+                💾 Guardar cambios
             </button>
         </div>
-
     </form>
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
-    Manzanita Store · 2026
-</footer>
+<footer>Manzanita Store · 2026</footer>
 
 <script>
-    // Datos demostrativos. Después se consultarán en MySQL.
-    const productos = [
-        {
-            codigo: "PROD-001",
-            nombre: "iPhone 13",
-            categoria: "iPhone",
-            marca: "Apple",
-            costo: 7500,
-            precio: 9500,
-            stock: 8,
-            minimo: 3,
-            proveedor: "Proveedor Apple",
-            descripcion: "Equipo iPhone 13."
-        },
-        {
-            codigo: "PROD-002",
-            nombre: "MacBook Air M2",
-            categoria: "Mac",
-            marca: "Apple",
-            costo: 15000,
-            precio: 18500,
-            stock: 2,
-            minimo: 3,
-            proveedor: "Proveedor Apple",
-            descripcion: "Computadora portátil MacBook Air M2."
-        },
-        {
-            codigo: "PROD-003",
-            nombre: "Cargador USB-C",
-            categoria: "Accesorios",
-            marca: "Apple",
-            costo: 300,
-            precio: 450,
-            stock: 15,
-            minimo: 5,
-            proveedor: "Distribuidor de accesorios",
-            descripcion: "Cargador con conexión USB-C."
-        },
-        {
-            codigo: "PROD-004",
-            nombre: "Pantalla iPhone 11",
-            categoria: "Refacciones",
-            marca: "Genérica",
-            costo: 850,
-            precio: 1200,
-            stock: 0,
-            minimo: 2,
-            proveedor: "Proveedor de refacciones",
-            descripcion: "Pantalla de reemplazo para iPhone 11."
-        }
-    ];
+const form = document.getElementById("formulario");
 
-    const codigo = new URLSearchParams(location.search)
-        .get("codigo");
+form.addEventListener("submit", function(evento) {
+    const costo = Number(document.getElementById("costo").value);
+    const precio = Number(document.getElementById("precio").value);
 
-    const producto = productos.find(p => p.codigo === codigo);
-    const formulario = document.getElementById("formulario");
-    const mensaje = document.getElementById("mensaje");
-
-    if (!producto) {
-        formulario.classList.add("hidden");
-        document.getElementById("error").classList.remove("hidden");
-    } else {
-        document.getElementById("subtitulo").textContent =
-            "Modificando el producto " + producto.codigo;
-
-        const campos = [
-            "codigo", "nombre", "categoria", "marca",
-            "costo", "precio", "stock", "minimo",
-            "proveedor", "descripcion"
-        ];
-
-        campos.forEach(campo => {
-            document.getElementById(campo).value =
-                producto[campo] ?? "";
-        });
-
-        formulario.addEventListener("submit", function(evento) {
-            evento.preventDefault();
-
-            if (!formulario.reportValidity()) return;
-
-            const costo = Number(
-                document.getElementById("costo").value
-            );
-
-            const precio = Number(
-                document.getElementById("precio").value
-            );
-
-            mensaje.classList.remove("hidden");
-
-            if (precio < costo) {
-                mensaje.className =
-                    "mt-6 rounded-lg bg-red-50 p-4 text-sm text-red-700";
-
-                mensaje.textContent =
-                    "Revisa los precios: el precio de venta es menor al costo.";
-                return;
-            }
-
-            mensaje.className =
-                "mt-6 rounded-lg bg-blue-50 p-4 text-sm text-blue-800";
-
-            mensaje.textContent =
-                "Cambios validados correctamente para " +
-                producto.codigo +
-                ". La conexión con MySQL está pendiente.";
-        });
+    if (precio < costo) {
+        evento.preventDefault();
+        alert("El precio de venta no puede ser menor al costo.");
+        document.getElementById("precio").focus();
     }
+});
 </script>
 
 </body>
 </html>
-
