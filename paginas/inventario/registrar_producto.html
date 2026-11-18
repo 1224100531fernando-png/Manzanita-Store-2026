@@ -41,7 +41,10 @@
     </div>
 
     <form id="formulario"
-          class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
+        method="POST"
+        action="{{ url_for('registrar_producto') }}"
+        enctype="multipart/form-data"
+        class="rounded-xl bg-white p-6 shadow-sm sm:p-8">
 
         <h3 class="mb-5 border-b pb-3 text-lg font-semibold">
             Información del producto
@@ -158,6 +161,34 @@
         </div>
 
         <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
+    Fotografía del producto
+</h3>
+
+<div class="mb-6">
+    <label for="imagen" class="mb-2 block text-sm font-medium">
+        Seleccionar imagen
+    </label>
+
+    <input
+        id="imagen"
+        name="imagen"
+        type="file"
+        accept=".png,.jpg,.jpeg,.webp"
+        class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3"
+    >
+
+    <p class="mt-2 text-xs text-slate-500">
+        Formatos permitidos: PNG, JPG, JPEG y WEBP.
+    </p>
+
+    <img
+        id="vistaPrevia"
+        alt="Vista previa del producto"
+        class="mt-4 hidden h-48 w-48 rounded-xl border border-slate-200 object-cover"
+    >
+</div>
+
+        <h3 class="mb-5 mt-8 border-b pb-3 text-lg font-semibold">
             Información adicional
         </h3>
 
@@ -195,34 +226,68 @@
 </footer>
 
 <script>
-    const formulario = document.getElementById("formulario");
-    const mensaje = document.getElementById("mensaje");
+const formulario = document.getElementById("formulario");
+const mensaje = document.getElementById("mensaje");
+const imagen = document.getElementById("imagen");
+const vistaPrevia = document.getElementById("vistaPrevia");
 
-    formulario.addEventListener("submit", function(evento) {
+imagen.addEventListener("change", function () {
+    const archivo = imagen.files[0];
+
+    if (!archivo) {
+        vistaPrevia.classList.add("hidden");
+        vistaPrevia.removeAttribute("src");
+        return;
+    }
+
+    const formatos = [
+        "image/png",
+        "image/jpeg",
+        "image/webp"
+    ];
+
+    if (!formatos.includes(archivo.type)) {
+        alert("Selecciona una imagen PNG, JPG, JPEG o WEBP.");
+        imagen.value = "";
+        vistaPrevia.classList.add("hidden");
+        return;
+    }
+
+    vistaPrevia.src = URL.createObjectURL(archivo);
+    vistaPrevia.classList.remove("hidden");
+});
+
+formulario.addEventListener("submit", function (evento) {
+
+    if (!formulario.reportValidity()) {
+        evento.preventDefault();
+        return;
+    }
+
+    const costo = Number(
+        document.getElementById("costo").value
+    );
+
+    const precio = Number(
+        document.getElementById("precio").value
+    );
+
+    if (precio < costo) {
         evento.preventDefault();
 
-        if (!formulario.reportValidity()) return;
-
-        const costo = Number(document.getElementById("costo").value);
-        const precio = Number(document.getElementById("precio").value);
-
-        if (precio < costo) {
-            mensaje.classList.remove("hidden");
-            mensaje.className =
-                "mt-6 rounded-lg bg-red-50 p-4 text-sm text-red-700";
-            mensaje.textContent =
-                "Revisa los precios: el precio de venta es menor al costo.";
-            return;
-        }
-
         mensaje.classList.remove("hidden");
+
         mensaje.className =
-            "mt-6 rounded-lg bg-blue-50 p-4 text-sm text-blue-800";
+            "mt-6 rounded-lg bg-red-50 p-4 text-sm text-red-700";
 
         mensaje.textContent =
-            "Formulario validado correctamente. " +
-            "El registro definitivo se habilitará al conectar MySQL.";
-    });
+            "El precio de venta no puede ser menor al costo.";
+
+        return;
+    }
+
+});
+
 </script>
 
 </body>

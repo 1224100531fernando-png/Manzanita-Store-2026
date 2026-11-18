@@ -1,12 +1,9 @@
-
 import json
 import os
 import secrets
 import time
 import uuid
-
 from functools import wraps
-
 from flask import (
     Flask,
     render_template,
@@ -47,12 +44,27 @@ CARPETA_FOTOS = os.path.join(
 
 os.makedirs(CARPETA_FOTOS, exist_ok=True)
 
+ARCHIVO_PRODUCTOS = os.path.join(
+    app.root_path,
+    "productos.json"
+)
+
+CARPETA_PRODUCTOS = os.path.join(
+    app.root_path,
+    "static",
+    "img",
+    "productos"
+)
+
+os.makedirs(CARPETA_PRODUCTOS, exist_ok=True)
+
 EXTENSIONES_PERMITIDAS = {"png", "jpg", "jpeg", "webp"}
 
 ROLES_VALIDOS = [
     "Administrador",
     "Vendedor",
-    "Técnico"
+    "Técnico",
+    "Cliente"
 ]
 
 TIEMPO_CODIGO = 600
@@ -98,6 +110,44 @@ def guardar_usuarios(usuarios):
             indent=4
         )
 
+# ==========================================================
+# FUNCIONES DE ALMACENAMIENTO DE PRODUCTOS
+# ==========================================================
+
+def cargar_productos():
+
+    if not os.path.exists(ARCHIVO_PRODUCTOS):
+        return []
+
+    try:
+        with open(
+            ARCHIVO_PRODUCTOS,
+            "r",
+            encoding="utf-8"
+        ) as archivo:
+
+            datos = json.load(archivo)
+
+            return datos if isinstance(datos, list) else []
+
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def guardar_productos(productos):
+
+    with open(
+        ARCHIVO_PRODUCTOS,
+        "w",
+        encoding="utf-8"
+    ) as archivo:
+
+        json.dump(
+            productos,
+            archivo,
+            ensure_ascii=False,
+            indent=4
+        )
 
 def obtener_cuenta_actual():
 
@@ -166,8 +216,11 @@ def inicio_por_rol():
 
     if rol == "Técnico":
         return redirect(url_for("reparaciones"))
+    
+    if rol == "Cliente":
+        return redirect(url_for("panel_cliente"))
 
-    session.clear()
+    session.clear() 
 
     flash(
         "Tu cuenta todavía no tiene un rol asignado.",
@@ -249,9 +302,36 @@ def inicio():
 
     return redirect(url_for("login"))
 
+# ==========================================================
+# 6. PANEL DEL CLIENTE
+# ==========================================================
+
+@app.route("/mi-cuenta")
+@requiere_rol("Cliente")
+def panel_cliente():
+
+    cuenta = obtener_cuenta_actual()
+
+    if not cuenta:
+        session.clear()
+
+        flash(
+            "No se encontró tu cuenta. Inicia sesión nuevamente.",
+            "error"
+        )
+
+        return redirect(url_for("login"))
+
+    return render_template(
+    "tienda/panel_cliente.html",
+    cuenta=cuenta,
+    nombre=session.get("nombre"),
+    rol=obtener_rol(),
+    foto_perfil=obtener_foto(cuenta)
+    )
 
 # ==========================================================
-# 6. DASHBOARD DEL ADMINISTRADOR
+# 7. DASHBOARD DEL ADMINISTRADOR
 # ==========================================================
 
 @app.route("/dashboard")
@@ -272,7 +352,7 @@ def dashboard():
 
 
 # ==========================================================
-# 7. MI PERFIL
+# 8. MI PERFIL
 # ==========================================================
 
 @app.route(
@@ -724,6 +804,119 @@ def registro():
 
     return render_template(
         "autenticacion/registro.html"
+    )
+
+
+# ==========================================================
+# 10. REGISTRO PÚBLICO DE CLIENTES
+# ==========================================================
+
+@app.route("/registro-cliente", methods=["GET", "POST"])
+def registro_cliente():
+
+    if request.method == "POST":
+
+        nombre = request.form.get("nombre", "").strip()
+        apellidos = request.form.get("apellidos", "").strip()
+        usuario = request.form.get("usuario", "").strip()
+        correo = request.form.get("correo", "").strip().lower()
+
+        password = request.form.get("password", "")
+        confirmar_password = request.form.get(
+            "confirmar_password",
+            ""
+        )
+
+        if not all([
+            nombre,
+            apellidos,
+            usuario,
+            correo,
+            password,
+            confirmar_password
+        ]):
+
+            flash(
+                "Todos los campos son obligatorios.",
+                "error"
+            )
+
+            return render_template(
+                "tienda/registro_cliente.html"
+            )
+
+        if len(password) < 8:
+
+            flash(
+                "La contraseña debe tener al menos 8 caracteres.",
+                "error"
+            )
+
+            return render_template(
+                "tienda/registro_cliente.html"
+            )
+
+        if password != confirmar_password:
+
+            flash(
+                "Las contraseñas no coinciden.",
+                "error"
+            )
+
+            return render_template(
+                "tienda/registro_cliente.html"
+            )
+
+        usuarios_registrados = cargar_usuarios()
+
+        for cuenta in usuarios_registrados:
+
+            if cuenta.get("usuario", "").casefold() == usuario.casefold():
+
+                flash(
+                    "Ese nombre de usuario ya está registrado.",
+                    "error"
+                )
+
+                return render_template(
+                    "tienda/registro_cliente.html"
+                )
+
+            if cuenta.get("correo", "").casefold() == correo.casefold():
+
+                flash(
+                    "Ese correo electrónico ya está registrado.",
+                    "error"
+                )
+
+                return render_template(
+                    "tienda/registro_cliente.html"
+                )
+
+        nueva_cuenta = {
+            "nombre": nombre,
+            "apellidos": apellidos,
+            "usuario": usuario,
+            "correo": correo,
+            "password": generate_password_hash(password),
+            "rol": "Cliente",
+            "foto_perfil": "",
+            "activo": True
+        }
+
+        usuarios_registrados.append(nueva_cuenta)
+
+        guardar_usuarios(usuarios_registrados)
+
+        flash(
+            "Tu cuenta de cliente se creó correctamente. Ya puedes iniciar sesión.",
+            "success"
+        )
+
+        return redirect(url_for("login"))
+
+    return render_template(
+        "tienda/registro_cliente.html"
     )
 
 
@@ -1554,12 +1747,113 @@ registrar_pagina(
     ("Administrador", "Vendedor")
 )
 
-registrar_pagina(
-    "registrar_producto",
-    "/inventario/registrar",
-    "inventario/registrar_producto.html",
-    ("Administrador",)
-)
+
+@app.route("/inventario/registrar", methods=["GET", "POST"])
+@requiere_rol("Administrador")
+def registrar_producto():
+
+    if request.method == "POST":
+
+        codigo = request.form.get("codigo", "").strip()
+        nombre = request.form.get("nombre", "").strip()
+        categoria = request.form.get("categoria", "").strip()
+        marca = request.form.get("marca", "").strip()
+        proveedor = request.form.get("proveedor", "").strip()
+        descripcion = request.form.get("descripcion", "").strip()
+
+        categorias_validas = [
+            "iPhone",
+            "Mac",
+            "Accesorios",
+            "Refacciones"
+        ]
+
+        if not all([codigo, nombre, categoria, marca]):
+            flash("Completa todos los campos obligatorios.", "error")
+            return redirect(url_for("registrar_producto"))
+
+        if (
+            len(codigo) > 30
+            or not all(c.isalnum() or c in "_-" for c in codigo)
+        ):
+            flash("El código del producto no es válido.", "error")
+            return redirect(url_for("registrar_producto"))
+
+        if categoria not in categorias_validas:
+            flash("Selecciona una categoría válida.", "error")
+            return redirect(url_for("registrar_producto"))
+
+        productos = cargar_productos()
+
+        if any(
+            p.get("codigo", "").casefold() == codigo.casefold()
+            for p in productos
+        ):
+            flash("Ya existe un producto con ese código.", "error")
+            return redirect(url_for("registrar_producto"))
+
+        try:
+            costo = float(request.form.get("costo", ""))
+            precio = float(request.form.get("precio", ""))
+            stock = int(request.form.get("stock", ""))
+            minimo = int(request.form.get("minimo", ""))
+
+            if (
+                costo < 0 or precio < 0
+                or costo > 999999999 or precio > 999999999
+                or stock < 0 or minimo < 0
+                or stock > 999999 or minimo > 999999
+                or precio < costo
+            ):
+                raise ValueError
+
+        except (ValueError, TypeError):
+            flash("Revisa los costos, precios y existencias.", "error")
+            return redirect(url_for("registrar_producto"))
+
+        imagen = request.files.get("imagen")
+        nombre_imagen = ""
+
+        if imagen and imagen.filename:
+
+            if not extension_permitida(imagen.filename):
+                flash("La imagen debe ser PNG, JPG, JPEG o WEBP.", "error")
+                return redirect(url_for("registrar_producto"))
+
+            extension = imagen.filename.rsplit(".", 1)[1].lower()
+            nombre_imagen = f"{uuid.uuid4().hex}.{extension}"
+
+            imagen.save(
+                os.path.join(CARPETA_PRODUCTOS, nombre_imagen)
+            )
+
+        producto = {
+            "id": uuid.uuid4().hex,
+            "codigo": codigo,
+            "nombre": nombre,
+            "categoria": categoria,
+            "marca": marca,
+            "costo": costo,
+            "precio": precio,
+            "stock": stock,
+            "minimo": minimo,
+            "proveedor": proveedor,
+            "descripcion": descripcion,
+            "imagen": nombre_imagen,
+            "activo": True
+        }
+
+        productos.append(producto)
+        guardar_productos(productos)
+
+        flash("Producto registrado correctamente.", "success")
+        return redirect(url_for("inventario"))
+
+    return render_template(
+        "inventario/registrar_producto.html",
+        rol=obtener_rol(),
+        nombre=session.get("nombre")
+    )
 
 registrar_pagina(
     "editar_producto",
