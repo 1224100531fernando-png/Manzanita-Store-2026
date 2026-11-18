@@ -5,330 +5,1176 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reporte de inventario | Manzanita Store</title>
-<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ENCABEZADO */
+
+.header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--limon);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+
+.brand h1 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 750;
+}
+
+.brand h1 span { color: var(--limon); }
+
+.brand p {
+    margin: 4px 0 0;
+    color: #b6cfbe;
+    font-size: 12px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-inicio,
+.salir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 20px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 10px;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.btn-inicio { background: var(--medio); }
+.btn-inicio:hover { background: var(--boton); }
+.salir:hover { background: var(--medio); }
+
+/* CONTENIDO */
+
+.contenido {
+    max-width: 1280px;
+    margin: auto;
+    padding: 38px 25px;
+}
+
+.volver {
+    display: inline-block;
+    color: #548b1a;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.volver:hover { text-decoration: underline; }
+
+.page-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 22px 0 28px;
+}
+
+.page-title small {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+
+.page-title h2 {
+    margin: 9px 0;
+    color: var(--verde);
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.page-title p {
+    color: var(--gris);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.btn-imprimir {
+    padding: 14px 23px;
+    border: none;
+    border-radius: 11px;
+    background: var(--boton);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn-imprimir:hover { background: #608f12; }
+
+/* BIENVENIDA */
+
+.welcome {
+    position: relative;
+    overflow: hidden;
+    padding: 30px 35px;
+    margin-bottom: 25px;
+    border-radius: 19px;
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    color: white;
+}
+
+.welcome::after {
+    content: "📦";
+    position: absolute;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 90px;
+    opacity: .15;
+    pointer-events: none;
+}
+
+.welcome small {
+    color: var(--limon);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 3px;
+}
+
+.welcome h3 {
+    position: relative;
+    z-index: 1;
+    margin: 10px 0;
+    font-size: 24px;
+}
+
+.welcome p {
+    position: relative;
+    z-index: 1;
+    color: #d8e7dc;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.aviso-demo {
+    padding: 14px 19px;
+    margin-bottom: 25px;
+    border: 1px solid #f4d79d;
+    border-radius: 11px;
+    background: #fff7e6;
+    color: #875b13;
+    font-size: 13px;
+}
+
+/* TARJETAS */
+
+.card {
+    padding: 27px;
+    margin-bottom: 25px;
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.card-title {
+    margin: 0 0 20px;
+    color: var(--verde);
+    font-size: 19px;
+    font-weight: 750;
+}
+
+/* FILTROS */
+
+.filtros {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 18px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 9px;
+    color: #35473a;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.campo input,
+.campo select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    background: #fbfcfa;
+    color: var(--texto);
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-color: var(--boton);
+    box-shadow: 0 0 0 3px rgba(117,173,22,.12);
+}
+
+/* ESTADÍSTICAS */
+
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 29px;
+}
+
+.resumen-card {
+    padding: 23px;
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 17px;
+    box-shadow: 0 5px 18px rgba(24,61,50,.035);
+}
+
+.resumen-icon {
+    width: 49px;
+    height: 49px;
+    margin-bottom: 16px;
+    border-radius: 13px;
+    background: #eff8dc;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+}
+
+.resumen-card:nth-child(2) .resumen-icon {
+    background: #e4f3e9;
+}
+
+.resumen-card:nth-child(3) .resumen-icon {
+    background: #fee2e2;
+}
+
+.resumen-card:nth-child(4) .resumen-icon {
+    background: #e7f3fa;
+}
+
+.resumen-card p {
+    margin: 0 0 8px;
+    color: var(--gris);
+    font-size: 13px;
+}
+
+.resumen-card h3 {
+    margin: 0;
+    color: var(--verde);
+    font-size: 28px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+#unidades { color: #326b43; }
+#bajos { color: #c43b3b; }
+#valor { color: #159447; }
+
+/* GRÁFICAS */
+
+.graficas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 23px;
+    margin-bottom: 28px;
+}
+
+.grafica-card {
+    min-width: 0;
+    padding: 27px;
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.grafica-card h3 {
+    margin: 0 0 7px;
+    color: var(--verde);
+    font-size: 18px;
+    font-weight: 750;
+}
+
+.grafica-card p {
+    margin: 0 0 22px;
+    color: var(--gris);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.grafica-area {
+    position: relative;
+    width: 100%;
+    height: 310px;
+}
+
+/* TABLA */
+
+.tabla-card {
+    overflow: hidden;
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.tabla-heading {
+    padding: 25px 27px;
+    border-bottom: 1px solid #edf1eb;
+}
+
+.tabla-heading h3 {
+    margin: 0;
+    color: var(--verde);
+    font-size: 19px;
+    font-weight: 750;
+}
+
+.tabla-heading p {
+    margin: 6px 0 0;
+    color: var(--gris);
+    font-size: 13px;
+}
+
+.tabla-scroll { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead { background: #f5f8f3; }
+
+th {
+    padding: 18px 20px;
+    color: #718177;
+    font-size: 11px;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+td {
+    padding: 19px 20px;
+    border-top: 1px solid #eef2ed;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+tbody tr:hover { background: #f7faf4; }
+
+.codigo {
+    color: var(--verde);
+    font-weight: 750;
+}
+
+.valor-costo {
+    color: #16813a;
+    font-weight: 750;
+}
+
+.etiqueta {
+    display: inline-block;
+    padding: 8px 13px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.estado-disponible {
+    background: #e4f7e7;
+    color: #16813a;
+}
+
+.estado-bajo {
+    background: #fff3dc;
+    color: #b76b00;
+}
+
+.estado-agotado {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.text-right { text-align: right; }
+
+.tabla-footer {
+    padding: 17px 27px;
+    border-top: 1px solid #edf1eb;
+    color: var(--gris);
+    font-size: 12px;
+}
+
+footer {
+    padding: 25px;
+    text-align: center;
+    color: #929b93;
+    font-size: 12px;
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 1100px) {
+    .resumen {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+}
+
+@media(max-width: 800px) {
+    .graficas {
+        grid-template-columns: 1fr;
+    }
+
+    .filtros {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 550px) {
+    .contenido {
+        padding: 25px 15px;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after { display: none; }
+
+    .card, .grafica-card {
+        padding: 21px;
+    }
+
+    .resumen {
+        grid-template-columns: 1fr;
+    }
+
+    .grafica-area { height: 270px; }
+}
+
+@media(max-width: 480px) {
+    .header-content { padding: 0 12px; }
+    .header-actions { gap: 7px; }
+
+    .btn-inicio, .salir {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+}
+
+/* IMPRESIÓN */
+
+@media print {
+    @page { margin: 15mm; }
+
+    body {
+        background: white !important;
+        color: #222 !important;
+    }
+
+    .header,
+    footer,
+    .volver,
+    .btn-imprimir {
+        display: none !important;
+    }
+
+    .contenido {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .welcome {
+        background: white !important;
+        color: #183d32 !important;
+        border: 1px solid #ddd;
+    }
+
+    .welcome p { color: #555 !important; }
+    .welcome::after { display: none; }
+
+    .card,
+    .grafica-card,
+    .tabla-card {
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+    }
+
+    .tabla-card { break-inside: auto; }
+    tr { break-inside: avoid; }
+
+    .campo input,
+    .campo select {
+        border: none !important;
+    }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<!-- ENCABEZADO -->
+
+<header class="header">
+    <div class="header-content">
+
+        <div class="brand">
+            <div class="brand-icon">🍏</div>
+
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Sistema de gestión</p>
+            </div>
         </div>
 
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
-            Salir
-        </a>
+        <div class="header-actions">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="btn-inicio">
+                🏠 Inicio
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="salir">
+                Salir
+            </a>
+
+        </div>
+
     </div>
 </header>
 
-<main class="mx-auto max-w-7xl px-6 py-8">
+<main class="contenido">
 
-    <a href="reportes.html"
-       class="text-sm font-medium text-blue-600 hover:underline">
+    <!-- VOLVER -->
+
+    <a href="{{ url_for('reportes') }}" class="volver">
         ← Volver a reportes
     </a>
 
-    <div class="mb-7 mt-5 flex flex-wrap items-center justify-between gap-4">
+    <!-- TÍTULO -->
+
+    <div class="page-title">
+
         <div>
-            <p class="text-sm font-medium text-blue-600">Administración</p>
-            <h2 class="text-3xl font-bold">Reporte de inventario</h2>
-            <p class="mt-2 text-sm text-slate-500">
-                Consulta existencias, valoración del inventario y productos con stock bajo.
-            </p>
-            <p class="mt-1 text-xs text-amber-700">
-                Datos de demostración, pendientes de conectar con MySQL.
+            <small>ADMINISTRACIÓN</small>
+
+            <h2>Reporte de inventario</h2>
+
+            <p>
+                Consulta existencias, valoración del inventario
+                y productos con stock bajo.
             </p>
         </div>
 
-        <button onclick="window.print()"
-                class="rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700">
-            Imprimir reporte
+        <button id="imprimir"
+                type="button"
+                class="btn-imprimir">
+            🖨️ Imprimir reporte
         </button>
+
     </div>
 
-    <section class="mb-6 rounded-xl bg-white p-5 shadow-sm">
-        <h3 class="mb-4 font-semibold">Filtrar inventario</h3>
+    <!-- BIENVENIDA -->
 
-        <div class="grid gap-4 sm:grid-cols-3">
-            <div>
-                <label for="buscar" class="mb-2 block text-sm">
+    <section class="welcome">
+
+        <small>CONTROL DE EXISTENCIAS</small>
+
+        <h3>Análisis del inventario</h3>
+
+        <p>
+            Supervisa las unidades disponibles,
+            identifica productos con existencias bajas
+            y consulta la valoración estimada a costo.
+        </p>
+
+    </section>
+
+    <div class="aviso-demo" id="avisoDemo">
+        ℹ️ Este reporte contiene datos de demostración.
+        No está conectado con MySQL.
+    </div>
+
+    <!-- FILTROS -->
+
+    <section class="card">
+
+        <h3 class="card-title">🔎 Filtrar inventario</h3>
+
+        <div class="filtros">
+
+            <div class="campo">
+
+                <label for="buscar">
                     Buscar producto
                 </label>
-                <input id="buscar" type="search"
-                       placeholder="Nombre o código..."
-                       class="w-full rounded-lg border border-slate-300 p-3">
+
+                <input id="buscar"
+                       type="search"
+                       placeholder="Nombre o código...">
+
             </div>
 
-            <div>
-                <label for="categoria" class="mb-2 block text-sm">
+            <div class="campo">
+
+                <label for="categoria">
                     Categoría
                 </label>
-                <select id="categoria"
-                        class="w-full rounded-lg border border-slate-300 bg-white p-3">
+
+                <select id="categoria">
+
                     <option value="">Todas las categorías</option>
-                    <option>iPhone</option>
-                    <option>Mac</option>
-                    <option>Accesorios</option>
-                    <option>Refacciones</option>
+                    <option value="iPhone">iPhone</option>
+                    <option value="Mac">Mac</option>
+                    <option value="Accesorios">Accesorios</option>
+                    <option value="Refacciones">Refacciones</option>
+
                 </select>
+
             </div>
 
-            <div>
-                <label for="estadoFiltro" class="mb-2 block text-sm">
+            <div class="campo">
+
+                <label for="estadoFiltro">
                     Estado del inventario
                 </label>
-                <select id="estadoFiltro"
-                        class="w-full rounded-lg border border-slate-300 bg-white p-3">
+
+                <select id="estadoFiltro">
+
                     <option value="">Todos los estados</option>
-                    <option>Disponible</option>
-                    <option>Stock bajo</option>
-                    <option>Agotado</option>
+                    <option value="Disponible">Disponible</option>
+                    <option value="Stock bajo">Stock bajo</option>
+                    <option value="Agotado">Agotado</option>
+
                 </select>
+
             </div>
-        </div>
-    </section>
 
-    <section class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Productos</p>
-            <h3 id="total" class="mt-2 text-3xl font-bold">0</h3>
-        </div>
-
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Unidades disponibles</p>
-            <h3 id="unidades" class="mt-2 text-3xl font-bold text-blue-600">0</h3>
-        </div>
-
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Stock bajo y agotado</p>
-            <h3 id="bajos" class="mt-2 text-3xl font-bold text-red-600">0</h3>
-        </div>
-
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Valor estimado a costo</p>
-            <h3 id="valor" class="mt-2 text-2xl font-bold text-emerald-600">$0.00</h3>
         </div>
 
     </section>
 
-    <section class="mb-6 grid gap-6 lg:grid-cols-2">
-        <div class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-2 text-lg font-semibold">Existencias por producto</h3>
-            <p class="mb-5 text-sm text-slate-500">
+    <!-- ESTADÍSTICAS -->
+
+    <section class="resumen">
+
+        <div class="resumen-card">
+
+            <div class="resumen-icon">📦</div>
+
+            <p>Productos</p>
+            <h3 id="total">0</h3>
+
+        </div>
+
+        <div class="resumen-card">
+
+            <div class="resumen-icon">🛒</div>
+
+            <p>Unidades disponibles</p>
+            <h3 id="unidades">0</h3>
+
+        </div>
+
+        <div class="resumen-card">
+
+            <div class="resumen-icon">⚠️</div>
+
+            <p>Stock bajo y agotado</p>
+            <h3 id="bajos">0</h3>
+
+        </div>
+
+        <div class="resumen-card">
+
+            <div class="resumen-icon">💰</div>
+
+            <p>Valor estimado a costo</p>
+            <h3 id="valor">$0.00</h3>
+
+        </div>
+
+    </section>
+
+    <!-- GRÁFICAS -->
+
+    <section class="graficas">
+
+        <div class="grafica-card">
+
+            <h3>📊 Existencias por producto</h3>
+
+            <p>
                 Cantidad disponible de cada artículo filtrado.
             </p>
-            <div class="h-80">
+
+            <div class="grafica-area">
                 <canvas id="graficaExistencias"></canvas>
             </div>
+
         </div>
 
-        <div class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-2 text-lg font-semibold">Estado del inventario</h3>
-            <p class="mb-5 text-sm text-slate-500">
+        <div class="grafica-card">
+
+            <h3>📦 Estado del inventario</h3>
+
+            <p>
                 Distribución de productos según sus existencias.
             </p>
-            <div class="mx-auto h-80 max-w-sm">
+
+            <div class="grafica-area">
                 <canvas id="graficaEstados"></canvas>
             </div>
+
         </div>
+
     </section>
 
-    <section class="overflow-hidden rounded-xl bg-white shadow-sm">
-        <div class="border-b p-5">
-            <h3 class="text-lg font-semibold">Detalle del inventario</h3>
+    <!-- TABLA -->
+
+    <section class="tabla-card">
+
+        <div class="tabla-heading">
+
+            <h3>Detalle del inventario</h3>
+
+            <p>
+                Consulta artículos, existencias,
+                mínimos y valoración estimada.
+            </p>
+
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
+        <div class="tabla-scroll">
+
+            <table>
+
+                <thead>
                     <tr>
-                        <th class="px-5 py-4">Código</th>
-                        <th class="px-5 py-4">Producto</th>
-                        <th class="px-5 py-4">Categoría</th>
-                        <th class="px-5 py-4">Stock</th>
-                        <th class="px-5 py-4">Mínimo</th>
-                        <th class="px-5 py-4">Estado</th>
-                        <th class="px-5 py-4 text-right">Valor a costo</th>
+                        <th>Código</th>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Stock</th>
+                        <th>Mínimo</th>
+                        <th>Estado</th>
+                        <th class="text-right">Valor a costo</th>
                     </tr>
                 </thead>
-                <tbody id="tabla" class="divide-y divide-slate-100"></tbody>
+
+                <tbody id="tabla"></tbody>
+
             </table>
+
         </div>
+
+        <div class="tabla-footer">
+            <span id="resultados">Mostrando 0 productos</span>
+        </div>
+
     </section>
 
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
+<footer>
     Manzanita Store · 2026
 </footer>
 
-<style>
-@media print {
-    header, footer, button, main > a {
-        display: none !important;
-    }
-    body { background: white !important; }
-    section { box-shadow: none !important; break-inside: avoid; }
-    input, select { border: none !important; }
-}
-</style>
+<!-- JAVASCRIPT -->
 
 <script>
-    // Datos de ejemplo consistentes con el módulo de inventario.
+    // DATOS DE DEMOSTRACIÓN.
+    // NO PROVIENEN DE MYSQL.
+
     const productos = [
-        {codigo:"PROD-001", nombre:"iPhone 13", categoria:"iPhone",
-         costo:7500, precio:9500, stock:8, minimo:3},
-
-        {codigo:"PROD-002", nombre:"MacBook Air M2", categoria:"Mac",
-         costo:15000, precio:18500, stock:2, minimo:3},
-
-        {codigo:"PROD-003", nombre:"Cargador USB-C", categoria:"Accesorios",
-         costo:300, precio:450, stock:15, minimo:5},
-
-        {codigo:"PROD-004", nombre:"Pantalla iPhone 11", categoria:"Refacciones",
-         costo:850, precio:1200, stock:0, minimo:2}
+        {
+            codigo: "PROD-001",
+            nombre: "iPhone 13",
+            categoria: "iPhone",
+            costo: 7500,
+            precio: 9500,
+            stock: 8,
+            minimo: 3
+        },
+        {
+            codigo: "PROD-002",
+            nombre: "MacBook Air M2",
+            categoria: "Mac",
+            costo: 15000,
+            precio: 18500,
+            stock: 2,
+            minimo: 3
+        },
+        {
+            codigo: "PROD-003",
+            nombre: "Cargador USB-C",
+            categoria: "Accesorios",
+            costo: 300,
+            precio: 450,
+            stock: 15,
+            minimo: 5
+        },
+        {
+            codigo: "PROD-004",
+            nombre: "Pantalla iPhone 11",
+            categoria: "Refacciones",
+            costo: 850,
+            precio: 1200,
+            stock: 0,
+            minimo: 2
+        }
     ];
 
-    const moneda = n => n.toLocaleString("es-MX", {
-        style:"currency", currency:"MXN"
-    });
+    // FORMATO DE MONEDA.
 
-    function estado(p) {
-        if (p.stock === 0) return "Agotado";
-        if (p.stock <= p.minimo) return "Stock bajo";
+    function moneda(valor) {
+        return valor.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN"
+        });
+    }
+
+    // DETERMINAR ESTADO.
+
+    function estado(producto) {
+
+        if (producto.stock === 0) {
+            return "Agotado";
+        }
+
+        if (producto.stock <= producto.minimo) {
+            return "Stock bajo";
+        }
+
         return "Disponible";
     }
 
+    // COLORES SEGÚN ESTADO.
+
     const colores = {
-        "Disponible": "bg-emerald-100 text-emerald-700",
-        "Stock bajo": "bg-amber-100 text-amber-700",
-        "Agotado": "bg-red-100 text-red-700"
+        "Disponible": "estado-disponible",
+        "Stock bajo": "estado-bajo",
+        "Agotado": "estado-agotado"
     };
 
     let graficaExistencias = null;
     let graficaEstados = null;
 
+    // CREAR CELDA.
+
+    function agregarCelda(fila, texto, clase = "") {
+
+        const celda = document.createElement("td");
+
+        celda.textContent = texto;
+        celda.className = clase;
+
+        fila.appendChild(celda);
+
+        return celda;
+    }
+
+    // MOSTRAR INVENTARIO FILTRADO.
+
     function mostrar() {
+
         const buscar = document.getElementById("buscar")
             .value.toLowerCase().trim();
-        const categoria = document.getElementById("categoria").value;
-        const filtro = document.getElementById("estadoFiltro").value;
 
-        const datos = productos.filter(p =>
-            [p.nombre, p.codigo].some(v =>
-                v.toLowerCase().includes(buscar)
-            ) &&
-            (!categoria || p.categoria === categoria) &&
-            (!filtro || estado(p) === filtro)
-        );
+        const categoria =
+            document.getElementById("categoria").value;
 
-        document.getElementById("total").textContent = datos.length;
+        const filtro =
+            document.getElementById("estadoFiltro").value;
+
+        // FILTRAR PRODUCTOS.
+
+        const datos = productos.filter(producto => {
+
+            const coincideTexto = [
+                producto.nombre,
+                producto.codigo
+            ].some(valor =>
+                valor.toLowerCase().includes(buscar)
+            );
+
+            const coincideCategoria =
+                !categoria || producto.categoria === categoria;
+
+            const coincideEstado =
+                !filtro || estado(producto) === filtro;
+
+            return coincideTexto &&
+                   coincideCategoria &&
+                   coincideEstado;
+        });
+
+        // ACTUALIZAR ESTADÍSTICAS.
+
+        document.getElementById("total").textContent =
+            datos.length;
+
         document.getElementById("unidades").textContent =
-            datos.reduce((s, p) => s + p.stock, 0);
+            datos.reduce(
+                (suma, producto) => suma + producto.stock,
+                0
+            );
+
         document.getElementById("bajos").textContent =
-            datos.filter(p => p.stock <= p.minimo).length;
+            datos.filter(
+                producto => producto.stock <= producto.minimo
+            ).length;
+
         document.getElementById("valor").textContent =
-            moneda(datos.reduce((s, p) => s + p.stock * p.costo, 0));
+            moneda(
+                datos.reduce(
+                    (suma, producto) =>
+                        suma + producto.stock * producto.costo,
+                    0
+                )
+            );
+
+        document.getElementById("resultados").textContent =
+            "Mostrando " + datos.length +
+            " de " + productos.length + " productos";
+
+        // MOSTRAR TABLA.
 
         const tabla = document.getElementById("tabla");
+
         tabla.replaceChildren();
 
-        datos.forEach(p => {
-            const fila = document.createElement("tr");
-            fila.className = "hover:bg-slate-50";
+        datos.forEach(producto => {
 
-            [p.codigo, p.nombre, p.categoria,
-             String(p.stock), String(p.minimo)].forEach(valor => {
-                const td = document.createElement("td");
-                td.className = "px-5 py-4";
-                td.textContent = valor;
-                fila.appendChild(td);
-            });
+            const fila = document.createElement("tr");
+
+            agregarCelda(
+                fila,
+                producto.codigo,
+                "codigo"
+            );
+
+            agregarCelda(fila, producto.nombre);
+            agregarCelda(fila, producto.categoria);
+            agregarCelda(fila, String(producto.stock));
+            agregarCelda(fila, String(producto.minimo));
+
+            // ESTADO.
 
             const celdaEstado = document.createElement("td");
-            celdaEstado.className = "px-5 py-4";
 
             const etiqueta = document.createElement("span");
+
             etiqueta.className =
-                "rounded-full px-3 py-1 text-xs " + colores[estado(p)];
-            etiqueta.textContent = estado(p);
+                "etiqueta " +
+                (colores[estado(producto)] || "");
+
+            etiqueta.textContent = estado(producto);
+
             celdaEstado.appendChild(etiqueta);
             fila.appendChild(celdaEstado);
 
-            const valor = document.createElement("td");
-            valor.className = "px-5 py-4 text-right font-semibold";
-            valor.textContent = moneda(p.stock * p.costo);
-            fila.appendChild(valor);
+            // VALOR A COSTO.
+
+            agregarCelda(
+                fila,
+                moneda(producto.stock * producto.costo),
+                "valor-costo text-right"
+            );
 
             tabla.appendChild(fila);
         });
 
+        // SIN RESULTADOS.
+
         if (!datos.length) {
+
             const fila = document.createElement("tr");
-            const celda = document.createElement("td");
+
+            const celda = agregarCelda(
+                fila,
+                "No se encontraron productos."
+            );
+
             celda.colSpan = 7;
-            celda.className = "px-5 py-7 text-center text-slate-500";
-            celda.textContent = "No se encontraron productos.";
-            fila.appendChild(celda);
+            celda.style.padding = "28px";
+            celda.style.textAlign = "center";
+            celda.style.color = "#78827a";
+
             tabla.appendChild(fila);
         }
 
-        if (typeof Chart === "undefined") return;
+        actualizarGraficas(datos);
+    }
 
-        if (graficaExistencias) graficaExistencias.destroy();
-        if (graficaEstados) graficaEstados.destroy();
+    // ACTUALIZAR GRÁFICAS.
+
+    function actualizarGraficas(datos) {
+
+        if (typeof Chart === "undefined") {
+            document.getElementById("avisoDemo").textContent =
+                "Los datos son de demostración. " +
+                "No se pudo cargar Chart.js; revisa tu conexión " +
+                "a internet para visualizar las gráficas.";
+            return;
+        }
+
+        // EVITAR GRÁFICAS DUPLICADAS.
+
+        if (graficaExistencias) {
+            graficaExistencias.destroy();
+        }
+
+        if (graficaEstados) {
+            graficaEstados.destroy();
+        }
+
+        // EXISTENCIAS POR PRODUCTO.
 
         graficaExistencias = new Chart(
-            document.getElementById("graficaExistencias"), {
-                type:"bar",
-                data:{
-                    labels:datos.map(p => p.nombre),
-                    datasets:[{
-                        label:"Unidades",
-                        data:datos.map(p => p.stock),
-                        backgroundColor:"#2563eb",
-                        borderRadius:6
+            document.getElementById("graficaExistencias"),
+            {
+                type: "bar",
+                data: {
+                    labels: datos.map(p => p.nombre),
+                    datasets: [{
+                        label: "Unidades disponibles",
+                        data: datos.map(p => p.stock),
+                        backgroundColor: datos.map(p => {
+                            const e = estado(p);
+
+                            if (e === "Agotado") return "#c43b3b";
+                            if (e === "Stock bajo") return "#e2a448";
+                            return "#75ad16";
+                        }),
+                        borderRadius: 7,
+                        maxBarThickness: 52
                     }]
                 },
-                options:{
-                    responsive:true,
-                    maintainAspectRatio:false,
-                    indexAxis:"y",
-                    scales:{x:{beginAtZero:true}}
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: "y",
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0
+                            }
+                        }
+                    }
                 }
             }
         );
 
-        const estados = ["Disponible", "Stock bajo", "Agotado"];
+        // DISTRIBUCIÓN POR ESTADO.
+
+        const estados = [
+            "Disponible",
+            "Stock bajo",
+            "Agotado"
+        ];
+
+        const cantidades = estados.map(
+            nombreEstado => datos.filter(
+                p => estado(p) === nombreEstado
+            ).length
+        );
 
         graficaEstados = new Chart(
-            document.getElementById("graficaEstados"), {
-                type:"doughnut",
-                data:{
-                    labels:estados,
-                    datasets:[{
-                        data:estados.map(e =>
-                            datos.filter(p => estado(p) === e).length
-                        ),
-                        backgroundColor:[
-                            "#10b981", "#f59e0b", "#ef4444"
-                        ]
+            document.getElementById("graficaEstados"),
+            {
+                type: "doughnut",
+                data: {
+                    labels: estados,
+                    datasets: [{
+                        data: cantidades,
+                        backgroundColor: [
+                            "#75ad16",
+                            "#e2a448",
+                            "#c43b3b"
+                        ],
+                        borderColor: "#ffffff",
+                        borderWidth: 3
                     }]
                 },
-                options:{
-                    responsive:true,
-                    maintainAspectRatio:false,
-                    plugins:{
-                        title:{
-                            display:datos.length === 0,
-                            text:"Sin productos para mostrar"
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "65%",
+                    plugins: {
+                        legend: {
+                            position: "bottom"
+                        },
+                        title: {
+                            display: datos.length === 0,
+                            text: "Sin productos para mostrar"
                         }
                     }
                 }
@@ -336,12 +1182,25 @@
         );
     }
 
-    ["buscar", "categoria", "estadoFiltro"].forEach(id => {
-        const elemento = document.getElementById(id);
-        elemento.addEventListener(
-            id === "buscar" ? "input" : "change", mostrar
-        );
-    });
+    // FILTROS AUTOMÁTICOS.
+
+    document.getElementById("buscar")
+        .addEventListener("input", mostrar);
+
+    document.getElementById("categoria")
+        .addEventListener("change", mostrar);
+
+    document.getElementById("estadoFiltro")
+        .addEventListener("change", mostrar);
+
+    // IMPRIMIR REPORTE.
+
+    document.getElementById("imprimir")
+        .addEventListener("click", () => {
+            window.print();
+        });
+
+    // CARGA INICIAL.
 
     mostrar();
 </script>

@@ -5,236 +5,1078 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reportes | Manzanita Store</title>
-<script src="https://cdn.tailwindcss.com"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ENCABEZADO */
+
+.header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.header-content {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--limon);
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 27px;
+}
+
+.brand h1 {
+    font-size: 21px;
+    font-weight: 750;
+    margin: 0;
+}
+
+.brand h1 span {
+    color: var(--limon);
+}
+
+.brand p {
+    color: #b6cfbe;
+    font-size: 12px;
+    margin: 4px 0 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-inicio,
+.salir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 20px;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 10px;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.btn-inicio {
+    background: var(--medio);
+}
+
+.btn-inicio:hover {
+    background: var(--boton);
+}
+
+.salir:hover {
+    background: var(--medio);
+}
+
+/* CONTENIDO */
+
+.contenido {
+    max-width: 1280px;
+    margin: auto;
+    padding: 38px 25px;
+}
+
+.page-title {
+    margin-bottom: 27px;
+}
+
+.page-title small {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+}
+
+.page-title h2 {
+    margin: 8px 0;
+    color: var(--verde);
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.page-title p {
+    margin: 6px 0;
+    color: var(--gris);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* BIENVENIDA */
+
+.welcome {
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    border-radius: 19px;
+    padding: 30px 35px;
+    margin-bottom: 28px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome::after {
+    content: "📊";
+    position: absolute;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 90px;
+    opacity: .15;
+    pointer-events: none;
+}
+
+.welcome small {
+    color: var(--limon);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 3px;
+}
+
+.welcome h3 {
+    position: relative;
+    z-index: 1;
+    margin: 10px 0;
+    font-size: 24px;
+    font-weight: 750;
+}
+
+.welcome p {
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+    color: #d8e7dc;
+    line-height: 1.7;
+}
+
+/* AVISO */
+
+.aviso-demo {
+    margin-bottom: 25px;
+    padding: 14px 19px;
+    border-radius: 11px;
+    background: #fff7e6;
+    border: 1px solid #f4d79d;
+    color: #875b13;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ESTADÍSTICAS */
+
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.resumen-card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 17px;
+    padding: 23px;
+    box-shadow: 0 5px 18px rgba(24,61,50,.035);
+}
+
+.resumen-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    background: #eff8dc;
+    border-radius: 13px;
+    font-size: 23px;
+    margin-bottom: 17px;
+}
+
+.resumen-card:nth-child(2) .resumen-icon {
+    background: #e4f3e9;
+}
+
+.resumen-card:nth-child(3) .resumen-icon {
+    background: #fff3dc;
+}
+
+.resumen-card:nth-child(4) .resumen-icon {
+    background: #fee2e2;
+}
+
+.resumen-card p {
+    margin: 0 0 9px;
+    color: var(--gris);
+    font-size: 13px;
+}
+
+.resumen-card h3 {
+    margin: 0;
+    color: var(--verde);
+    font-size: 28px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.resumen-card .detalle {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #929b93;
+}
+
+#ingresos {
+    color: #159447;
+}
+
+#reparaciones {
+    color: #326b43;
+}
+
+#tickets {
+    color: #d97706;
+}
+
+#stockBajo {
+    color: #c43b3b;
+}
+
+/* SECCIÓN DE GRÁFICAS */
+
+.graficas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.grafica-card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    padding: 27px;
+    min-width: 0;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.grafica-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e8eee7;
+    margin-bottom: 24px;
+}
+
+.grafica-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    background: #eff8dc;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+}
+
+.grafica-heading h3 {
+    margin: 0;
+    color: var(--verde);
+    font-size: 17px;
+    font-weight: 750;
+}
+
+.grafica-heading p {
+    margin: 5px 0 0;
+    color: var(--gris);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.grafica-area {
+    position: relative;
+    height: 290px;
+    width: 100%;
+}
+
+.grafica-area canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* REPORTES DETALLADOS */
+
+.reportes-card {
+    margin-top: 29px;
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    padding: 29px;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.reportes-heading {
+    margin-bottom: 22px;
+}
+
+.reportes-heading h3 {
+    margin: 0;
+    color: var(--verde);
+    font-size: 19px;
+    font-weight: 750;
+}
+
+.reportes-heading p {
+    margin: 7px 0 0;
+    color: var(--gris);
+    font-size: 13px;
+}
+
+.reportes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.reporte-enlace {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 22px;
+    border: 1px solid #dfe9dd;
+    border-radius: 15px;
+    background: #fbfdf9;
+    color: inherit;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.reporte-enlace:hover {
+    border-color: var(--boton);
+    background: #f3f9e9;
+    transform: translateY(-2px);
+}
+
+.reporte-icon {
+    display: grid;
+    place-items: center;
+    width: 51px;
+    height: 51px;
+    min-width: 51px;
+    border-radius: 13px;
+    background: #eff8dc;
+    font-size: 25px;
+}
+
+.reporte-texto h4 {
+    margin: 3px 0 8px;
+    color: var(--medio);
+    font-size: 16px;
+    font-weight: 750;
+}
+
+.reporte-texto p {
+    margin: 0;
+    color: var(--gris);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+footer {
+    padding: 26px;
+    text-align: center;
+    color: #929b93;
+    font-size: 12px;
+}
+
+/* RESPONSIVO */
+
+@media(max-width: 1000px) {
+    .resumen {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media(max-width: 750px) {
+    .graficas,
+    .reportes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contenido {
+        padding: 25px 15px;
+    }
+
+    .grafica-card,
+    .reportes-card {
+        padding: 22px;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+}
+
+@media(max-width: 480px) {
+    .header-content {
+        padding: 0 12px;
+    }
+
+    .header-actions {
+        gap: 7px;
+    }
+
+    .btn-inicio,
+    .salir {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .resumen {
+        grid-template-columns: 1fr;
+    }
+
+    .grafica-area {
+        height: 260px;
+    }
+
+    .reporte-enlace {
+        padding: 17px;
+    }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-800">
+<body>
 
-<header class="bg-slate-950 text-white">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div>
-            <h1 class="text-xl font-bold">
-                Manzanita <span class="text-blue-400">Store</span>
-            </h1>
-            <p class="text-xs text-slate-400">Sistema de gestión</p>
+<!-- ENCABEZADO -->
+
+<header class="header">
+    <div class="header-content">
+
+        <div class="brand">
+            <div class="brand-icon">🍏</div>
+
+            <div>
+                <h1>Manzanita <span>Store</span></h1>
+                <p>Sistema de gestión</p>
+            </div>
         </div>
-        <a href="../autenticacion/login.html"
-           class="rounded-lg border border-slate-700 px-4 py-2 text-sm hover:bg-slate-800">
-            Salir
-        </a>
+
+        <!-- BOTONES FLASK -->
+
+        <div class="header-actions">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="btn-inicio">
+                🏠 Inicio
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="salir">
+                Salir
+            </a>
+
+        </div>
+
     </div>
 </header>
 
-<main class="mx-auto max-w-7xl px-6 py-8">
+<main class="contenido">
 
-    <div class="mb-7">
-        <p class="text-sm font-medium text-blue-600">Administración</p>
-        <h2 class="text-3xl font-bold">Panel de reportes</h2>
-        <p class="mt-2 text-sm text-slate-500">
-            Resumen general de las operaciones de Manzanita Store.
-        </p>
-        <p class="mt-1 text-xs text-amber-700">
-            Datos de demostración, pendientes de conectar con MySQL.
+    <!-- TÍTULO -->
+
+    <div class="page-title">
+        <small>ADMINISTRACIÓN</small>
+
+        <h2>Panel de reportes</h2>
+
+        <p>
+            Resumen general de las operaciones
+            de Manzanita Store.
         </p>
     </div>
 
-    <section class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <!-- BIENVENIDA -->
 
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Ingresos por ventas</p>
-            <h3 class="mt-2 text-2xl font-bold text-emerald-600">
-                $29,650.00
-            </h3>
-            <p class="mt-2 text-xs text-slate-400">4 ventas de ejemplo</p>
-        </div>
+    <section class="welcome">
 
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Reparaciones</p>
-            <h3 class="mt-2 text-3xl font-bold text-blue-600">3</h3>
-            <p class="mt-2 text-xs text-slate-400">1 finalizada</p>
-        </div>
+        <small>ANÁLISIS Y CONTROL</small>
 
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Tickets de soporte</p>
-            <h3 class="mt-2 text-3xl font-bold text-amber-600">3</h3>
-            <p class="mt-2 text-xs text-slate-400">2 sin cerrar</p>
-        </div>
+        <h3>Estadísticas generales del negocio</h3>
 
-        <div class="rounded-xl bg-white p-5 shadow-sm">
-            <p class="text-sm text-slate-500">Productos con stock bajo</p>
-            <h3 class="mt-2 text-3xl font-bold text-red-600">2</h3>
-            <p class="mt-2 text-xs text-slate-400">
-                Incluye productos agotados
-            </p>
-        </div>
+        <p>
+            Visualiza las ventas, reparaciones,
+            tickets de soporte y existencias
+            del inventario desde un solo lugar.
+        </p>
+
     </section>
 
-    <section class="grid gap-6 lg:grid-cols-2">
+    <!-- AVISO DE DATOS DEMOSTRATIVOS -->
 
-        <div class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-1 text-lg font-semibold">Ingresos por día</h3>
-            <p class="mb-5 text-sm text-slate-500">
-                Ventas de demostración de noviembre de 2026.
-            </p>
-            <div class="h-72">
+    <div class="aviso-demo">
+        ℹ️ Este panel presenta datos de demostración.
+        Las estadísticas todavía no se consultan desde MySQL.
+    </div>
+
+    <!-- ESTADÍSTICAS -->
+
+    <section class="resumen">
+
+        <div class="resumen-card">
+
+            <div class="resumen-icon">💰</div>
+
+            <p>Ingresos por ventas</p>
+            <h3 id="ingresos">$0.00</h3>
+
+            <span id="detalleVentas" class="detalle"></span>
+
+        </div>
+
+        <div class="resumen-card">
+
+            <div class="resumen-icon">🔧</div>
+
+            <p>Reparaciones</p>
+            <h3 id="reparaciones">0</h3>
+
+            <span id="detalleReparaciones" class="detalle"></span>
+
+        </div>
+
+        <div class="resumen-card">
+
+            <div class="resumen-icon">🎫</div>
+
+            <p>Tickets de soporte</p>
+            <h3 id="tickets">0</h3>
+
+            <span id="detalleTickets" class="detalle"></span>
+
+        </div>
+
+        <div class="resumen-card">
+
+            <div class="resumen-icon">📦</div>
+
+            <p>Productos con stock bajo</p>
+            <h3 id="stockBajo">0</h3>
+
+            <span class="detalle">
+                Incluye productos agotados
+            </span>
+
+        </div>
+
+    </section>
+
+    <!-- GRÁFICAS -->
+
+    <section class="graficas">
+
+        <!-- INGRESOS -->
+
+        <div class="grafica-card">
+
+            <div class="grafica-heading">
+                <div class="grafica-icon">💰</div>
+
+                <div>
+                    <h3>Ingresos por día</h3>
+                    <p>Ventas de demostración de noviembre de 2026</p>
+                </div>
+            </div>
+
+            <div class="grafica-area">
                 <canvas id="graficaVentas"></canvas>
             </div>
+
         </div>
 
-        <div class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-1 text-lg font-semibold">
-                Estado de reparaciones
-            </h3>
-            <p class="mb-5 text-sm text-slate-500">
-                Distribución de las órdenes de servicio.
-            </p>
-            <div class="mx-auto h-72 max-w-sm">
+        <!-- REPARACIONES -->
+
+        <div class="grafica-card">
+
+            <div class="grafica-heading">
+                <div class="grafica-icon">🔧</div>
+
+                <div>
+                    <h3>Estado de reparaciones</h3>
+                    <p>Distribución de órdenes de servicio</p>
+                </div>
+            </div>
+
+            <div class="grafica-area">
                 <canvas id="graficaReparaciones"></canvas>
             </div>
+
         </div>
 
-        <div class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-1 text-lg font-semibold">Tickets de soporte</h3>
-            <p class="mb-5 text-sm text-slate-500">
-                Solicitudes agrupadas por estado.
-            </p>
-            <div class="h-72">
+        <!-- TICKETS -->
+
+        <div class="grafica-card">
+
+            <div class="grafica-heading">
+                <div class="grafica-icon">🎫</div>
+
+                <div>
+                    <h3>Tickets de soporte</h3>
+                    <p>Solicitudes agrupadas por estado</p>
+                </div>
+            </div>
+
+            <div class="grafica-area">
                 <canvas id="graficaTickets"></canvas>
             </div>
+
         </div>
 
-        <div class="rounded-xl bg-white p-6 shadow-sm">
-            <h3 class="mb-1 text-lg font-semibold">
-                Existencias del inventario
-            </h3>
-            <p class="mb-5 text-sm text-slate-500">
-                Unidades disponibles por producto.
-            </p>
-            <div class="h-72">
+        <!-- INVENTARIO -->
+
+        <div class="grafica-card">
+
+            <div class="grafica-heading">
+                <div class="grafica-icon">📦</div>
+
+                <div>
+                    <h3>Existencias del inventario</h3>
+                    <p>Unidades disponibles por producto</p>
+                </div>
+            </div>
+
+            <div class="grafica-area">
                 <canvas id="graficaInventario"></canvas>
             </div>
+
         </div>
 
     </section>
 
-    <section class="mt-6 rounded-xl bg-white p-6 shadow-sm">
-        <h3 class="mb-5 text-lg font-semibold">Reportes detallados</h3>
+    <!-- REPORTES DETALLADOS -->
 
-        <div class="grid gap-4 sm:grid-cols-2">
+    <section class="reportes-card">
 
-            <a href="reporte_ventas.html"
-               class="rounded-lg border border-slate-200 p-5 hover:border-blue-500 hover:bg-blue-50">
-                <h4 class="font-semibold text-blue-600">
-                    Reporte de ventas →
-                </h4>
-                <p class="mt-2 text-sm text-slate-500">
-                    Consulta ingresos, operaciones y productos vendidos.
-                </p>
+        <div class="reportes-heading">
+            <h3>Reportes detallados</h3>
+
+            <p>
+                Selecciona el reporte que deseas consultar.
+            </p>
+        </div>
+
+        <div class="reportes-grid">
+
+            <!-- REPORTE DE VENTAS -->
+
+            <a href="{{ url_for('reporte_ventas') }}"
+               class="reporte-enlace">
+
+                <div class="reporte-icon">💰</div>
+
+                <div class="reporte-texto">
+                    <h4>Reporte de ventas →</h4>
+
+                    <p>
+                        Consulta ingresos, operaciones
+                        y productos vendidos.
+                    </p>
+                </div>
+
             </a>
 
-            <a href="reporte_inventario.html"
-               class="rounded-lg border border-slate-200 p-5 hover:border-blue-500 hover:bg-blue-50">
-                <h4 class="font-semibold text-blue-600">
-                    Reporte de inventario →
-                </h4>
-                <p class="mt-2 text-sm text-slate-500">
-                    Consulta existencias y alertas de stock.
-                </p>
+            <!-- REPORTE DE INVENTARIO -->
+
+            <a href="{{ url_for('reporte_inventario') }}"
+               class="reporte-enlace">
+
+                <div class="reporte-icon">📦</div>
+
+                <div class="reporte-texto">
+                    <h4>Reporte de inventario →</h4>
+
+                    <p>
+                        Consulta existencias y
+                        alertas de stock.
+                    </p>
+                </div>
+
             </a>
 
         </div>
+
     </section>
 
 </main>
 
-<footer class="py-6 text-center text-xs text-slate-400">
+<footer>
     Manzanita Store · 2026
 </footer>
 
+<!-- JAVASCRIPT -->
+
 <script>
+    // DATOS DE DEMOSTRACIÓN.
+    // NO SE OBTIENEN DESDE MYSQL.
+
+    const ventas = [
+        { fecha: "2026-11-10", total: 9500 },
+        { fecha: "2026-11-11", total: 18500 },
+        { fecha: "2026-11-12", total: 450 },
+        { fecha: "2026-11-12", total: 1200 }
+    ];
+
+    const reparaciones = [
+        { estado: "En proceso" },
+        { estado: "Finalizada" },
+        { estado: "Pendiente" }
+    ];
+
+    const tickets = [
+        { estado: "Abierto" },
+        { estado: "En proceso" },
+        { estado: "Cerrado" }
+    ];
+
+    const productos = [
+        {
+            nombre: "iPhone 13",
+            stock: 8,
+            minimo: 3
+        },
+        {
+            nombre: "MacBook Air",
+            stock: 2,
+            minimo: 3
+        },
+        {
+            nombre: "Cargador USB-C",
+            stock: 15,
+            minimo: 5
+        },
+        {
+            nombre: "Pantalla iPhone 11",
+            stock: 0,
+            minimo: 2
+        }
+    ];
+
+    // FORMATO DE MONEDA.
+
+    function moneda(valor) {
+        return valor.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN"
+        });
+    }
+
+    // CALCULAR ESTADÍSTICAS.
+
+    const ingresos = ventas.reduce(
+        (suma, venta) => suma + venta.total,
+        0
+    );
+
+    const finalizadas = reparaciones.filter(
+        r => r.estado === "Finalizada"
+    ).length;
+
+    const sinCerrar = tickets.filter(
+        t => t.estado !== "Cerrado"
+    ).length;
+
+    const stockBajo = productos.filter(
+        p => p.stock <= p.minimo
+    ).length;
+
+    document.getElementById("ingresos").textContent =
+        moneda(ingresos);
+
+    document.getElementById("reparaciones").textContent =
+        reparaciones.length;
+
+    document.getElementById("tickets").textContent =
+        tickets.length;
+
+    document.getElementById("stockBajo").textContent =
+        stockBajo;
+
+    document.getElementById("detalleVentas").textContent =
+        ventas.length + " ventas de ejemplo";
+
+    document.getElementById("detalleReparaciones").textContent =
+        finalizadas + " finalizada(s)";
+
+    document.getElementById("detalleTickets").textContent =
+        sinCerrar + " sin cerrar";
+
+    // AGRUPAR INGRESOS POR FECHA.
+
+    const ingresosPorDia = {};
+
+    ventas.forEach(venta => {
+        ingresosPorDia[venta.fecha] =
+            (ingresosPorDia[venta.fecha] || 0) +
+            venta.total;
+    });
+
+    const fechas = Object.keys(ingresosPorDia).sort();
+
+    const etiquetasFechas = fechas.map(fecha => {
+        const partes = fecha.split("-");
+        return partes[2] + "/" + partes[1];
+    });
+
+    const valoresIngresos = fechas.map(
+        fecha => ingresosPorDia[fecha]
+    );
+
+    // CONTAR REGISTROS POR ESTADO.
+
+    function contarEstados(datos, estados) {
+        return estados.map(
+            estado => datos.filter(
+                registro => registro.estado === estado
+            ).length
+        );
+    }
+
+    const estadosReparacion = [
+        "Pendiente",
+        "En proceso",
+        "Finalizada"
+    ];
+
+    const estadosTicket = [
+        "Abierto",
+        "En proceso",
+        "Cerrado"
+    ];
+
+    // CREAR GRÁFICAS.
+
     if (typeof Chart === "undefined") {
-        alert("No se pudo cargar Chart.js. Revisa tu conexión a internet.");
+
+        const aviso = document.createElement("div");
+
+        aviso.className = "aviso-demo";
+
+        aviso.textContent =
+            "No se pudo cargar la biblioteca de gráficas. " +
+            "Revisa tu conexión a internet y actualiza la página.";
+
+        document.querySelector(".graficas").before(aviso);
+
     } else {
+
+        Chart.defaults.font.family =
+            "'Segoe UI', Arial, sans-serif";
+
+        Chart.defaults.color = "#78827a";
+
         const opciones = {
             responsive: true,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        usePointStyle: true,
+                        padding: 16
+                    }
+                }
+            }
         };
 
-        new Chart(document.getElementById("graficaVentas"), {
-            type: "bar",
-            data: {
-                labels: ["10 nov", "11 nov", "12 nov"],
-                datasets: [{
-                    label: "Ingresos (MXN)",
-                    data: [9500, 18500, 1650],
-                    backgroundColor: "#2563eb",
-                    borderRadius: 6
-                }]
-            },
-            options: opciones
-        });
+        // GRÁFICA 1: VENTAS.
 
-        new Chart(document.getElementById("graficaReparaciones"), {
-            type: "doughnut",
-            data: {
-                labels: ["Pendiente", "En proceso", "Finalizada"],
-                datasets: [{
-                    data: [1, 1, 1],
-                    backgroundColor: [
-                        "#94a3b8", "#f59e0b", "#10b981"
-                    ]
-                }]
-            },
-            options: opciones
-        });
-
-        new Chart(document.getElementById("graficaTickets"), {
-            type: "bar",
-            data: {
-                labels: ["Abierto", "En proceso", "Cerrado"],
-                datasets: [{
-                    label: "Tickets",
-                    data: [1, 1, 1],
-                    backgroundColor: [
-                        "#3b82f6", "#f59e0b", "#10b981"
-                    ],
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                ...opciones,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+        new Chart(
+            document.getElementById("graficaVentas"),
+            {
+                type: "bar",
+                data: {
+                    labels: etiquetasFechas,
+                    datasets: [{
+                        label: "Ingresos (MXN)",
+                        data: valoresIngresos,
+                        backgroundColor: "#75ad16",
+                        borderRadius: 7,
+                        maxBarThickness: 65
+                    }]
+                },
+                options: {
+                    ...opciones,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value =>
+                                    moneda(value)
+                            }
+                        }
+                    }
                 }
             }
-        });
+        );
 
-        new Chart(document.getElementById("graficaInventario"), {
-            type: "bar",
-            data: {
-                labels: [
-                    "iPhone 13",
-                    "MacBook Air",
-                    "Cargador USB-C",
-                    "Pantalla iPhone 11"
-                ],
-                datasets: [{
-                    label: "Existencias",
-                    data: [8, 2, 15, 0],
-                    backgroundColor: "#2563eb",
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                ...opciones,
-                indexAxis: "y",
-                scales: {
-                    x: { beginAtZero: true, ticks: { stepSize: 1 } }
+        // GRÁFICA 2: REPARACIONES.
+
+        new Chart(
+            document.getElementById("graficaReparaciones"),
+            {
+                type: "doughnut",
+                data: {
+                    labels: estadosReparacion,
+                    datasets: [{
+                        data: contarEstados(
+                            reparaciones,
+                            estadosReparacion
+                        ),
+                        backgroundColor: [
+                            "#a7b0a9",
+                            "#e2a448",
+                            "#75ad16"
+                        ],
+                        borderWidth: 3,
+                        borderColor: "#ffffff"
+                    }]
+                },
+                options: {
+                    ...opciones,
+                    cutout: "65%"
                 }
             }
-        });
+        );
+
+        // GRÁFICA 3: TICKETS.
+
+        new Chart(
+            document.getElementById("graficaTickets"),
+            {
+                type: "bar",
+                data: {
+                    labels: estadosTicket,
+                    datasets: [{
+                        label: "Tickets",
+                        data: contarEstados(
+                            tickets,
+                            estadosTicket
+                        ),
+                        backgroundColor: [
+                            "#326b43",
+                            "#e2a448",
+                            "#75ad16"
+                        ],
+                        borderRadius: 7,
+                        maxBarThickness: 65
+                    }]
+                },
+                options: {
+                    ...opciones,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            }
+        );
+
+        // GRÁFICA 4: INVENTARIO.
+
+        new Chart(
+            document.getElementById("graficaInventario"),
+            {
+                type: "bar",
+                data: {
+                    labels: productos.map(p => p.nombre),
+                    datasets: [{
+                        label: "Existencias",
+                        data: productos.map(p => p.stock),
+                        backgroundColor: [
+                            "#75ad16",
+                            "#e2a448",
+                            "#326b43",
+                            "#c43b3b"
+                        ],
+                        borderRadius: 7,
+                        maxBarThickness: 48
+                    }]
+                },
+                options: {
+                    ...opciones,
+                    indexAxis: "y",
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            }
+        );
     }
 </script>
 
