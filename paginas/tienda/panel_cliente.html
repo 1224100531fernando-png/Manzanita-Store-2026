@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mi cuenta | Manzanita Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-100 text-slate-800">
+
+    <!-- ENCABEZADO -->
+
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+            <a href="/" class="text-2xl font-bold text-gray-800">
+                Manzanita Store
+            </a>
+
+            <div class="flex items-center gap-4">
+
+                <span class="hidden sm:block text-sm text-gray-600">
+                    Hola, {{ nombre }}
+                </span>
+
+                <a href="{{ url_for('logout') }}"
+                class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">
+                    Cerrar sesión
+                </a>
+
+            </div>
+        </div>
+    </header>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+
+    <main class="max-w-7xl mx-auto px-6 py-10">
+
+        <section class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">
+                Mi cuenta
+            </h1>
+
+            <p class="text-gray-500 mt-2">
+                Bienvenido a tu espacio personal de Manzanita Store.
+            </p>
+        </section>
+
+
+        <!-- INFORMACIÓN DEL CLIENTE -->
+
+        <section class="bg-white rounded-2xl shadow-sm p-6 mb-8">
+
+            <div class="flex flex-col sm:flex-row sm:items-center gap-5">
+
+                {% if foto_perfil %}
+    <img
+        src="{{ url_for('static', filename='img/perfiles/' + foto_perfil) }}"
+        alt="Foto de perfil"
+        class="w-20 h-20 rounded-full object-cover border-4 border-blue-100"
+    >
+{% else %}
+    <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-3xl font-bold">
+        {{ nombre[:1]|upper }}
+    </div>
+{% endif %}
+
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">
+                        {{ cuenta.get('nombre', 'Cliente') }}
+                        {{ cuenta.get('apellidos', '') }}
+                    </h2>
+
+                    <p class="text-gray-500 text-sm mt-1">
+                        {{ cuenta.get('correo', '') }}
+                    </p>
+
+                    <span class="inline-block mt-2 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                        Cuenta de cliente
+                    </span>
+                </div>
+
+                <div class="sm:ml-auto">
+                    <a href="{{ url_for('perfil') }}"
+                    class="inline-block border border-blue-600 text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-semibold">
+                        Editar mi perfil
+                    </a>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- OPCIONES DEL CLIENTE -->
+
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <!-- COMPRAS -->
+
+            <article class="bg-white rounded-2xl shadow-sm p-6">
+                <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-xl flex items-center justify-center text-2xl">
+                    🛍️
+                </div>
+
+                <h3 class="font-bold text-lg mt-4">
+                    Mis compras
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-2">
+                    Consulta tus compras y pedidos realizados.
+                </p>
+
+                <span class="inline-block mt-4 text-xs font-semibold text-gray-400">
+                    Próximamente
+                </span>
+            </article>
+
+
+            <!-- REPARACIONES -->
+
+            <article class="bg-white rounded-2xl shadow-sm p-6">
+                <div class="w-12 h-12 bg-purple-100 text-purple-700 rounded-xl flex items-center justify-center text-2xl">
+                    🔧
+                </div>
+
+                <h3 class="font-bold text-lg mt-4">
+                    Mis reparaciones
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-2">
+                    Consulta el estado de tus equipos en reparación.
+                </p>
+
+                <span class="inline-block mt-4 text-xs font-semibold text-gray-400">
+                    Próximamente
+                </span>
+            </article>
+
+
+            <!-- SOLICITUDES -->
+
+            <article class="bg-white rounded-2xl shadow-sm p-6">
+                <div class="w-12 h-12 bg-orange-100 text-orange-700 rounded-xl flex items-center justify-center text-2xl">
+                    🎫
+                </div>
+
+                <h3 class="font-bold text-lg mt-4">
+                    Mis solicitudes
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-2">
+                    Consulta tus reportes y solicitudes de soporte.
+                </p>
+
+                <span class="inline-block mt-4 text-xs font-semibold text-gray-400">
+                    Próximamente
+                </span>
+            </article>
+
+
+            <!-- PERFIL -->
+
+            <article class="bg-white rounded-2xl shadow-sm p-6">
+                <div class="w-12 h-12 bg-green-100 text-green-700 rounded-xl flex items-center justify-center text-2xl">
+                    👤
+                </div>
+
+                <h3 class="font-bold text-lg mt-4">
+                    Mi perfil
+                </h3>
+
+                <p class="text-gray-500 text-sm mt-2">
+                    Administra tus datos personales y tu cuenta.
+                </p>
+
+                <a href="{{ url_for('perfil') }}"
+                class="inline-block mt-4 text-blue-600 font-semibold text-sm hover:underline">
+                    Administrar perfil →
+                </a>
+            </article>
+
+        </section>
+
+    </main>
+
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer class="text-center py-6 text-sm text-gray-500">
+        © Manzanita Store. Todos los derechos reservados.
+    </footer>
+
+</body>
+</html>

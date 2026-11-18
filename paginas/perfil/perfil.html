@@ -268,7 +268,7 @@
                 <p>Administra tu información personal y fotografía.</p>
             </div>
 
-            <a href="{% if rol == 'Administrador' %}{{ url_for('dashboard') }}{% elif rol == 'Vendedor' %}{{ url_for('ventas') }}{% else %}{{ url_for('reparaciones') }}{% endif %}"
+            <a href="{% if rol == 'Administrador' %}{{ url_for('dashboard') }}{% elif rol == 'Vendedor' %}{{ url_for('ventas') }}{% elif rol == 'Cliente' %}{{ url_for('panel_cliente') }}{% else %}{{ url_for('reparaciones') }}{% endif %}"
             class="btn-regresar">
                 Regresar
             </a>

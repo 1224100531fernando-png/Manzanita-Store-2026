@@ -281,7 +281,7 @@
                     </p>
                 </div>
 
-                <!-- MENSAJES ORIGINALES DE FLASK -->
+                <!-- MENSAJES DE FLASK -->
 
                 {% with mensajes = get_flashed_messages(with_categories=true) %}
                     {% for categoria, mensaje in mensajes %}
@@ -296,7 +296,7 @@
                     {% endfor %}
                 {% endwith %}
 
-                <!-- FORMULARIO ORIGINAL -->
+                <!-- FORMULARIO -->
 
                 <form action="{{ url_for('login') }}"
                       method="POST"
@@ -358,7 +358,7 @@
                         ¿No tienes una cuenta?
                     </p>
 
-                    <a href="{{ url_for('registro') }}"
+                    <a href="{{ url_for('registro_cliente') }}"
                        class="green-link inline-block mt-3">
                         Crear una cuenta
                     </a>
