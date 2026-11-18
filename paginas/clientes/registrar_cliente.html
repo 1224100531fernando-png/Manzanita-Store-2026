@@ -1,1 +1,622 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Registrar cliente | Manzanita Store</title><link rel="stylesheet" href="/static/clientes/clientes.css"></head><body data-pagina="registrar"><header class="topbar"><div class="topinner"><div class="brand">🍏 Manzanita Store<small>Gestión de clientes</small></div><a href="/dashboard" class="btn">Inicio</a></div></header><main class="container"><div class="eyebrow">ADMINISTRACIÓN / CLIENTES</div><h1>Registrar cliente</h1><p class="muted">Completa los datos del cliente.</p><div id="mensaje" class="notice" hidden></div><form id="formCliente" class="card formcard"><div class="formrow"><label for="nombre">Nombre completo *</label><input class="field" id="nombre" type="text" required minlength="3" maxlength="100"></div><div class="formrow"><label for="telefono">Teléfono *</label><input class="field" id="telefono" type="tel" required maxlength="20"></div><div class="formrow"><label for="correo">Correo electrónico (opcional)</label><input class="field" id="correo" type="email" maxlength="150"></div><div class="formactions"><a class="btn" href="/clientes">Cancelar</a><button class="btn primary" type="submit">Guardar cliente</button></div></form></main><script src="/static/clientes/clientes.js"></script></body></html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Registrar cliente | Manzanita Store</title>
+
+<!-- CSS ORIGINAL DE CARLOS -->
+<link rel="stylesheet" href="/static/clientes/clientes.css">
+
+<style>
+:root {
+    --verde: #183d32;
+    --medio: #326b43;
+    --limon: #a3d900;
+    --boton: #75ad16;
+    --fondo: #f3f6f1;
+    --texto: #26352c;
+    --gris: #78827a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ENCABEZADO */
+
+.topbar {
+    background: var(--verde);
+    color: white;
+    padding: 18px 0;
+    border-bottom: none;
+    box-shadow: 0 4px 15px rgba(24,61,50,.12);
+}
+
+.topinner {
+    max-width: 1280px;
+    margin: auto;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.brand {
+    color: white;
+    font-size: 21px;
+    font-weight: 750;
+    line-height: 1.4;
+}
+
+.brand small {
+    display: block;
+    margin-top: 4px;
+    color: #b6cfbe;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* BOTONES */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 12px 20px;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    background: white;
+    color: var(--medio);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-decoration: none;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn:hover {
+    background: #eff8dc;
+    border-color: var(--boton);
+    color: var(--verde);
+}
+
+.btn.primary {
+    background: var(--boton);
+    border-color: var(--boton);
+    color: white;
+}
+
+.btn.primary:hover {
+    background: #608f12;
+    border-color: #608f12;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-inicio {
+    background: var(--medio);
+    border: 1px solid rgba(255,255,255,.25);
+    color: white;
+}
+
+.btn-inicio:hover {
+    background: var(--boton);
+    border-color: var(--boton);
+    color: white;
+}
+
+.btn-salir {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.25);
+    color: white;
+}
+
+.btn-salir:hover {
+    background: var(--medio);
+    border-color: rgba(255,255,255,.4);
+    color: white;
+}
+
+/* CONTENIDO */
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 38px 25px;
+}
+
+.volver {
+    display: inline-block;
+    margin-bottom: 22px;
+    color: #548b1a;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.volver:hover {
+    text-decoration: underline;
+}
+
+.eyebrow {
+    color: var(--boton);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+h1 {
+    margin: 9px 0;
+    color: var(--verde);
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.muted {
+    color: var(--gris);
+}
+
+.page-description {
+    margin: 8px 0 28px;
+    color: var(--gris);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* BIENVENIDA */
+
+.welcome {
+    background: linear-gradient(115deg, var(--verde), var(--medio));
+    border-radius: 19px;
+    padding: 30px 35px;
+    margin-bottom: 27px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome::after {
+    content: "👤";
+    position: absolute;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 90px;
+    opacity: .15;
+    pointer-events: none;
+}
+
+.welcome small {
+    display: block;
+    color: var(--limon);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 3px;
+}
+
+.welcome h2 {
+    position: relative;
+    z-index: 1;
+    margin: 10px 0;
+    color: white;
+    font-size: 24px;
+    font-weight: 750;
+}
+
+.welcome p {
+    position: relative;
+    z-index: 1;
+    color: #d8e7dc;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* TARJETA DEL FORMULARIO */
+
+.card {
+    background: white;
+    border: 1px solid #e5ede5;
+    border-radius: 19px;
+    box-shadow: 0 6px 20px rgba(24,61,50,.045);
+}
+
+.formcard {
+    padding: 30px;
+    margin-bottom: 25px;
+}
+
+.form-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding-bottom: 19px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e8eee7;
+}
+
+.form-icon {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    background: #eff8dc;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+}
+
+.form-heading h2 {
+    margin: 0;
+    color: var(--verde);
+    font-size: 19px;
+    font-weight: 750;
+}
+
+.form-heading p {
+    margin: 5px 0 0;
+    color: var(--gris);
+    font-size: 12px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.formrow {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin: 0;
+    min-width: 0;
+}
+
+.formrow.full {
+    grid-column: 1 / -1;
+}
+
+.formrow label {
+    color: #35473a;
+    font-size: 13px;
+    font-weight: 650;
+    margin: 0;
+}
+
+.field {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #d5ded6;
+    border-radius: 11px;
+    background: #fbfcfa;
+    color: var(--texto);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: .2s;
+}
+
+.field:focus {
+    border-color: var(--boton);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(117,173,22,.12);
+}
+
+.field::placeholder {
+    color: #9ca89f;
+}
+
+.requerido {
+    color: var(--boton);
+}
+
+/* AVISOS DEL JAVASCRIPT ORIGINAL */
+
+.notice {
+    margin: 0 0 22px;
+    padding: 16px 20px;
+    border-radius: 11px;
+    border: 1px solid #d5ded6;
+    background: #eff8dc;
+    color: var(--verde);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.notice[hidden] {
+    display: none !important;
+}
+
+.notice.error,
+.notice.danger {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.notice.success {
+    background: #e4f7e7;
+    color: #16813a;
+    border-color: #bde5c5;
+}
+
+/* ACCIONES */
+
+.formactions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 13px;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid #e8eee7;
+}
+
+/* PIE */
+
+.footer {
+    padding: 25px;
+    text-align: center;
+    color: #929b93;
+    font-size: 12px;
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 700px) {
+    .container {
+        padding: 25px 15px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .welcome {
+        padding: 25px;
+    }
+
+    .welcome::after {
+        display: none;
+    }
+
+    .formcard {
+        padding: 23px 19px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .formrow.full {
+        grid-column: auto;
+    }
+
+    .formactions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .formactions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .topinner {
+        padding: 0 12px;
+    }
+
+    .brand {
+        font-size: 17px;
+    }
+
+    .header-actions {
+        gap: 7px;
+    }
+
+    .btn-inicio,
+    .btn-salir {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body data-pagina="registrar">
+
+<!-- ENCABEZADO -->
+
+<header class="topbar">
+
+    <div class="topinner">
+
+        <div class="brand">
+            🍏 Manzanita Store
+            <small>Sistema de gestión</small>
+        </div>
+
+        <div class="header-actions">
+
+            <a href="/dashboard" class="btn btn-inicio">
+                🏠 Inicio
+            </a>
+
+            <a href="/logout" class="btn btn-salir">
+                Salir
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+    <!-- VOLVER -->
+
+    <a href="/clientes" class="volver">
+        ← Volver a clientes
+    </a>
+
+    <!-- TÍTULO -->
+
+    <div class="eyebrow">
+        ADMINISTRACIÓN / CLIENTES
+    </div>
+
+    <h1>Registrar cliente</h1>
+
+    <p class="page-description">
+        Completa los datos del cliente
+        para agregarlo al sistema.
+    </p>
+
+    <!-- BIENVENIDA -->
+
+    <section class="welcome">
+
+        <small>NUEVO REGISTRO</small>
+
+        <h2>Agregar un nuevo cliente</h2>
+
+        <p>
+            Ingresa la información del cliente.
+            Los campos marcados con un asterisco
+            son obligatorios.
+        </p>
+
+    </section>
+
+    <!-- MENSAJE DEL JAVASCRIPT ORIGINAL -->
+
+    <div id="mensaje" class="notice" hidden></div>
+
+    <!-- FORMULARIO ORIGINAL -->
+
+    <form id="formCliente" class="card formcard">
+
+        <div class="form-heading">
+
+            <div class="form-icon">👤</div>
+
+            <div>
+                <h2>Información del cliente</h2>
+                <p>Datos personales y de contacto</p>
+            </div>
+
+        </div>
+
+        <div class="form-grid">
+
+            <!-- NOMBRE -->
+
+            <div class="formrow full">
+
+                <label for="nombre">
+                    Nombre completo
+                    <span class="requerido">*</span>
+                </label>
+
+                <input
+                    class="field"
+                    id="nombre"
+                    type="text"
+                    required
+                    minlength="3"
+                    maxlength="100"
+                    placeholder="Ej. Juan Pérez">
+
+            </div>
+
+            <!-- TELÉFONO -->
+
+            <div class="formrow">
+
+                <label for="telefono">
+                    Teléfono
+                    <span class="requerido">*</span>
+                </label>
+
+                <input
+                    class="field"
+                    id="telefono"
+                    type="tel"
+                    required
+                    maxlength="20"
+                    placeholder="Ej. 4421234567">
+
+            </div>
+
+            <!-- CORREO -->
+
+            <div class="formrow">
+
+                <label for="correo">
+                    Correo electrónico (opcional)
+                </label>
+
+                <input
+                    class="field"
+                    id="correo"
+                    type="email"
+                    maxlength="150"
+                    placeholder="Ej. cliente@correo.com">
+
+            </div>
+
+        </div>
+
+        <!-- BOTONES -->
+
+        <div class="formactions">
+
+            <a class="btn" href="/clientes">
+                Cancelar
+            </a>
+
+            <button class="btn primary" type="submit">
+                Guardar cliente
+            </button>
+
+        </div>
+
+    </form>
+
+</main>
+
+<footer class="footer">
+    Manzanita Store · 2026
+</footer>
+
+<!-- JAVASCRIPT ORIGINAL DE CARLOS -->
+<script src="/static/clientes/clientes.js"></script>
+
+</body>
+</html>
