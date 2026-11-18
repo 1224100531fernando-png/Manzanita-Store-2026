@@ -323,7 +323,7 @@ def panel_cliente():
         return redirect(url_for("login"))
 
     return render_template(
-    "tienda/panel_cliente.html",
+    "tienda/panel_cliente.html", productos_catalogo=[p for p in cargar_productos() if isinstance(p, dict)],
     cuenta=cuenta,
     nombre=session.get("nombre"),
     rol=obtener_rol(),
@@ -1935,6 +1935,15 @@ def logout():
 # ==========================================================
 # 21. EJECUTAR APLICACIÓN
 # ==========================================================
+
+
+
+@app.context_processor
+def inyectar_productos_inventario():
+    # Se inyectan datos solo en la vista autorizada de Inventario.
+    if request.endpoint == "inventario" and "usuario" in session:
+        return {"inventario_productos": cargar_productos()}
+    return {}
 
 if __name__ == "__main__":
 
