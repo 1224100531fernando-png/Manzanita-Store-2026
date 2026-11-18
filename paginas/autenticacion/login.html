@@ -1,112 +1,376 @@
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sesión | Manzanita Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f3f6f1;
+        }
+
+        .login-card {
+            max-width: 1050px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: white;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(24,61,50,.12);
+        }
+
+        .welcome {
+            background: linear-gradient(140deg, #183d32, #326b43);
+            padding: 50px 42px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome::after {
+            content: "🍏";
+            position: absolute;
+            right: -15px;
+            bottom: 55px;
+            font-size: 170px;
+            opacity: .12;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .logo-icon {
+            background: #a3d900;
+            color: #183d32;
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .logo strong {
+            display: block;
+            font-size: 23px;
+        }
+
+        .logo span {
+            color: #a3d900;
+            letter-spacing: 3px;
+            font-size: 12px;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+            margin: 55px 0;
+        }
+
+        .welcome-content small {
+            color: #a3d900;
+            letter-spacing: 3px;
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .welcome-content h1 {
+            font-size: 37px;
+            font-weight: 750;
+            line-height: 1.2;
+            margin: 20px 0;
+        }
+
+        .welcome-content p {
+            color: #d8e7dc;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 17px;
+            font-size: 14px;
+            color: #e3f2e7;
+        }
+
+        .feature-icon {
+            width: 39px;
+            height: 39px;
+            border-radius: 11px;
+            background: rgba(255,255,255,.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .welcome-footer {
+            color: #a9c1b2;
+            font-size: 12px;
+        }
+
+        .form-panel {
+            padding: 55px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-content {
+            width: 100%;
+            max-width: 390px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d5ded6;
+            border-radius: 11px;
+            background: #fbfcfa;
+            outline: none;
+            transition: .2s;
+        }
+
+        .form-input:focus {
+            border-color: #75ad16;
+            box-shadow: 0 0 0 3px rgba(117,173,22,.13);
+            background: white;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #75ad16;
+            color: white;
+            border-radius: 11px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .login-btn:hover {
+            background: #608f12;
+        }
+
+        .green-link {
+            color: #548b1a;
+            font-weight: 600;
+        }
+
+        .green-link:hover {
+            color: #326b43;
+            text-decoration: underline;
+        }
+
+        @media(max-width: 800px) {
+            .login-card {
+                grid-template-columns: 1fr;
+                max-width: 510px;
+            }
+
+            .welcome {
+                padding: 28px;
+            }
+
+            .welcome-content {
+                margin: 22px 0 0;
+            }
+
+            .welcome-content h1 {
+                font-size: 27px;
+                margin: 12px 0;
+            }
+
+            .feature,
+            .welcome-footer {
+                display: none;
+            }
+
+            .form-panel {
+                padding: 36px 28px;
+            }
+        }
+    </style>
 </head>
 
-<body class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <main class="bg-white w-full max-w-md rounded-2xl shadow-lg p-8">
+    <main class="login-card">
 
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">
-                Iniciar sesión
-            </h1>
+        <!-- BIENVENIDA -->
 
-            <p class="text-gray-500 mt-2">
-                Ingresa tus datos para acceder al sistema.
-            </p>
-        </div>
+        <section class="welcome">
 
-        {% with mensajes = get_flashed_messages(with_categories=true) %}
-            {% for categoria, mensaje in mensajes %}
-                <div class="mb-4 p-3 rounded-lg text-sm
-                    {% if categoria == 'error' %}
-                        bg-red-100 text-red-700
-                    {% else %}
-                        bg-green-100 text-green-700
-                    {% endif %}">
-                    {{ mensaje }}
+            <div class="logo">
+                <div class="logo-icon">🍏</div>
+                <div>
+                    <strong>Manzanita</strong>
+                    <span>STORE</span>
                 </div>
-            {% endfor %}
-        {% endwith %}
-
-        <form action="{{ url_for('login') }}" method="POST" class="space-y-5">
-
-            <div>
-                <label for="usuario"
-                    class="block text-sm font-semibold text-gray-700 mb-2">
-                    Usuario
-                </label>
-
-                <input
-                    type="text"
-                    id="usuario"
-                    name="usuario"
-                    placeholder="Ingresa tu usuario"
-                    required
-                    autocomplete="username"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg
-                    focus:outline-none focus:ring-2 focus:ring-blue-500
-                    focus:border-blue-500 transition">
             </div>
 
-            <div>
-                <label for="password"
-                    class="block text-sm font-semibold text-gray-700 mb-2">
-                    Contraseña
-                </label>
+            <div class="welcome-content">
 
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Ingresa tu contraseña"
-                    required
-                    autocomplete="current-password"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg
-                    focus:outline-none focus:ring-2 focus:ring-blue-500
-                    focus:border-blue-500 transition">
+                <small>BIENVENIDO</small>
+
+                <h1>
+                    Todo tu negocio<br>
+                    en un solo lugar.
+                </h1>
+
+                <p>
+                    Accede a Manzanita Store y administra
+                    las operaciones de tu negocio de forma
+                    sencilla, rápida y organizada.
+                </p>
+
+                <div class="mt-8">
+                    <div class="feature">
+                        <div class="feature-icon">👥</div>
+                        Gestión de clientes y usuarios
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">🔧</div>
+                        Control de servicios y reparaciones
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">📦</div>
+                        Inventario, ventas y reportes
+                    </div>
+                </div>
+
             </div>
 
-            <div class="text-right">
-                <a href="{{ url_for('recuperar_contrasena') }}"
-                    class="text-blue-600 hover:underline">
-                    ¿Olvidaste tu contraseña?
-                </a>
+            <div class="welcome-footer">
+                © 2026 Manzanita Store
             </div>
 
-            <button
-                type="submit"
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white
-                font-semibold py-3 rounded-lg transition duration-200 shadow-sm">
-                Iniciar sesión
-            </button>
+        </section>
 
-        </form>
+        <!-- INICIO DE SESIÓN -->
 
-        <div class="flex items-center gap-4 my-6">
-            <div class="flex-1 border-t border-gray-300"></div>
-            <span class="text-gray-400 text-sm">O</span>
-            <div class="flex-1 border-t border-gray-300"></div>
-        </div>
+        <section class="form-panel">
 
-        <div class="text-center">
-            <p class="text-gray-600 text-sm">
-                ¿No tienes una cuenta?
-            </p>
+            <div class="form-content">
 
-            <a href="{{ url_for('registro') }}"
-                class="inline-block mt-3 text-blue-600 font-semibold
-                hover:text-blue-800 hover:underline">
-                Crear una cuenta
-            </a>
-        </div>
+                <div class="mb-8">
+                    <div class="text-3xl mb-4">🍏</div>
+
+                    <h2 class="text-3xl font-bold text-slate-900">
+                        Iniciar sesión
+                    </h2>
+
+                    <p class="text-slate-500 mt-3 text-sm">
+                        Ingresa tus datos para acceder al sistema.
+                    </p>
+                </div>
+
+                <!-- MENSAJES ORIGINALES DE FLASK -->
+
+                {% with mensajes = get_flashed_messages(with_categories=true) %}
+                    {% for categoria, mensaje in mensajes %}
+                        <div class="mb-4 p-3 rounded-lg text-sm
+                            {% if categoria == 'error' %}
+                                bg-red-100 text-red-700
+                            {% else %}
+                                bg-green-100 text-green-700
+                            {% endif %}">
+                            {{ mensaje }}
+                        </div>
+                    {% endfor %}
+                {% endwith %}
+
+                <!-- FORMULARIO ORIGINAL -->
+
+                <form action="{{ url_for('login') }}"
+                      method="POST"
+                      class="space-y-5">
+
+                    <div>
+                        <label for="usuario"
+                               class="block text-sm font-semibold text-slate-700 mb-2">
+                            Usuario
+                        </label>
+
+                        <input
+                            type="text"
+                            id="usuario"
+                            name="usuario"
+                            placeholder="Ingresa tu usuario"
+                            required
+                            autocomplete="username"
+                            class="form-input">
+                    </div>
+
+                    <div>
+                        <label for="password"
+                               class="block text-sm font-semibold text-slate-700 mb-2">
+                            Contraseña
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Ingresa tu contraseña"
+                            required
+                            autocomplete="current-password"
+                            class="form-input">
+                    </div>
+
+                    <div class="text-right">
+                        <a href="{{ url_for('recuperar_contrasena') }}"
+                           class="green-link text-sm">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    </div>
+
+                    <button type="submit" class="login-btn">
+                        Iniciar sesión
+                    </button>
+
+                </form>
+
+                <div class="flex items-center gap-4 my-7">
+                    <div class="flex-1 border-t border-gray-200"></div>
+                    <span class="text-gray-400 text-sm">O</span>
+                    <div class="flex-1 border-t border-gray-200"></div>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-gray-500 text-sm">
+                        ¿No tienes una cuenta?
+                    </p>
+
+                    <a href="{{ url_for('registro') }}"
+                       class="green-link inline-block mt-3">
+                        Crear una cuenta
+                    </a>
+                </div>
+
+                <p class="text-center text-xs text-gray-400 mt-8">
+                    Manzanita Store · Sistema de gestión
+                </p>
+
+            </div>
+
+        </section>
 
     </main>
 
