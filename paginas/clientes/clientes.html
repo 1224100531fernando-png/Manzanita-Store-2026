@@ -1,16 +1,13 @@
-
+﻿
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Gestión de clientes | Manzanita Store</title>
 
-<!-- ESTILOS ORIGINALES DE CARLOS -->
 <link rel="stylesheet" href="/static/clientes/clientes.css">
 
-<!-- ESTILO VERDE MANZANITA STORE -->
 <style>
 :root {
     --verde: #183d32;
@@ -22,9 +19,7 @@
     --gris: #78827a;
 }
 
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -34,13 +29,10 @@ body {
     min-height: 100vh;
 }
 
-/* ENCABEZADO */
-
 .topbar {
     background: var(--verde);
     color: white;
     padding: 18px 0;
-    border-bottom: none;
     box-shadow: 0 4px 15px rgba(24,61,50,.12);
 }
 
@@ -69,8 +61,6 @@ body {
     font-weight: 400;
 }
 
-/* BOTONES */
-
 .btn {
     display: inline-flex;
     align-items: center;
@@ -83,7 +73,6 @@ body {
     color: var(--medio);
     font-size: 13px;
     font-weight: 700;
-    line-height: 1.4;
     text-decoration: none;
     cursor: pointer;
     transition: .2s;
@@ -95,20 +84,11 @@ body {
     color: var(--verde);
 }
 
-.btn.primary {
-    background: var(--boton);
-    border-color: var(--boton);
-    color: white;
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
-
-.btn.primary:hover {
-    background: #608f12;
-    border-color: #608f12;
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* BOTÓN INICIO */
 
 .btn-inicio {
     background: var(--medio);
@@ -118,16 +98,7 @@ body {
 
 .btn-inicio:hover {
     background: var(--boton);
-    border-color: var(--boton);
     color: white;
-}
-
-/* BOTÓN SALIR */
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
 }
 
 .btn-salir {
@@ -138,11 +109,8 @@ body {
 
 .btn-salir:hover {
     background: var(--medio);
-    border-color: rgba(255,255,255,.4);
     color: white;
 }
-
-/* CONTENIDO */
 
 .container {
     max-width: 1280px;
@@ -150,16 +118,7 @@ body {
     padding: 38px 25px;
 }
 
-/* TÍTULO */
-
-.heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 28px;
-}
+.heading { margin-bottom: 28px; }
 
 .eyebrow {
     color: var(--boton);
@@ -177,9 +136,7 @@ body {
     line-height: 1.3;
 }
 
-.muted {
-    color: var(--gris);
-}
+.muted { color: var(--gris); }
 
 .heading p {
     margin-top: 8px;
@@ -187,8 +144,6 @@ body {
     font-size: 14px;
     line-height: 1.6;
 }
-
-/* BIENVENIDA */
 
 .welcome {
     background: linear-gradient(115deg, var(--verde), var(--medio));
@@ -208,7 +163,6 @@ body {
     transform: translateY(-50%);
     font-size: 90px;
     opacity: .15;
-    pointer-events: none;
 }
 
 .welcome small {
@@ -236,8 +190,6 @@ body {
     line-height: 1.7;
 }
 
-/* ESTADÍSTICAS */
-
 .stats {
     display: grid;
     grid-template-columns: repeat(3, minmax(0,1fr));
@@ -255,7 +207,6 @@ body {
 .card.stat {
     padding: 25px;
     border-radius: 17px;
-    min-width: 0;
 }
 
 .stat-head {
@@ -275,13 +226,8 @@ body {
     font-size: 27px;
 }
 
-.stat:nth-child(2) .stat-icon {
-    background: #e4f3e9;
-}
-
-.stat:nth-child(3) .stat-icon {
-    background: #fee2e2;
-}
+.stat:nth-child(2) .stat-icon { background: #e4f3e9; }
+.stat:nth-child(3) .stat-icon { background: #fee2e2; }
 
 .stat-label {
     color: var(--gris);
@@ -294,18 +240,10 @@ body {
     color: var(--verde);
     font-size: 30px;
     font-weight: 800;
-    line-height: 1.3;
 }
 
-.stat .value.green {
-    color: #159447;
-}
-
-.stat .value.red {
-    color: #c43b3b;
-}
-
-/* TARJETA DE CLIENTES */
+.stat .value.green { color: #159447; }
+.stat .value.red { color: #c43b3b; }
 
 .clientes-card {
     overflow: hidden;
@@ -330,8 +268,6 @@ body {
     font-size: 13px;
 }
 
-/* BUSCADOR Y FILTROS */
-
 .toolbar {
     display: flex;
     align-items: center;
@@ -350,7 +286,6 @@ body {
     font-family: inherit;
     font-size: 14px;
     outline: none;
-    min-width: 0;
 }
 
 .field:focus {
@@ -361,16 +296,9 @@ body {
 .field.search {
     flex: 1;
     min-width: 220px;
-    width: auto;
 }
 
-.field::placeholder {
-    color: #9ca89f;
-}
-
-#filtroEstado {
-    min-width: 190px;
-}
+#filtroEstado { min-width: 190px; }
 
 #btnLimpiar {
     background: var(--verde);
@@ -380,10 +308,7 @@ body {
 
 #btnLimpiar:hover {
     background: var(--medio);
-    border-color: var(--medio);
 }
-
-/* TABLA */
 
 .table-wrap {
     overflow-x: auto;
@@ -397,9 +322,7 @@ table {
     text-align: left;
 }
 
-thead {
-    background: #f5f8f3;
-}
+thead { background: #f5f8f3; }
 
 th {
     padding: 18px 21px;
@@ -410,7 +333,6 @@ th {
     letter-spacing: 1px;
     text-transform: uppercase;
     white-space: nowrap;
-    border: 0;
 }
 
 td {
@@ -421,20 +343,13 @@ td {
     vertical-align: middle;
 }
 
-tbody tr:hover {
-    background: #f7faf4;
-}
-
+tbody tr:hover { background: #f7faf4; }
 tbody td:first-child {
     color: var(--verde);
     font-weight: 700;
 }
 
-/* BADGES DE ESTADO */
-
-.badge,
-.estado,
-.status {
+.badge {
     display: inline-block;
     padding: 7px 13px;
     border-radius: 30px;
@@ -442,29 +357,14 @@ tbody td:first-child {
     font-weight: 700;
 }
 
-.badge.activo,
-.badge.active,
-.badge.green,
-.estado.activo,
-.status.activo {
+.badge.activo {
     background: #e4f7e7;
     color: #16813a;
 }
 
-.badge.inactivo,
-.badge.inactive,
-.badge.red,
-.estado.inactivo,
-.status.inactivo {
+.badge.inactivo {
     background: #fee2e2;
     color: #b91c1c;
-}
-
-/* BOTONES DENTRO DE LA TABLA */
-
-td a,
-td button {
-    font-family: inherit;
 }
 
 td a {
@@ -473,16 +373,7 @@ td a {
     text-decoration: none;
 }
 
-td a:hover {
-    text-decoration: underline;
-}
-
-td .btn {
-    padding: 9px 13px;
-    font-size: 12px;
-}
-
-/* MENSAJE SIN CLIENTES */
+td a:hover { text-decoration: underline; }
 
 .empty {
     text-align: center;
@@ -504,26 +395,19 @@ td .btn {
 }
 
 .empty p {
-    margin: 10px 0 22px;
+    margin: 10px 0;
     font-size: 14px;
     line-height: 1.6;
 }
-
-/* PIE DE LA TABLA */
 
 .foot {
     padding: 18px 27px;
     border-top: 1px solid #edf1eb;
     color: var(--gris);
     font-size: 12px;
-    text-align: left;
 }
 
-.foot strong {
-    color: var(--verde);
-}
-
-/* FOOTER */
+.foot strong { color: var(--verde); }
 
 .footer {
     padding: 25px;
@@ -532,233 +416,121 @@ td .btn {
     font-size: 12px;
 }
 
-/* RESPONSIVO */
-
 @media(max-width: 900px) {
-    .stats {
-        grid-template-columns: 1fr;
-    }
+    .stats { grid-template-columns: 1fr; }
 }
 
 @media(max-width: 650px) {
-    .container {
-        padding: 25px 15px;
-    }
-
-    .heading h1 {
-        font-size: 28px;
-    }
-
-    .welcome {
-        padding: 25px;
-    }
-
-    .welcome::after {
-        display: none;
-    }
-
+    .container { padding: 25px 15px; }
+    .heading h1 { font-size: 28px; }
+    .welcome { padding: 25px; }
+    .welcome::after { display: none; }
     .toolbar {
         flex-direction: column;
         align-items: stretch;
     }
-
-    .field.search,
-    #filtroEstado,
-    #btnLimpiar {
+    .field.search, #filtroEstado, #btnLimpiar {
         width: 100%;
         min-width: 0;
-    }
-
-    .stat-head {
-        gap: 13px;
     }
 }
 
 @media(max-width: 480px) {
-    .topinner {
-        padding: 0 12px;
-    }
-
-    .header-actions {
-        gap: 7px;
-    }
-
-    .btn-inicio,
-    .btn-salir {
+    .topinner { padding: 0 12px; }
+    .header-actions { gap: 7px; }
+    .btn-inicio, .btn-salir {
         padding: 10px 12px;
         font-size: 12px;
     }
-
-    .brand {
-        font-size: 17px;
-    }
+    .brand { font-size: 17px; }
 }
 </style>
 </head>
 
-<body data-pagina="clientes">
-
-<!-- ENCABEZADO -->
+<body>
 
 <header class="topbar">
-
     <div class="topinner">
-
         <div class="brand">
             🍏 Manzanita Store
             <small>Sistema de gestión</small>
         </div>
 
         <div class="header-actions">
-
-            <a href="/dashboard" class="btn btn-inicio">
-                🏠 Inicio
-            </a>
-
-            <a href="/logout" class="btn btn-salir">
-                Salir
-            </a>
-
+            <a href=/dashboard class=btn primary>↩ Regresar al menú</a>
         </div>
-
     </div>
-
 </header>
-
-<!-- CONTENIDO PRINCIPAL -->
 
 <main class="container">
 
-    <!-- TÍTULO -->
-
     <div class="heading">
-
         <div>
-            <div class="eyebrow">
-                ADMINISTRACIÓN / CLIENTES
-            </div>
-
+            <div class="eyebrow">ADMINISTRACIÓN / CLIENTES</div>
             <h1>Gestión de Clientes</h1>
-
             <p class="muted">
-                Administra, consulta y actualiza
-                la información de tus clientes.
+                Consulta los clientes que se registran en Manzanita Store.
             </p>
         </div>
-
-        <a href="/clientes/registrar" class="btn primary">
-            + Nuevo cliente
-        </a>
-
     </div>
 
-    <!-- BIENVENIDA -->
-
     <section class="welcome">
-
         <small>CONTROL DE CLIENTES</small>
-
         <h2>Administración de clientes</h2>
-
         <p>
-            Consulta los clientes registrados,
-            revisa sus estados y administra
-            su información desde un solo lugar.
+            Consulta los clientes registrados desde la tienda,
+            revisa sus estados y su información desde un solo lugar.
         </p>
-
     </section>
-
-    <!-- ESTADÍSTICAS -->
 
     <section class="stats">
 
-        <!-- TOTAL -->
-
         <div class="card stat">
-
             <div class="stat-head">
-
                 <div class="stat-icon">👥</div>
-
                 <div>
-                    <div class="stat-label">
-                        Total de clientes
-                    </div>
-
-                    <div id="totalClientes" class="value">
-                        0
-                    </div>
+                    <div class="stat-label">Total de clientes</div>
+                    <div id="totalClientes" class="value">{{ clientes|length }}</div>
                 </div>
-
             </div>
-
         </div>
 
-        <!-- ACTIVOS -->
-
         <div class="card stat">
-
             <div class="stat-head">
-
                 <div class="stat-icon">✅</div>
-
                 <div>
-                    <div class="stat-label">
-                        Clientes activos
-                    </div>
-
+                    <div class="stat-label">Clientes activos</div>
                     <div id="clientesActivos" class="value green">
-                        0
+                        {{ clientes|selectattr("estado", "equalto", "activo")|list|length }}
                     </div>
                 </div>
-
             </div>
-
         </div>
 
-        <!-- INACTIVOS -->
-
         <div class="card stat">
-
             <div class="stat-head">
-
                 <div class="stat-icon">⛔</div>
-
                 <div>
-                    <div class="stat-label">
-                        Clientes inactivos
-                    </div>
-
+                    <div class="stat-label">Clientes inactivos</div>
                     <div id="clientesInactivos" class="value red">
-                        0
+                        {{ clientes|selectattr("estado", "equalto", "inactivo")|list|length }}
                     </div>
                 </div>
-
             </div>
-
         </div>
 
     </section>
-
-    <!-- LISTADO DE CLIENTES -->
 
     <section class="card clientes-card">
 
         <div class="tabla-heading">
-
             <h2>Listado de clientes</h2>
-
             <p>
-                Busca, consulta y administra
-                los registros de tus clientes.
+                Los datos se obtienen directamente de las cuentas registradas.
             </p>
-
         </div>
 
-        <!-- BUSCADOR Y FILTROS -->
-
         <div class="toolbar">
-
             <input
                 id="buscarCliente"
                 class="field search"
@@ -766,36 +538,18 @@ td .btn {
                 placeholder="Buscar por nombre, teléfono o correo...">
 
             <select id="filtroEstado" class="field">
-
-                <option value="todos">
-                    Todos los estados
-                </option>
-
-                <option value="activo">
-                    Activos
-                </option>
-
-                <option value="inactivo">
-                    Inactivos
-                </option>
-
+                <option value="todos">Todos los estados</option>
+                <option value="activo">Activos</option>
+                <option value="inactivo">Inactivos</option>
             </select>
 
-            <button
-                id="btnLimpiar"
-                class="btn"
-                type="button">
+            <button id="btnLimpiar" class="btn" type="button">
                 Limpiar
             </button>
-
         </div>
 
-        <!-- TABLA -->
-
         <div class="table-wrap">
-
             <table>
-
                 <thead>
                     <tr>
                         <th>Cliente</th>
@@ -806,40 +560,50 @@ td .btn {
                     </tr>
                 </thead>
 
-                <tbody id="tablaClientes"></tbody>
-
+                <tbody id="tablaClientes">
+                    {% for cliente in clientes %}
+                    <tr data-estado="{{ cliente.estado }}">
+                        <td>{{ cliente.nombre }}</td>
+                        <td>{{ cliente.telefono or "No registrado" }}</td>
+                        <td>{{ cliente.correo or "No registrado" }}</td>
+                        <td>
+                            <span class="badge {{ cliente.estado }}">
+                                {{ "Activo" if cliente.estado == "activo" else "Inactivo" }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('detalle_cliente', id=cliente.id) }}">
+                                Ver detalles
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
-
         </div>
 
-        <!-- MENSAJE SIN CLIENTES -->
-
-        <div id="sinResultados" class="empty">
-
+        <div id="sinResultados" class="empty"
+             {% if clientes %}hidden{% endif %}>
             <div class="emoji">👥</div>
-
             <h2 id="tituloVacio">
-                Aún no hay clientes registrados
+                {% if clientes %}
+                    No se encontraron clientes
+                {% else %}
+                    Aún no hay clientes registrados
+                {% endif %}
             </h2>
-
             <p id="mensajeVacio" class="muted">
-                Registra tu primer cliente para comenzar.
+                {% if clientes %}
+                    Prueba otra búsqueda o cambia el filtro.
+                {% else %}
+                    Los clientes aparecerán aquí cuando creen una cuenta en la tienda.
+                {% endif %}
             </p>
-
-            <a
-                id="enlacePrimerCliente"
-                class="btn primary"
-                href="/clientes/registrar">
-                + Registrar primer cliente
-            </a>
-
         </div>
-
-        <!-- PIE DE TABLA -->
 
         <div class="foot">
             Mostrando
-            <strong id="resultadosBusqueda">0</strong>
+            <strong id="resultadosBusqueda">{{ clientes|length }}</strong>
             clientes
         </div>
 
@@ -851,8 +615,9 @@ td .btn {
     Manzanita Store · 2026
 </footer>
 
-<!-- JAVASCRIPT ORIGINAL DE CARLOS -->
 <script src="/static/clientes/clientes.js"></script>
 
 </body>
 </html>
+
+

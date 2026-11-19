@@ -812,6 +812,7 @@ def registro():
 # 10. REGISTRO PÚBLICO DE CLIENTES
 # ==========================================================
 
+
 @app.route("/registro-cliente", methods=["GET", "POST"])
 def registro_cliente():
 
@@ -821,6 +822,7 @@ def registro_cliente():
         apellidos = request.form.get("apellidos", "").strip()
         usuario = request.form.get("usuario", "").strip()
         correo = request.form.get("correo", "").strip().lower()
+        telefono = request.form.get("telefono", "").strip()
 
         password = request.form.get("password", "")
         confirmar_password = request.form.get(
@@ -833,12 +835,24 @@ def registro_cliente():
             apellidos,
             usuario,
             correo,
+            telefono,
             password,
             confirmar_password
         ]):
 
             flash(
                 "Todos los campos son obligatorios.",
+                "error"
+            )
+
+            return render_template(
+                "tienda/registro_cliente.html"
+            )
+
+        if not telefono.isdigit() or len(telefono) != 10:
+
+            flash(
+                "El teléfono debe contener exactamente 10 dígitos.",
                 "error"
             )
 
@@ -899,6 +913,7 @@ def registro_cliente():
             "apellidos": apellidos,
             "usuario": usuario,
             "correo": correo,
+            "telefono": telefono,
             "password": generate_password_hash(password),
             "rol": "Cliente",
             "foto_perfil": "",
@@ -919,6 +934,7 @@ def registro_cliente():
     return render_template(
         "tienda/registro_cliente.html"
     )
+
 
 
 # ==========================================================
@@ -1631,37 +1647,97 @@ registrar_pagina(
 )
 
 
+
 # ==========================================================
 # 14. MÓDULO DE CLIENTES
 # ==========================================================
 
-registrar_pagina(
-    "clientes",
-    "/clientes",
-    "clientes/clientes.html",
-    ("Administrador", "Vendedor", "Técnico")
-)
+@app.route("/clientes")
+def clientes():
 
-registrar_pagina(
-    "registrar_cliente",
-    "/clientes/registrar",
-    "clientes/registrar_cliente.html",
-    ("Administrador", "Vendedor")
-)
+    if "usuario" not in session:
+        flash("Primero debes iniciar sesión.", "error")
+        return redirect(url_for("login"))
 
-registrar_pagina(
-    "detalle_cliente",
-    "/clientes/detalle/<int:id>",
-    "clientes/detalle_cliente.html",
-    ("Administrador", "Vendedor", "Técnico")
-)
+    if not tiene_rol("Administrador", "Vendedor", "Técnico"):
+        return inicio_por_rol()
 
-registrar_pagina(
-    "editar_cliente",
-    "/clientes/editar/<int:id>",
-    "clientes/editar_cliente.html",
-    ("Administrador", "Vendedor")
-)
+    usuarios_registrados = cargar_usuarios()
+    lista_clientes = []
+
+    for indice, cuenta in enumerate(usuarios_registrados, start=1):
+
+        if cuenta.get("rol") != "Cliente":
+            continue
+
+        lista_clientes.append({
+            "id": indice,
+            "nombre": (
+                cuenta.get("nombre", "") + " " +
+                cuenta.get("apellidos", "")
+            ).strip(),
+            "telefono": cuenta.get("telefono", ""),
+            "correo": cuenta.get("correo", ""),
+            "estado": (
+                "activo"
+                if cuenta.get("activo", True)
+                else "inactivo"
+            ),
+            "fecha": cuenta.get("fecha_registro", "")
+        })
+
+    return render_template(
+        "clientes/clientes.html",
+        clientes=lista_clientes,
+        rol=obtener_rol(),
+        nombre=session.get("nombre")
+    )
+
+
+@app.route("/clientes/detalle/<int:id>")
+def detalle_cliente(id):
+
+    if "usuario" not in session:
+        flash("Primero debes iniciar sesión.", "error")
+        return redirect(url_for("login"))
+
+    if not tiene_rol("Administrador", "Vendedor", "Técnico"):
+        return inicio_por_rol()
+
+    usuarios_registrados = cargar_usuarios()
+
+    if id < 1 or id > len(usuarios_registrados):
+        flash("Cliente no encontrado.", "error")
+        return redirect(url_for("clientes"))
+
+    cuenta = usuarios_registrados[id - 1]
+
+    if cuenta.get("rol") != "Cliente":
+        flash("La cuenta solicitada no es un cliente.", "error")
+        return redirect(url_for("clientes"))
+
+    cliente = {
+        "id": id,
+        "nombre": (
+            cuenta.get("nombre", "") + " " +
+            cuenta.get("apellidos", "")
+        ).strip(),
+        "telefono": cuenta.get("telefono", ""),
+        "correo": cuenta.get("correo", ""),
+        "estado": (
+            "activo"
+            if cuenta.get("activo", True)
+            else "inactivo"
+        ),
+        "fecha": cuenta.get("fecha_registro", "")
+    }
+
+    return render_template(
+        "clientes/detalle_cliente.html",
+        cliente=cliente,
+        rol=obtener_rol(),
+        nombre=session.get("nombre")
+    )
 
 
 # ==========================================================
