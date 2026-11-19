@@ -495,6 +495,27 @@ footer {
     }
 }
 </style>
+
+<style id="manzanita-iconos-limpios">
+/* Ocultar iconos decorativos en botones con texto */
+button:has(> svg):not(:has(> svg:only-child)) > svg,
+a:has(> svg):not(:has(> svg:only-child)) > svg {
+    display: none !important;
+}
+
+/* Iconos de bibliotecas dentro de botones con texto */
+button:has(> i):not(:has(> i:only-child)) > i,
+a:has(> i):not(:has(> i:only-child)) > i {
+    display: none !important;
+}
+
+/* Conservar iconos funcionales de botones sin texto */
+button:has(> svg:only-child) > svg,
+a:has(> svg:only-child) > svg {
+    display: inline-block !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -581,7 +602,7 @@ footer {
             <p>Ingresos por ventas</p>
             <h3 id="ingresos">$0.00</h3>
 
-            <span id="detalleVentas" class="detalle"></span>
+            
 
         </div>
 
@@ -592,7 +613,7 @@ footer {
             <p>Reparaciones</p>
             <h3 id="reparaciones">0</h3>
 
-            <span id="detalleReparaciones" class="detalle"></span>
+            
 
         </div>
 
@@ -603,7 +624,7 @@ footer {
             <p>Tickets de soporte</p>
             <h3 id="tickets">0</h3>
 
-            <span id="detalleTickets" class="detalle"></span>
+            
 
         </div>
 

@@ -1,9 +1,30 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Inventario | Manzanita Store</title>
 <script src="https://cdn.tailwindcss.com"></script>
+
+<style id="manzanita-iconos-limpios">
+/* Ocultar iconos decorativos en botones con texto */
+button:has(> svg):not(:has(> svg:only-child)) > svg,
+a:has(> svg):not(:has(> svg:only-child)) > svg {
+    display: none !important;
+}
+
+/* Iconos de bibliotecas dentro de botones con texto */
+button:has(> i):not(:has(> i:only-child)) > i,
+a:has(> i):not(:has(> i:only-child)) > i {
+    display: none !important;
+}
+
+/* Conservar iconos funcionales de botones sin texto */
+button:has(> svg:only-child) > svg,
+a:has(> svg:only-child) > svg {
+    display: inline-block !important;
+}
+</style>
+
 </head>
 <body class="min-h-screen bg-emerald-50/40 text-slate-800">
 <header class="bg-emerald-950 text-white"><div class="mx-auto max-w-7xl px-6 py-5 flex justify-between items-center"><div><h1 class="text-xl font-bold">Manzanita <span class="text-emerald-300">Store</span></h1><p class="text-xs text-emerald-200">Gestión de inventario</p></div><a class="rounded-lg border border-emerald-600 px-4 py-2 text-sm hover:bg-emerald-900" href="{{ url_for('inventario') }}">Inventario</a></div></header>

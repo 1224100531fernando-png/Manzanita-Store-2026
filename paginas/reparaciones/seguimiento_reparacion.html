@@ -306,7 +306,7 @@ body {
 }
 
 .etapa:not(:last-child)::before {
-    content: "";
+    content: none;
     position: absolute;
     top: 42px;
     left: 21px;
@@ -533,6 +533,27 @@ footer {
     }
 }
 </style>
+
+<style id="manzanita-iconos-limpios">
+/* Ocultar iconos decorativos en botones con texto */
+button:has(> svg):not(:has(> svg:only-child)) > svg,
+a:has(> svg):not(:has(> svg:only-child)) > svg {
+    display: none !important;
+}
+
+/* Iconos de bibliotecas dentro de botones con texto */
+button:has(> i):not(:has(> i:only-child)) > i,
+a:has(> i):not(:has(> i:only-child)) > i {
+    display: none !important;
+}
+
+/* Conservar iconos funcionales de botones sin texto */
+button:has(> svg:only-child) > svg,
+a:has(> svg:only-child) > svg {
+    display: inline-block !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -580,7 +601,7 @@ footer {
             <p id="folio"></p>
         </div>
 
-        <span id="estado" class="estado hidden"></span>
+        
 
     </div>
 
@@ -836,7 +857,7 @@ footer {
 
     // Registro de prueba correspondiente.
     const reparacion = folioSolicitado
-        ? reparaciones.find(r => r.folio === folioSolicitado)
+         reparaciones.find(r => r.folio === folioSolicitado)
         : reparaciones.find(r => r.id === idActual);
 
     // Generar rutas reales desde Flask.
@@ -916,7 +937,7 @@ footer {
             (colores[reparacion.estado] || "estado-pendiente");
 
         // Calcular el avance original.
-        const completadas = avances[reparacion.estado] ?? 0;
+        const completadas = avances[reparacion.estado]  0;
         const porcentaje = completadas * 20;
 
         document.getElementById("porcentaje").textContent =
@@ -938,14 +959,14 @@ footer {
             const fila = document.createElement("div");
 
             fila.className = terminada
-                ? "etapa completada"
+                 "etapa completada"
                 : "etapa";
 
             const circulo = document.createElement("div");
             circulo.className = "etapa-icono";
 
             circulo.textContent =
-                terminada ? "✓" : String(i + 1);
+                terminada  "✓" : String(i + 1);
 
             const texto = document.createElement("div");
             texto.className = "etapa-texto";

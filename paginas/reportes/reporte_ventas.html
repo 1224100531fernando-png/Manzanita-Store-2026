@@ -558,6 +558,27 @@ footer {
     .aviso-demo { border: 1px solid #ddd; }
 }
 </style>
+
+<style id="manzanita-iconos-limpios">
+/* Ocultar iconos decorativos en botones con texto */
+button:has(> svg):not(:has(> svg:only-child)) > svg,
+a:has(> svg):not(:has(> svg:only-child)) > svg {
+    display: none !important;
+}
+
+/* Iconos de bibliotecas dentro de botones con texto */
+button:has(> i):not(:has(> i:only-child)) > i,
+a:has(> i):not(:has(> i:only-child)) > i {
+    display: none !important;
+}
+
+/* Conservar iconos funcionales de botones sin texto */
+button:has(> svg:only-child) > svg,
+a:has(> svg:only-child) > svg {
+    display: inline-block !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -876,7 +897,7 @@ footer {
             moneda(total);
 
         document.getElementById("promedio").textContent =
-            moneda(datos.length ? total / datos.length : 0);
+            moneda(datos.length  total / datos.length : 0);
 
         document.getElementById("resultados").textContent =
             "Mostrando " + datos.length +

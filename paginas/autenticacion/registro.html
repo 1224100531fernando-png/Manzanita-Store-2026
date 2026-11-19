@@ -7,6 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear cuenta | Manzanita Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+<style id="manzanita-iconos-limpios">
+/* Ocultar iconos decorativos en botones con texto */
+button:has(> svg):not(:has(> svg:only-child)) > svg,
+a:has(> svg):not(:has(> svg:only-child)) > svg {
+    display: none !important;
+}
+
+/* Iconos de bibliotecas dentro de botones con texto */
+button:has(> i):not(:has(> i:only-child)) > i,
+a:has(> i):not(:has(> i:only-child)) > i {
+    display: none !important;
+}
+
+/* Conservar iconos funcionales de botones sin texto */
+button:has(> svg:only-child) > svg,
+a:has(> svg:only-child) > svg {
+    display: inline-block !important;
+}
+</style>
+
 </head>
 
 <body class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
@@ -165,7 +186,7 @@
 
         <div class="text-center">
             <p class="text-gray-600 text-sm">
-                ¿Ya tienes una cuenta?
+                ¿Ya tienes una cuenta
             </p>
 
             <a href="{{ url_for('login') }}"

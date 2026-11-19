@@ -256,6 +256,100 @@
             }
         }
     </style>
+
+<style id="manzanita-perfil-profesional">
+:root {
+    --perfil-verde: #14532d;
+    --perfil-verde-hover: #166534;
+    --perfil-fondo: #f3f7f5;
+    --perfil-borde: #dce8df;
+}
+
+body {
+    background: var(--perfil-fondo) !important;
+    color: #17352a !important;
+}
+
+h1, h2, h3 {
+    color: #143e2b !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select, textarea {
+    border: 1px solid var(--perfil-borde) !important;
+    border-radius: 10px !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline-color: #16a34a !important;
+    border-color: #16a34a !important;
+}
+
+button[type="submit"],
+input[type="submit"] {
+    background: var(--perfil-verde) !important;
+    color: white !important;
+    border-radius: 10px !important;
+    transition: background .2s ease;
+}
+
+button[type="submit"]:hover,
+input[type="submit"]:hover {
+    background: var(--perfil-verde-hover) !important;
+}
+
+form {
+    accent-color: #15803d;
+}
+
+img {
+    object-fit: cover;
+}
+</style>
+
+
+<style id="manzanita-boton-regresar">
+/* Cambia solo el enlace Regresar del perfil */
+a[href] {
+    transition: background-color .2s ease;
+}
+a[href].btn-back,
+a[href].btn-regresar,
+a[href].back-btn,
+a[href].btn-volver {
+    background-color: #14532d !important;
+    color: #ffffff !important;
+    border-color: #14532d !important;
+}
+a[href].btn-back:hover,
+a[href].btn-regresar:hover,
+a[href].back-btn:hover,
+a[href].btn-volver:hover {
+    background-color: #166534 !important;
+}
+</style>
+
+
+<style id="manzanita-iconos-limpios">
+/* Ocultar iconos decorativos en botones con texto */
+button:has(> svg):not(:has(> svg:only-child)) > svg,
+a:has(> svg):not(:has(> svg:only-child)) > svg {
+    display: none !important;
+}
+
+/* Iconos de bibliotecas dentro de botones con texto */
+button:has(> i):not(:has(> i:only-child)) > i,
+a:has(> i):not(:has(> i:only-child)) > i {
+    display: none !important;
+}
+
+/* Conservar iconos funcionales de botones sin texto */
+button:has(> svg:only-child) > svg,
+a:has(> svg:only-child) > svg {
+    display: inline-block !important;
+}
+</style>
+
 </head>
 
 <body>

@@ -9,6 +9,110 @@
     <title>Roles y permisos | Manzanita Store</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+<style id="manzanita-permisos-profesional">
+:root {
+    --ms-verde: #14532d;
+    --ms-verde-claro: #166534;
+    --ms-fondo: #f3f7f5;
+    --ms-borde: #dce8df;
+}
+
+body {
+    background-color: var(--ms-fondo) !important;
+    color: #17352a !important;
+}
+
+/* Encabezado principal */
+header {
+    background: #123d2e !important;
+    border-bottom: 1px solid #245d46 !important;
+}
+
+header h1,
+header h2,
+header p,
+header span {
+    color: #ffffff !important;
+}
+
+/* Boton regresar */
+header a[href] {
+    background: #176847 !important;
+    color: #ffffff !important;
+    border-color: #176847 !important;
+    border-radius: 10px !important;
+}
+
+header a[href]:hover {
+    background: #14532d !important;
+}
+
+/* Titulos */
+main h1,
+main h2,
+main h3 {
+    color: #123d2e !important;
+}
+
+/* Tarjetas y contenedores */
+main section,
+main article {
+    border-color: var(--ms-borde) !important;
+}
+
+/* Tabla de permisos */
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    background: #e8f2ec !important;
+}
+
+thead th {
+    color: #14532d !important;
+}
+
+tbody tr:hover {
+    background: #f2faf5 !important;
+}
+
+/* Controles */
+button,
+input,
+select {
+    accent-color: #15803d;
+}
+
+button[type="submit"] {
+    background: var(--ms-verde) !important;
+    color: #ffffff !important;
+    border-radius: 10px !important;
+}
+</style>
+
+
+<style id="manzanita-iconos-limpios">
+/* Ocultar iconos decorativos en botones con texto */
+button:has(> svg):not(:has(> svg:only-child)) > svg,
+a:has(> svg):not(:has(> svg:only-child)) > svg {
+    display: none !important;
+}
+
+/* Iconos de bibliotecas dentro de botones con texto */
+button:has(> i):not(:has(> i:only-child)) > i,
+a:has(> i):not(:has(> i:only-child)) > i {
+    display: none !important;
+}
+
+/* Conservar iconos funcionales de botones sin texto */
+button:has(> svg:only-child) > svg,
+a:has(> svg:only-child) > svg {
+    display: inline-block !important;
+}
+</style>
+
 </head>
 
 <body class="min-h-screen bg-slate-100 text-slate-800">

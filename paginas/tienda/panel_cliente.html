@@ -8,6 +8,27 @@
     <title>Mi cuenta | Manzanita Store</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+<style id="manzanita-iconos-limpios">
+/* Ocultar iconos decorativos en botones con texto */
+button:has(> svg):not(:has(> svg:only-child)) > svg,
+a:has(> svg):not(:has(> svg:only-child)) > svg {
+    display: none !important;
+}
+
+/* Iconos de bibliotecas dentro de botones con texto */
+button:has(> i):not(:has(> i:only-child)) > i,
+a:has(> i):not(:has(> i:only-child)) > i {
+    display: none !important;
+}
+
+/* Conservar iconos funcionales de botones sin texto */
+button:has(> svg:only-child) > svg,
+a:has(> svg:only-child) > svg {
+    display: inline-block !important;
+}
+</style>
+
 </head>
 
 <body class="min-h-screen bg-slate-100 text-slate-800">
@@ -220,7 +241,7 @@
   const contador=document.getElementById('catalogo-contador');
   const vacio=document.getElementById('catalogo-vacio');
   const formato=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'});
-  const texto=(x)=>String(x??'');
+  const texto=(x)=>String(x'');
   const cat=Array.from(new Set(productos.map(p=>texto(p.categoria).trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b,'es'));
   for(const nombre of cat){const op=document.createElement('option');op.value=nombre;op.textContent=nombre;categorias.append(op);}
   const nodo=(etiqueta,clase,contenido)=>{const e=document.createElement(etiqueta);e.className=clase;if(contenido!==undefined)e.textContent=contenido;return e;};
@@ -245,10 +266,10 @@
       cuerpo.append(nodo('h3','text-lg font-bold text-slate-900',texto(p.nombre)||'Sin nombre'));
       cuerpo.append(nodo('p','text-sm text-slate-500',texto(p.marca)||'Marca no especificada'));
       const precio=Number(p.precio);
-      cuerpo.append(nodo('p','text-xl font-extrabold text-emerald-700',Number.isFinite(precio)&&precio>0?formato.format(precio):'Precio por consultar'));
+      cuerpo.append(nodo('p','text-xl font-extrabold text-emerald-700',Number.isFinite(precio)&&precio>0formato.format(precio):'Precio por consultar'));
       const stock=Number(p.stock)||0;
       const disponible=p.activo!==false && stock>0;
-      const estado=nodo('span','inline-block rounded-full px-3 py-1 text-xs font-semibold '+(disponible?'bg-emerald-100 text-emerald-800':'bg-slate-100 text-slate-600'),disponible?'Disponible · '+stock+' unidades':'Sin disponibilidad');
+      const estado=nodo('span','inline-block rounded-full px-3 py-1 text-xs font-semibold '+(disponible'bg-emerald-100 text-emerald-800':'bg-slate-100 text-slate-600'),disponible'Disponible · '+stock+' unidades':'Sin disponibilidad');
       cuerpo.append(estado);card.append(imagen,cuerpo);tarjetas.append(card);
     }
   }
