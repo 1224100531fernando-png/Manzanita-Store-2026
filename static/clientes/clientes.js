@@ -1,25 +1,66 @@
+
 (() => {
-'use strict';
-const KEY='manzanita_store_clientes_v2';
-const $=id=>document.getElementById(id);
-const urls={list:'/clientes',add:'/clientes/registrar',edit:'/clientes/editar/',detail:'/clientes/detalle/'};
-function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(x)?x:[]}catch(e){console.error(e);return []}}
-function save(x){try{localStorage.setItem(KEY,JSON.stringify(x));return true}catch(e){alert('No se pudieron guardar los clientes en este navegador.');return false}}
-function idFromUrl(){return Number(location.pathname.split('/').filter(Boolean).pop())}
-function find(id){return read().find(x=>Number(x.id)===Number(id))}
-function clean(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim()}
-function error(s){const e=$('mensaje');if(e){e.textContent=s;e.hidden=false}else alert(s)}
-function cell(s){const e=document.createElement('td');e.textContent=s;return e}
-function link(s,href){const e=document.createElement('a');e.className='btn small';e.textContent=s;e.href=href;return e}
-function list(){const clients=read(),q=clean($('buscarCliente').value),status=$('filtroEstado').value;
-const filtered=clients.filter(c=>clean(c.nombre+' '+c.telefono+' '+(c.correo||'')).includes(q)&&(status==='todos'||c.estado===status));
-$('totalClientes').textContent=clients.length;$('clientesActivos').textContent=clients.filter(c=>c.estado==='activo').length;$('clientesInactivos').textContent=clients.filter(c=>c.estado==='inactivo').length;$('resultadosBusqueda').textContent=filtered.length;
-const tbody=$('tablaClientes');tbody.replaceChildren();
-filtered.forEach(c=>{const tr=document.createElement('tr');tr.append(cell(c.nombre),cell(c.telefono),cell(c.correo||'No registrado'));const st=cell(''),badge=document.createElement('span');badge.className='pill'+(c.estado==='inactivo'?' off':'');badge.textContent=c.estado==='activo'?'Activo':'Inactivo';st.append(badge);tr.append(st);const td=cell(''),buttons=document.createElement('div');buttons.className='actions';buttons.append(link('Ver',urls.detail+c.id),link('Editar',urls.edit+c.id));td.append(buttons);tr.append(td);tbody.append(tr)});
-$('sinResultados').hidden=filtered.length!==0;$('tituloVacio').textContent=clients.length?'No se encontraron clientes':'Aún no hay clientes registrados';$('mensajeVacio').textContent=clients.length?'Prueba otra búsqueda o cambia el filtro.':'Registra tu primer cliente para comenzar.';$('enlacePrimerCliente').hidden=clients.length!==0}
-function initList(){$('buscarCliente').addEventListener('input',list);$('filtroEstado').addEventListener('change',list);$('btnLimpiar').addEventListener('click',()=>{$('buscarCliente').value='';$('filtroEstado').value='todos';list()});window.addEventListener('storage',list);list()}
-function initForm(edit){const id=edit?idFromUrl():null;if(edit){const c=find(id);if(!c){$('formCliente').hidden=true;error('Cliente no encontrado.');return}$('nombre').value=c.nombre;$('telefono').value=c.telefono;$('correo').value=c.correo||''}
-$('formCliente').addEventListener('submit',ev=>{ev.preventDefault();const nombre=$('nombre').value.trim().replace(/\s+/g,' '),telefono=$('telefono').value.replace(/\D/g,''),correo=$('correo').value.trim();if(nombre.length<3)return error('El nombre debe tener al menos 3 caracteres.');if(telefono.length!==10)return error('El teléfono debe tener 10 dígitos.');if(correo&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo))return error('Correo inválido.');const clients=read();if(clients.some(c=>c.telefono===telefono&&Number(c.id)!==id))return error('Ya existe un cliente con ese teléfono.');if(edit){const idx=clients.findIndex(c=>Number(c.id)===id);if(idx<0)return error('Cliente no encontrado.');clients[idx]={...clients[idx],nombre,telefono,correo}}else{const newId=clients.reduce((max,c)=>Math.max(max,Number(c.id)||0),0)+1;clients.push({id:newId,nombre,telefono,correo,estado:'activo',fecha:new Date().toISOString()})}if(save(clients))location.href=urls.list})}
-function initDetail(){const id=idFromUrl(),c=find(id);if(!c){$('detalleCliente').hidden=true;error('Cliente no encontrado.');return}$('detalleNombre').textContent=c.nombre;$('detalleTelefono').textContent=c.telefono;$('detalleCorreo').textContent=c.correo||'No registrado';$('detalleEstado').textContent=c.estado==='activo'?'Activo':'Inactivo';$('detalleEstado').className='pill'+(c.estado==='inactivo'?' off':'');$('detalleFecha').textContent=c.fecha?new Date(c.fecha).toLocaleDateString('es-MX'):'No disponible';$('btnEditarDetalle').href=urls.edit+id;$('btnEstado').textContent=c.estado==='activo'?'Desactivar cliente':'Activar cliente';$('btnEstado').addEventListener('click',()=>{if(!confirm('¿Deseas cambiar el estado del cliente?'))return;const clients=read(),i=clients.findIndex(x=>Number(x.id)===id);if(i<0)return error('Cliente no encontrado.');clients[i].estado=clients[i].estado==='activo'?'inactivo':'activo';if(save(clients))location.reload()})}
-document.addEventListener('DOMContentLoaded',()=>{const page=document.body.dataset.pagina;if(page==='clientes')initList();else if(page==='registrar')initForm(false);else if(page==='editar')initForm(true);else if(page==='detalle')initDetail()});
+    'use strict';
+
+    const $ = id => document.getElementById(id);
+
+    function filtrarClientes() {
+        const busqueda = $('buscarCliente').value
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .trim();
+
+        const estado = $('filtroEstado').value;
+        const filas = [...$('tablaClientes').querySelectorAll('tr')];
+
+        let visibles = 0;
+
+        filas.forEach(fila => {
+            const texto = fila.textContent
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase();
+
+            const coincideTexto = texto.includes(busqueda);
+            const coincideEstado =
+                estado === 'todos' || fila.dataset.estado === estado;
+
+            const mostrar = coincideTexto && coincideEstado;
+
+            fila.hidden = !mostrar;
+
+            if (mostrar) visibles++;
+        });
+
+        $('resultadosBusqueda').textContent = visibles;
+        $('sinResultados').hidden = visibles !== 0;
+
+        if (filas.length === 0) {
+            $('tituloVacio').textContent =
+                'Aún no hay clientes registrados';
+
+            $('mensajeVacio').textContent =
+                'Los clientes aparecerán aquí cuando creen una cuenta en la tienda.';
+        } else {
+            $('tituloVacio').textContent =
+                'No se encontraron clientes';
+
+            $('mensajeVacio').textContent =
+                'Prueba otra búsqueda o cambia el filtro.';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        $('buscarCliente').addEventListener('input', filtrarClientes);
+        $('filtroEstado').addEventListener('change', filtrarClientes);
+
+        $('btnLimpiar').addEventListener('click', () => {
+            $('buscarCliente').value = '';
+            $('filtroEstado').value = 'todos';
+            filtrarClientes();
+        });
+
+        filtrarClientes();
+    });
 })();

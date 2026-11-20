@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import secrets
 import time
@@ -811,6 +812,7 @@ def registro():
 # 10. REGISTRO PÚBLICO DE CLIENTES
 # ==========================================================
 
+
 @app.route("/registro-cliente", methods=["GET", "POST"])
 def registro_cliente():
 
@@ -820,6 +822,7 @@ def registro_cliente():
         apellidos = request.form.get("apellidos", "").strip()
         usuario = request.form.get("usuario", "").strip()
         correo = request.form.get("correo", "").strip().lower()
+        telefono = request.form.get("telefono", "").strip()
 
         password = request.form.get("password", "")
         confirmar_password = request.form.get(
@@ -832,12 +835,24 @@ def registro_cliente():
             apellidos,
             usuario,
             correo,
+            telefono,
             password,
             confirmar_password
         ]):
 
             flash(
                 "Todos los campos son obligatorios.",
+                "error"
+            )
+
+            return render_template(
+                "tienda/registro_cliente.html"
+            )
+
+        if not telefono.isdigit() or len(telefono) != 10:
+
+            flash(
+                "El teléfono debe contener exactamente 10 dígitos.",
                 "error"
             )
 
@@ -898,6 +913,7 @@ def registro_cliente():
             "apellidos": apellidos,
             "usuario": usuario,
             "correo": correo,
+            "telefono": telefono,
             "password": generate_password_hash(password),
             "rol": "Cliente",
             "foto_perfil": "",
@@ -918,6 +934,7 @@ def registro_cliente():
     return render_template(
         "tienda/registro_cliente.html"
     )
+
 
 
 # ==========================================================
@@ -1630,37 +1647,97 @@ registrar_pagina(
 )
 
 
+
 # ==========================================================
 # 14. MÓDULO DE CLIENTES
 # ==========================================================
 
-registrar_pagina(
-    "clientes",
-    "/clientes",
-    "clientes/clientes.html",
-    ("Administrador", "Vendedor", "Técnico")
-)
+@app.route("/clientes")
+def clientes():
 
-registrar_pagina(
-    "registrar_cliente",
-    "/clientes/registrar",
-    "clientes/registrar_cliente.html",
-    ("Administrador", "Vendedor")
-)
+    if "usuario" not in session:
+        flash("Primero debes iniciar sesión.", "error")
+        return redirect(url_for("login"))
 
-registrar_pagina(
-    "detalle_cliente",
-    "/clientes/detalle/<int:id>",
-    "clientes/detalle_cliente.html",
-    ("Administrador", "Vendedor", "Técnico")
-)
+    if not tiene_rol("Administrador", "Vendedor", "Técnico"):
+        return inicio_por_rol()
 
-registrar_pagina(
-    "editar_cliente",
-    "/clientes/editar/<int:id>",
-    "clientes/editar_cliente.html",
-    ("Administrador", "Vendedor")
-)
+    usuarios_registrados = cargar_usuarios()
+    lista_clientes = []
+
+    for indice, cuenta in enumerate(usuarios_registrados, start=1):
+
+        if cuenta.get("rol") != "Cliente":
+            continue
+
+        lista_clientes.append({
+            "id": indice,
+            "nombre": (
+                cuenta.get("nombre", "") + " " +
+                cuenta.get("apellidos", "")
+            ).strip(),
+            "telefono": cuenta.get("telefono", ""),
+            "correo": cuenta.get("correo", ""),
+            "estado": (
+                "activo"
+                if cuenta.get("activo", True)
+                else "inactivo"
+            ),
+            "fecha": cuenta.get("fecha_registro", "")
+        })
+
+    return render_template(
+        "clientes/clientes.html",
+        clientes=lista_clientes,
+        rol=obtener_rol(),
+        nombre=session.get("nombre")
+    )
+
+
+@app.route("/clientes/detalle/<int:id>")
+def detalle_cliente(id):
+
+    if "usuario" not in session:
+        flash("Primero debes iniciar sesión.", "error")
+        return redirect(url_for("login"))
+
+    if not tiene_rol("Administrador", "Vendedor", "Técnico"):
+        return inicio_por_rol()
+
+    usuarios_registrados = cargar_usuarios()
+
+    if id < 1 or id > len(usuarios_registrados):
+        flash("Cliente no encontrado.", "error")
+        return redirect(url_for("clientes"))
+
+    cuenta = usuarios_registrados[id - 1]
+
+    if cuenta.get("rol") != "Cliente":
+        flash("La cuenta solicitada no es un cliente.", "error")
+        return redirect(url_for("clientes"))
+
+    cliente = {
+        "id": id,
+        "nombre": (
+            cuenta.get("nombre", "") + " " +
+            cuenta.get("apellidos", "")
+        ).strip(),
+        "telefono": cuenta.get("telefono", ""),
+        "correo": cuenta.get("correo", ""),
+        "estado": (
+            "activo"
+            if cuenta.get("activo", True)
+            else "inactivo"
+        ),
+        "fecha": cuenta.get("fecha_registro", "")
+    }
+
+    return render_template(
+        "clientes/detalle_cliente.html",
+        cliente=cliente,
+        rol=obtener_rol(),
+        nombre=session.get("nombre")
+    )
 
 
 # ==========================================================
@@ -1855,12 +1932,97 @@ def registrar_producto():
         nombre=session.get("nombre")
     )
 
-registrar_pagina(
-    "editar_producto",
-    "/inventario/editar/<int:id>",
-    "inventario/editar_producto.html",
-    ("Administrador",)
-)
+@app.route("/inventario/editar/<string:id>", methods=["GET", "POST"])
+@requiere_rol("Administrador")
+def editar_producto(id):
+    # Los productos se identifican por su UUID, no por su posición.
+    productos = cargar_productos()
+    producto = next(
+        (p for p in productos if isinstance(p, dict) and p.get("id") == id),
+        None
+    )
+
+    if producto is None:
+        flash("Producto no encontrado.", "error")
+        return redirect(url_for("inventario"))
+
+    if "csrf_token_inventario" not in session:
+        session["csrf_token_inventario"] = secrets.token_urlsafe(32)
+
+    if request.method == "POST":
+        token = request.form.get("csrf_token", "")
+        if not secrets.compare_digest(token, session["csrf_token_inventario"]):
+            flash("Solicitud inválida. Actualiza la página e intenta nuevamente.", "error")
+            return redirect(url_for("editar_producto", id=id))
+
+        nombre = request.form.get("nombre", "").strip()
+        categoria = request.form.get("categoria", "").strip()
+        marca = request.form.get("marca", "").strip()
+        proveedor = request.form.get("proveedor", "").strip()
+        descripcion = request.form.get("descripcion", "").strip()
+        activo = request.form.get("activo", "")
+
+        if (
+            not 1 <= len(nombre) <= 120
+            or categoria not in ("iPhone", "Mac", "Accesorios", "Refacciones")
+            or not 1 <= len(marca) <= 80
+            or len(proveedor) > 120
+            or len(descripcion) > 1000
+            or activo not in ("true", "false")
+        ):
+            flash("Revisa los datos del producto.", "error")
+            return redirect(url_for("editar_producto", id=id))
+
+        try:
+            costo = float(request.form.get("costo", ""))
+            precio = float(request.form.get("precio", ""))
+            stock_txt = request.form.get("stock", "")
+            minimo_txt = request.form.get("minimo", "")
+            if not stock_txt.isdecimal() or not minimo_txt.isdecimal():
+                raise ValueError("Las existencias deben ser enteros.")
+            stock = int(stock_txt)
+            minimo = int(minimo_txt)
+            if (
+                not math.isfinite(costo) or not math.isfinite(precio)
+                or costo < 0 or precio < costo
+                or costo > 999999999 or precio > 999999999
+                or stock > 999999 or minimo > 999999
+            ):
+                raise ValueError("Valores fuera de rango.")
+        except (ValueError, TypeError, OverflowError):
+            flash("Revisa los precios y las existencias.", "error")
+            return redirect(url_for("editar_producto", id=id))
+
+        # Se actualiza el producto sin alterar código, ID o imagen.
+        producto.update({
+            "nombre": nombre,
+            "categoria": categoria,
+            "marca": marca,
+            "proveedor": proveedor,
+            "descripcion": descripcion,
+            "costo": round(costo, 2),
+            "precio": round(precio, 2),
+            "stock": stock,
+            "minimo": minimo,
+            "activo": activo == "true"
+        })
+
+        try:
+            guardar_productos(productos)
+        except OSError:
+            flash("No fue posible guardar los cambios.", "error")
+            return redirect(url_for("editar_producto", id=id))
+
+        flash("Producto actualizado correctamente.", "success")
+        return redirect(url_for("inventario"))
+
+    return render_template(
+        "inventario/editar_producto.html",
+        producto=producto,
+        csrf_token=session["csrf_token_inventario"],
+        rol=obtener_rol(),
+        nombre=session.get("nombre")
+    )
 
 
 # ==========================================================
